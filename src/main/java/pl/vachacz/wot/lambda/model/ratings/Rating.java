@@ -1,23 +1,32 @@
 package pl.vachacz.wot.lambda.model.ratings;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.json.JSONObject;
 
 public class Rating {
 
-    @JsonProperty("rank_delta")
-    private Integer rankDelta;
-
-    @JsonProperty("value")
+    private String stat;
+    private Long rankDelta;
     private Double value;
+    private Long rank;
 
-    @JsonProperty("rank")
-    private Integer rank;
+    public Rating(String stat, double value) {
+        this.stat = stat;
+        this.value = value;
+    }
 
-    public Integer getRankDelta() {
+    public String getStat() {
+        return stat;
+    }
+
+    public void setStat(String stat) {
+        this.stat = stat;
+    }
+
+    public Long getRankDelta() {
         return rankDelta;
     }
 
-    public void setRankDelta(Integer rankDelta) {
+    public void setRankDelta(Long rankDelta) {
         this.rankDelta = rankDelta;
     }
 
@@ -29,11 +38,11 @@ public class Rating {
         this.value = value;
     }
 
-    public Integer getRank() {
+    public Long getRank() {
         return rank;
     }
 
-    public void setRank(Integer rank) {
+    public void setRank(Long rank) {
         this.rank = rank;
     }
 }
