@@ -1,4 +1,4 @@
-package pl.vachacz.wot.lambda.model.account;
+package pl.vachacz.wot.lambda.model.wot.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -7,7 +7,7 @@ public class Account {
     private String nickname;
 
     @JsonProperty("account_id")
-    private String accountId;
+    private Long accountId;
 
     public String getNickname() {
         return nickname;
@@ -17,11 +17,11 @@ public class Account {
         this.nickname = nickname;
     }
 
-    public String getAccountId() {
+    public Long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
 

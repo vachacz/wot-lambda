@@ -1,4 +1,4 @@
-package pl.vachacz.wot.lambda.model;
+package pl.vachacz.wot.lambda.model.wot;
 
 public class BaseResponse {
 

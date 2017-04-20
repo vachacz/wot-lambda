@@ -1,6 +1,4 @@
-package pl.vachacz.wot.lambda.model.ratings;
-
-import org.json.JSONObject;
+package pl.vachacz.wot.lambda.model.wot.ratings;
 
 public class Rating {
 

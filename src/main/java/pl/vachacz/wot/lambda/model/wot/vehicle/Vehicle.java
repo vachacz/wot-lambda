@@ -1,13 +1,15 @@
-package pl.vachacz.wot.lambda.model.vehicle;
+package pl.vachacz.wot.lambda.model.wot.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Vehicle {
 
     @JsonProperty("tank_id")
-    private Integer tankId;
+    private Long tankId;
+
     @JsonProperty("name_i18n")
     private String name;
+
     private String nation;
     private String type;
     private Integer level;
@@ -20,11 +22,11 @@ public class Vehicle {
         this.name = name;
     }
 
-    public Integer getTankId() {
+    public Long getTankId() {
         return tankId;
     }
 
-    public void setTankId(Integer tankId) {
+    public void setTankId(Long tankId) {
         this.tankId = tankId;
     }
 

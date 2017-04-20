@@ -1,4 +1,4 @@
-package pl.vachacz.wot.lambda.model.tankrating;
+package pl.vachacz.wot.lambda.model.wot.tankrating;
 
 import java.util.List;
 import java.util.Map;
@@ -13,5 +13,9 @@ public class TankRatingsResponse {
 
     public void setData(Map<String, List<TankRatingsWrapper>> data) {
         this.data = data;
+    }
+
+    public List<TankRatingsWrapper> getPlayerStats(String accountId) {
+        return data.get(accountId);
     }
 }

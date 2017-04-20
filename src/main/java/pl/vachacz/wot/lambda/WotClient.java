@@ -9,11 +9,11 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import org.json.JSONObject;
-import pl.vachacz.wot.lambda.model.account.AccountResponse;
-import pl.vachacz.wot.lambda.model.ratings.Rating;
-import pl.vachacz.wot.lambda.model.ratings.RatingsResponse;
-import pl.vachacz.wot.lambda.model.tankrating.TankRatingsResponse;
-import pl.vachacz.wot.lambda.model.vehicle.VehiclesResponse;
+import pl.vachacz.wot.lambda.model.wot.account.AccountResponse;
+import pl.vachacz.wot.lambda.model.wot.ratings.Rating;
+import pl.vachacz.wot.lambda.model.wot.ratings.RatingsResponse;
+import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatingsResponse;
+import pl.vachacz.wot.lambda.model.wot.vehicle.VehiclesResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +32,7 @@ public class WotClient {
         setObjectMapper();
     }
 
-    public String getAccountId(String hawtank) {
+    public Long getAccountId(String hawtank) {
         HttpRequest request = Unirest.get(WOT_API_ACCOUNT)
                 .queryString("application_id", "demo")
                 .queryString("search", "hawtank")
@@ -59,14 +59,14 @@ public class WotClient {
         return make(request, TankRatingsResponse.class);
     }
 
-    public RatingsResponse getPlayerStats(String accountId) {
+    public RatingsResponse getPlayerStats(Long accountId) {
         HttpRequest request = Unirest.get(WOT_API_RATINGS)
                 .queryString("application_id", "demo")
                 .queryString("type", "all")
                 .queryString("account_id", accountId);
 
         JsonNode json = makeJson(request).getBody();
-        JSONObject data = json.getObject().getJSONObject("data").getJSONObject(accountId);
+        JSONObject data = json.getObject().getJSONObject("data").getJSONObject(accountId.toString());
 
         List<Rating> ratings = data.keySet().stream()
                 .filter(key -> {

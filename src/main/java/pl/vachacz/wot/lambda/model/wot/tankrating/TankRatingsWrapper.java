@@ -1,4 +1,4 @@
-package pl.vachacz.wot.lambda.model.tankrating;
+package pl.vachacz.wot.lambda.model.wot.tankrating;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

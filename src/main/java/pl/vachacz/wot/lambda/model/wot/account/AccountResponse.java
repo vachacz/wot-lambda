@@ -1,10 +1,8 @@
-package pl.vachacz.wot.lambda.model.account;
+package pl.vachacz.wot.lambda.model.wot.account;
 
-import pl.vachacz.wot.lambda.model.BaseResponse;
-import pl.vachacz.wot.lambda.model.vehicle.Vehicle;
+import pl.vachacz.wot.lambda.model.wot.BaseResponse;
 
 import java.util.List;
-import java.util.Map;
 
 public class AccountResponse extends BaseResponse {
 

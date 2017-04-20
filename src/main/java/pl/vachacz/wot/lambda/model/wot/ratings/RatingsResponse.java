@@ -1,9 +1,8 @@
-package pl.vachacz.wot.lambda.model.ratings;
+package pl.vachacz.wot.lambda.model.wot.ratings;
 
-import pl.vachacz.wot.lambda.model.BaseResponse;
+import pl.vachacz.wot.lambda.model.wot.BaseResponse;
 
 import java.util.List;
-import java.util.Map;
 
 public class RatingsResponse extends BaseResponse {
 
