@@ -4,7 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName = "wot_import")
+@DynamoDBTable(tableName = "wot_imports")
 public class WotImportEntity {
 
     @DynamoDBHashKey(attributeName="import_uuid")

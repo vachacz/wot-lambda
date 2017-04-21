@@ -15,7 +15,7 @@ public class TankRatingsResponse {
         this.data = data;
     }
 
-    public List<TankRatingsWrapper> getPlayerStats(String accountId) {
-        return data.get(accountId);
+    public List<TankRatingsWrapper> getPlayerStats(Long accountId) {
+        return data.get(accountId.toString());
     }
 }

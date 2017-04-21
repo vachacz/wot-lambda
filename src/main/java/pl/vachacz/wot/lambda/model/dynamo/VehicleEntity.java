@@ -4,7 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName = "wot_tanks")
+@DynamoDBTable(tableName = "wot_vehicles")
 public class VehicleEntity {
 
     @DynamoDBHashKey(attributeName="tank_id")

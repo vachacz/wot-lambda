@@ -4,13 +4,18 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerStatsEntity;
+import pl.vachacz.wot.lambda.model.dynamo.PlayerTankStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.VehicleEntity;
 import pl.vachacz.wot.lambda.model.dynamo.WotImportEntity;
 import pl.vachacz.wot.lambda.model.wot.ratings.RatingsResponse;
+import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatings;
+import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatingsResponse;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -18,7 +23,7 @@ import java.util.UUID;
 public class LambdaHandler implements RequestHandler<Request, Response> {
 
     private AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "us-west-2"))
+        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://dynamodb.eu-central-1.amazonaws.com", "eu-central-1"))
         .build();
 
     private DynamoDB dynamoDB = new DynamoDB(client);
@@ -65,7 +70,44 @@ public class LambdaHandler implements RequestHandler<Request, Response> {
             mapper.save(entity);
         });
 
-//        TankRatingsResponse playerTankStats = client.getPlayerTankStats(accountId);
+        TankRatingsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
+        playerTankStats.getPlayerStats(accountId).stream().forEach(s -> {
+            PlayerTankStatsEntity entity = new PlayerTankStatsEntity();
+            entity.setImportUuid(uuid);
+            entity.setAccountId(accountId);
+            entity.setTankId(s.getTankId());
+            entity.setKey(accountId + "|" + s.getTankId());
+
+            TankRatings tankRatings = s.getTankRatings();
+
+            entity.setAvgDamageBlocked(tankRatings.getAvgDamageBlocked());
+            entity.setBattleAvgXp(tankRatings.getBattleAvgXp());
+            entity.setBattles(tankRatings.getBattles());
+            entity.setBattleAvgXp(tankRatings.getBattleAvgXp());
+            entity.setCapturePoints(tankRatings.getCapturePoints());
+            entity.setDamageDealt(tankRatings.getDamageDealt());
+            entity.setDamageReceived(tankRatings.getDamageReceived());
+            entity.setDirectHitsReceived(tankRatings.getDirectHitsReceived());
+            entity.setDraws(tankRatings.getDraws());
+            entity.setDroppedCapturePoints(tankRatings.getDroppedCapturePoints());
+            entity.setExplosionHits(tankRatings.getExplosionHits());
+            entity.setExplosionHitsReceived(tankRatings.getExplosionHitsReceived());
+            entity.setFrags(tankRatings.getFrags());
+            entity.setHits(tankRatings.getHits());
+            entity.setHitsPercents(tankRatings.getHitsPercents());
+            entity.setLosses(tankRatings.getLosses());
+            entity.setWins(tankRatings.getWins());
+            entity.setSpotted(tankRatings.getSpotted());
+            entity.setShots(tankRatings.getShots());
+            entity.setXp(tankRatings.getXp());
+            entity.setPiercings(tankRatings.getPiercings());
+            entity.setSurvivedBattles(tankRatings.getSurvivedBattles());
+            entity.setPiercingsReceived(tankRatings.getPiercingsReceived());
+            entity.setNoDamageDirectHitsReceived(tankRatings.getNoDamageDirectHitsReceived());
+            entity.setTankingFactor(tankRatings.getTankingFactor());
+
+            mapper.save(entity);
+        });
 
         return new Response();
     }

@@ -50,7 +50,7 @@ public class WotClient {
         return make(request, VehiclesResponse.class);
     }
 
-    public TankRatingsResponse getPlayerTankStats(String accountId) {
+    public TankRatingsResponse getPlayerTankStats(Long accountId) {
         HttpRequest request = Unirest.get(WOT_API_TANK_STATS)
                 .queryString("application_id", "demo")
                 .queryString("account_id", accountId)
