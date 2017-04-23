@@ -59,6 +59,7 @@ fabric.properties
 modules.xml
 .idea/misc.xml
 *.ipr
+.idea/vcs.xml
 
 ### Java ###
 # Compiled class file
@@ -116,3 +117,4 @@ gradle-app.setting
 
 # End of https://www.gitignore.io/api/vim,java,gradle,intellij+iml
 
+node_modules
