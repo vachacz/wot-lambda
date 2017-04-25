@@ -15,5 +15,14 @@ dependencies {
 
     compile group: 'com.mashape.unirest', name: 'unirest-java', version:'1.4.9'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.8'
-
 }
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtime
+    }
+}
+
+build.dependsOn buildZip
