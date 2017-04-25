@@ -4,8 +4,6 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -13,29 +11,26 @@ import pl.vachacz.wot.lambda.model.dynamo.PlayerStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerTankStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.VehicleEntity;
 import pl.vachacz.wot.lambda.model.dynamo.WotImportEntity;
-import pl.vachacz.wot.lambda.model.wot.ratings.Rating;
 import pl.vachacz.wot.lambda.model.wot.ratings.RatingsResponse;
 import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatings;
 import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatingsResponse;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.UUID;
 
-public class LambdaHandler implements RequestHandler<Request, Response> {
+public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
 
     private AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
         .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://dynamodb.eu-central-1.amazonaws.com", "eu-central-1"))
         .build();
 
-    private DynamoDB dynamoDB = new DynamoDB(client);
     private DynamoDBMapper mapper = new DynamoDBMapper(client);
 
     public Response handleRequest(Request input, Context context) {
 
         WotClient wotClient = new WotClient();
 
-        wotClient.getVehicles().getVehicleList().stream().forEach(s -> {
+        wotClient.getVehicles().getVehicleList().forEach(s -> {
             VehicleEntity loaded = mapper.load(VehicleEntity.class, s.getTankId());
             if (loaded == null) {
                 VehicleEntity entity = new VehicleEntity();
@@ -79,7 +74,7 @@ public class LambdaHandler implements RequestHandler<Request, Response> {
         mapper.save(entity);
 
         TankRatingsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
-        playerTankStats.getPlayerStats(accountId).stream().forEach(s -> {
+        playerTankStats.getPlayerStats(accountId).forEach(s -> {
             PlayerTankStatsEntity tankEntity = new PlayerTankStatsEntity();
             tankEntity.setImportUuid(uuid);
             tankEntity.setAccountId(accountId);
@@ -121,7 +116,7 @@ public class LambdaHandler implements RequestHandler<Request, Response> {
     }
 
     public static void main(String[] args) {
-        new LambdaHandler().handleRequest(null, null);
+        new WotSyncLambdaHandler().handleRequest(null, null);
     }
 
 }
