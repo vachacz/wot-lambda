@@ -57,6 +57,29 @@ html[xmlns] .clearfix {
 
 .App-clear {
     clear: both;
+    padding-top: 20px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.arrow-up {
+    color: green;
+    font-size: 80%;
+}
+
+.arrow-down {
+    color: red;
+    font-size: 80%;
+}
+
+.effective-property {
+    color: blue;
+    font-weight: bold;
+    font-size: 90%;
+}
+
+.App-stats-table {
+    text-align: right;
 }
 
 @keyframes App-logo-spin {

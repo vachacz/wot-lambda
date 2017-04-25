@@ -8,15 +8,28 @@ const getRandomInt = (min, max) => {
 
 const randomArray = () => {
   var array = new Array()
+  var stat = {
+    amountXp: getRandomInt(10000, 11000),
+    damageDealt: getRandomInt(20000, 20000),
+    fragsCount: getRandomInt(1200, 1800),
+    battlesCount: getRandomInt(600, 1000),
+  };
   for (var i = 0; i < getRandomInt(3, 10); i += 1) {
-      array.push({
-          amountXp: getRandomInt(100, 200), damageDealt: getRandomInt(100, 200),
-          averageXp: getRandomInt(100, 200), averageFrags: getRandomInt(100, 200),
-          averageDamage: getRandomInt(100, 200), battlesCount: getRandomInt(100, 200),
-          hitsRatio: getRandomInt(100, 200), winsRatio: getRandomInt(100, 200),
-          survivedRatio: getRandomInt(100, 200), globalRating: getRandomInt(100, 200),
-          fragsCount: getRandomInt(100, 200), maxXp: getRandomInt(100, 200)
-      });
+      stat = {
+          amountXp: stat.amountXp - getRandomInt(1000, 1100),
+          damageDealt: stat.damageDealt - getRandomInt(1000, 2000),
+          fragsCount: stat.fragsCount - getRandomInt(100, 150),
+          averageXp: getRandomInt(100, 110),
+          averageFrags: getRandomInt(100, 200),
+          averageDamage: getRandomInt(100, 110),
+          battlesCount: stat.battlesCount - getRandomInt(50, 100),
+          hitsRatio: getRandomInt(100, 111),
+          winsRatio: getRandomInt(100, 200),
+          survivedRatio: getRandomInt(100, 110),
+          globalRating: getRandomInt(100, 200),
+          maxXp: 1402
+      }
+      array.push(stat);
   }
   return array;
 }
