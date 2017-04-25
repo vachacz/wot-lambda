@@ -16,4 +16,20 @@ public class RatingsResponse extends BaseResponse {
         this.ratings = ratings;
     }
 
+    public Long findLongStatValue(String stat) {
+        return ratings.stream()
+                .filter(r -> r.getStat().equals(stat))
+                .map(r -> r.getValue())
+                .map(r -> r.longValue())
+                .findFirst()
+                .get();
+    }
+
+    public Double findDoubleStatValue(String stat) {
+        return ratings.stream()
+                .filter(r -> r.getStat().equals(stat))
+                .map(r -> r.getValue())
+                .findFirst()
+                .get();
+    }
 }

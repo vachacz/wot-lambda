@@ -13,11 +13,13 @@ import pl.vachacz.wot.lambda.model.dynamo.PlayerStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerTankStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.VehicleEntity;
 import pl.vachacz.wot.lambda.model.dynamo.WotImportEntity;
+import pl.vachacz.wot.lambda.model.wot.ratings.Rating;
 import pl.vachacz.wot.lambda.model.wot.ratings.RatingsResponse;
 import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatings;
 import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatingsResponse;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 public class LambdaHandler implements RequestHandler<Request, Response> {
@@ -57,56 +59,62 @@ public class LambdaHandler implements RequestHandler<Request, Response> {
         Long accountId = wotClient.getAccountId("hawtank");
 
         RatingsResponse playerStats = wotClient.getPlayerStats(accountId);
-        playerStats.getRatings().stream().forEach(s -> {
-            PlayerStatsEntity entity = new PlayerStatsEntity();
-            entity.setKey(accountId + "|" + s.getStat());
-            entity.setImportUuid(uuid);
-            entity.setAccountId(accountId);
-            entity.setStat(s.getStat());
-            entity.setValue(s.getValue());
-            entity.setRank(s.getRank());
-            entity.setRankDelta(s.getRankDelta());
 
-            mapper.save(entity);
-        });
+        PlayerStatsEntity entity = new PlayerStatsEntity();
+        entity.setAccountId(accountId);
+        entity.setImportUuid(uuid);
+        entity.setAmountXp(playerStats.findLongStatValue("xp_amount"));
+        entity.setAverageDamage(playerStats.findDoubleStatValue("damage_avg"));
+        entity.setAverageFrags(playerStats.findDoubleStatValue("frags_avg"));
+        entity.setAverageXp(playerStats.findDoubleStatValue("xp_avg"));
+        entity.setBattlesCount(playerStats.findLongStatValue("battles_count"));
+        entity.setFragsCount(playerStats.findLongStatValue("frags_count"));
+        entity.setGlobalRating(playerStats.findDoubleStatValue("global_rating"));
+        entity.setDamageDealt(playerStats.findLongStatValue("damage_dealt"));
+        entity.setMaxXp(playerStats.findLongStatValue("xp_max"));
+        entity.setWinsRatio(playerStats.findDoubleStatValue("wins_ratio"));
+        entity.setHitsRatio(playerStats.findDoubleStatValue("hits_ratio"));
+        entity.setSurvivedRatio(playerStats.findDoubleStatValue("survived_ratio"));
+
+        mapper.save(entity);
 
         TankRatingsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
         playerTankStats.getPlayerStats(accountId).stream().forEach(s -> {
-            PlayerTankStatsEntity entity = new PlayerTankStatsEntity();
-            entity.setImportUuid(uuid);
-            entity.setAccountId(accountId);
-            entity.setTankId(s.getTankId());
-            entity.setKey(accountId + "|" + s.getTankId());
+            PlayerTankStatsEntity tankEntity = new PlayerTankStatsEntity();
+            tankEntity.setImportUuid(uuid);
+            tankEntity.setAccountId(accountId);
+            tankEntity.setTankId(s.getTankId());
+            tankEntity.setKey(accountId + "|" + s.getTankId());
 
             TankRatings tankRatings = s.getTankRatings();
 
-            entity.setAvgDamageBlocked(tankRatings.getAvgDamageBlocked());
-            entity.setBattleAvgXp(tankRatings.getBattleAvgXp());
-            entity.setBattles(tankRatings.getBattles());
-            entity.setBattleAvgXp(tankRatings.getBattleAvgXp());
-            entity.setCapturePoints(tankRatings.getCapturePoints());
-            entity.setDamageDealt(tankRatings.getDamageDealt());
-            entity.setDamageReceived(tankRatings.getDamageReceived());
-            entity.setDirectHitsReceived(tankRatings.getDirectHitsReceived());
-            entity.setDraws(tankRatings.getDraws());
-            entity.setDroppedCapturePoints(tankRatings.getDroppedCapturePoints());
-            entity.setExplosionHits(tankRatings.getExplosionHits());
-            entity.setExplosionHitsReceived(tankRatings.getExplosionHitsReceived());
-            entity.setFrags(tankRatings.getFrags());
-            entity.setHits(tankRatings.getHits());
-            entity.setHitsPercents(tankRatings.getHitsPercents());
-            entity.setLosses(tankRatings.getLosses());
-            entity.setWins(tankRatings.getWins());
-            entity.setSpotted(tankRatings.getSpotted());
-            entity.setShots(tankRatings.getShots());
-            entity.setXp(tankRatings.getXp());
-            entity.setPiercings(tankRatings.getPiercings());
-            entity.setSurvivedBattles(tankRatings.getSurvivedBattles());
-            entity.setPiercingsReceived(tankRatings.getPiercingsReceived());
-            entity.setNoDamageDirectHitsReceived(tankRatings.getNoDamageDirectHitsReceived());
-            entity.setTankingFactor(tankRatings.getTankingFactor());
+            tankEntity.setAvgDamageBlocked(tankRatings.getAvgDamageBlocked());
+            tankEntity.setBattleAvgXp(tankRatings.getBattleAvgXp());
+            tankEntity.setBattles(tankRatings.getBattles());
+            tankEntity.setBattleAvgXp(tankRatings.getBattleAvgXp());
+            tankEntity.setCapturePoints(tankRatings.getCapturePoints());
+            tankEntity.setDamageDealt(tankRatings.getDamageDealt());
+            tankEntity.setDamageReceived(tankRatings.getDamageReceived());
+            tankEntity.setDirectHitsReceived(tankRatings.getDirectHitsReceived());
+            tankEntity.setDraws(tankRatings.getDraws());
+            tankEntity.setDroppedCapturePoints(tankRatings.getDroppedCapturePoints());
+            tankEntity.setExplosionHits(tankRatings.getExplosionHits());
+            tankEntity.setExplosionHitsReceived(tankRatings.getExplosionHitsReceived());
+            tankEntity.setFrags(tankRatings.getFrags());
+            tankEntity.setHits(tankRatings.getHits());
+            tankEntity.setHitsPercents(tankRatings.getHitsPercents());
+            tankEntity.setLosses(tankRatings.getLosses());
+            tankEntity.setWins(tankRatings.getWins());
+            tankEntity.setSpotted(tankRatings.getSpotted());
+            tankEntity.setShots(tankRatings.getShots());
+            tankEntity.setXp(tankRatings.getXp());
+            tankEntity.setPiercings(tankRatings.getPiercings());
+            tankEntity.setSurvivedBattles(tankRatings.getSurvivedBattles());
+            tankEntity.setPiercingsReceived(tankRatings.getPiercingsReceived());
+            tankEntity.setNoDamageDirectHitsReceived(tankRatings.getNoDamageDirectHitsReceived());
+            tankEntity.setTankingFactor(tankRatings.getTankingFactor());
 
-            mapper.save(entity);
+            mapper.save(tankEntity);
         });
 
         return new Response();
