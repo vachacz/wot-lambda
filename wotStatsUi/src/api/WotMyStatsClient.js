@@ -34,14 +34,12 @@ const randomArray = () => {
   return array;
 }
 
-export const getPlayerStats = () => {
-  // return axios.get(url).then(response => response.data);
-  return {
-    playerStats: {
-      accountId: 12345,
-      stats: randomArray()
-    }
-  }
+export const getPlayerStats = (component) => {
+  return axios.get("https://c5lu9mesih.execute-api.eu-central-1.amazonaws.com/prod/playerstats")
+    .then(response => component.setState(response.data));
+//  return {
+//    playerStats: randomArray()
+//  }
 }
 
 export const getPlayerTankStats = (tankId) => {

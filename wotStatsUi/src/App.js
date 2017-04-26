@@ -133,6 +133,9 @@ class Stat extends Component {
     let stat = this.props.stats[this.props.property]
     let previousStat = this.props.previousStats[this.props.property]
     let delta = stat - previousStat
+    if ( delta % 1 !== 0 ) {
+      delta = delta.toFixed(2);
+    }
 
     let deltaComponent
     if (delta > 0) {
@@ -160,13 +163,14 @@ class StatTable extends Component {
   constructor () {
     super()
     this.state = {
-        playerStats: { stats: [] },
+        playerStats: [],
         deltaModeSelected: "relative"
     };
     let _this = this;
     emitter.on('statPresetSelected', function(preset) {
       _this.setState({ statPresetSelected: preset });
-      _this.setState(getPlayerStats());
+      var playerStats = getPlayerStats(_this);
+      _this.setState(playerStats);
     })
     emitter.on('deltaModeSelected', function(deltaMode) {
       _this.setState({
@@ -194,13 +198,13 @@ class StatTable extends Component {
   }
   generateStatRows() {
     var _state = this.state;
-    var rows = this.state.playerStats.stats.map(function(stat, index) {
+    var rows = this.state.playerStats.map(function(stat, index) {
       var previousStat = {};
       if (_state.deltaModeSelected === "relative") {
-        if (index + 1 < _state.playerStats.stats.length) { previousStat = _state.playerStats.stats[index+1]; }
+        if (index + 1 < _state.playerStats.length) { previousStat = _state.playerStats[index+1]; }
       }
       if (_state.deltaModeSelected === "absolute") {
-        previousStat = _state.playerStats.stats[0];
+        previousStat = _state.playerStats[0];
       }
       return (
         <tr>
@@ -215,7 +219,6 @@ class StatTable extends Component {
           <Stat stats={stat} previousStats={previousStat} property="winsRatio"/>
           <Stat stats={stat} previousStats={previousStat} property="survivedRatio"/>
           <Stat stats={stat} previousStats={previousStat} property="globalRating"/>
-
           <Stat stats={stat} previousStats={previousStat} property="maxXp"/>
         </tr>
       );
