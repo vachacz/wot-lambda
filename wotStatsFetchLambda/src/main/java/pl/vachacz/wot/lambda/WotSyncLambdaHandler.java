@@ -4,13 +4,11 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerTankStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.VehicleEntity;
-import pl.vachacz.wot.lambda.model.dynamo.WotImportEntity;
 import pl.vachacz.wot.lambda.model.wot.ratings.RatingsResponse;
 import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatings;
 import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatingsResponse;
@@ -43,13 +41,7 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
             }
         });
 
-        String uuid = UUID.randomUUID().toString();
-
-        WotImportEntity wotImport = new WotImportEntity();
-        wotImport.setUuid(uuid);
-        wotImport.setTimestamp(Calendar.getInstance().getTimeInMillis());
-
-        mapper.save(wotImport);
+        long timestamp = Calendar.getInstance().getTimeInMillis();
 
         Long accountId = wotClient.getAccountId("hawtank");
 
@@ -57,7 +49,7 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
 
         PlayerStatsEntity entity = new PlayerStatsEntity();
         entity.setAccountId(accountId);
-        entity.setImportUuid(uuid);
+        entity.setTimestamp(timestamp);
         entity.setAmountXp(playerStats.findLongStatValue("xp_amount"));
         entity.setAverageDamage(playerStats.findDoubleStatValue("damage_avg"));
         entity.setAverageFrags(playerStats.findDoubleStatValue("frags_avg"));
@@ -76,7 +68,7 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
         TankRatingsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
         playerTankStats.getPlayerStats(accountId).forEach(s -> {
             PlayerTankStatsEntity tankEntity = new PlayerTankStatsEntity();
-            tankEntity.setImportUuid(uuid);
+            tankEntity.setTimestamp(timestamp);
             tankEntity.setAccountId(accountId);
             tankEntity.setTankId(s.getTankId());
             tankEntity.setKey(accountId + "|" + s.getTankId());

@@ -7,11 +7,14 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName = "wot_player_tank_stats")
 public class PlayerTankStatsEntity {
 
-    @DynamoDBHashKey(attributeName="key")
+    @DynamoDBHashKey(attributeName="composite_key")
     private String key;
 
-    @DynamoDBRangeKey(attributeName="import_uuid")
-    private String importUuid;
+    @DynamoDBRangeKey(attributeName="timestamp")
+    private Long timestamp;
+
+    private Boolean weeklyStat;
+    private Boolean monthlyStat;
 
     private Long tankId;
     private Long accountId;
@@ -46,14 +49,6 @@ public class PlayerTankStatsEntity {
 
     public void setKey(String key) {
         this.key = key;
-    }
-
-    public String getImportUuid() {
-        return importUuid;
-    }
-
-    public void setImportUuid(String importUuid) {
-        this.importUuid = importUuid;
     }
 
     public Long getAccountId() {
@@ -262,5 +257,29 @@ public class PlayerTankStatsEntity {
 
     public void setTankId(Long tankId) {
         this.tankId = tankId;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Boolean getWeeklyStat() {
+        return weeklyStat;
+    }
+
+    public void setWeeklyStat(Boolean weeklyStat) {
+        this.weeklyStat = weeklyStat;
+    }
+
+    public Boolean getMonthlyStat() {
+        return monthlyStat;
+    }
+
+    public void setMonthlyStat(Boolean monthlyStat) {
+        this.monthlyStat = monthlyStat;
     }
 }

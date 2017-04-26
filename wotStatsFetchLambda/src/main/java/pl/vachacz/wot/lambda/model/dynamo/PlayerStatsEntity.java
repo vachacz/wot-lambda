@@ -10,8 +10,11 @@ public class PlayerStatsEntity {
     @DynamoDBHashKey(attributeName="account_id")
     private Long accountId;
 
-    @DynamoDBRangeKey(attributeName="import_uuid")
-    private String importUuid;
+    @DynamoDBRangeKey(attributeName="timestamp")
+    private Long timestamp;
+
+    private Boolean weeklyStat;
+    private Boolean monthlyStat;
 
     private Long amountXp;
     private Long damageDealt;
@@ -32,14 +35,6 @@ public class PlayerStatsEntity {
 
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
-    }
-
-    public String getImportUuid() {
-        return importUuid;
-    }
-
-    public void setImportUuid(String importUuid) {
-        this.importUuid = importUuid;
     }
 
     public Long getAmountXp() {
@@ -138,4 +133,27 @@ public class PlayerStatsEntity {
         this.maxXp = maxXp;
     }
 
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Boolean getWeeklyStat() {
+        return weeklyStat;
+    }
+
+    public void setWeeklyStat(Boolean weeklyStat) {
+        this.weeklyStat = weeklyStat;
+    }
+
+    public Boolean getMonthlyStat() {
+        return monthlyStat;
+    }
+
+    public void setMonthlyStat(Boolean monthlyStat) {
+        this.monthlyStat = monthlyStat;
+    }
 }
