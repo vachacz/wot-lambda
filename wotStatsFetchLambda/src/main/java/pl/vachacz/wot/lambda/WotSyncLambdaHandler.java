@@ -4,8 +4,12 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import pl.vachacz.wot.lambda.model.dynamo.PlayerEntity;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerTankStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.VehicleEntity;
@@ -13,8 +17,8 @@ import pl.vachacz.wot.lambda.model.wot.ratings.RatingsResponse;
 import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatings;
 import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatingsResponse;
 
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.UUID;
 
 public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
 
@@ -41,30 +45,25 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
             }
         });
 
-        long timestamp = Calendar.getInstance().getTimeInMillis();
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        PaginatedScanList<PlayerEntity> players = mapper.scan(PlayerEntity.class, scan);
 
-        Long accountId = wotClient.getAccountId("hawtank");
+        players.forEach(player -> {
+            if (player.getAccountId() == null) {
+                Long accountId = wotClient.getAccountId(player.getPlayer());
+                player.setAccountId(accountId);
+                mapper.save(player);
+            }
 
-        RatingsResponse playerStats = wotClient.getPlayerStats(accountId);
+            long timestamp = Calendar.getInstance().getTimeInMillis();
+            savePlayerStats(wotClient, timestamp, player.getAccountId());
+            savePlayerTankStats(wotClient, timestamp, player.getAccountId());
+        });
 
-        PlayerStatsEntity entity = new PlayerStatsEntity();
-        entity.setAccountId(accountId);
-        entity.setTimestamp(timestamp);
-        entity.setAmountXp(playerStats.findLongStatValue("xp_amount"));
-        entity.setAverageDamage(playerStats.findDoubleStatValue("damage_avg"));
-        entity.setAverageFrags(playerStats.findDoubleStatValue("frags_avg"));
-        entity.setAverageXp(playerStats.findDoubleStatValue("xp_avg"));
-        entity.setBattlesCount(playerStats.findLongStatValue("battles_count"));
-        entity.setFragsCount(playerStats.findLongStatValue("frags_count"));
-        entity.setGlobalRating(playerStats.findDoubleStatValue("global_rating"));
-        entity.setDamageDealt(playerStats.findLongStatValue("damage_dealt"));
-        entity.setMaxXp(playerStats.findLongStatValue("xp_max"));
-        entity.setWinsRatio(playerStats.findDoubleStatValue("wins_ratio"));
-        entity.setHitsRatio(playerStats.findDoubleStatValue("hits_ratio"));
-        entity.setSurvivedRatio(playerStats.findDoubleStatValue("survived_ratio"));
+        return new Response();
+    }
 
-        mapper.save(entity);
-
+    private void savePlayerTankStats(WotClient wotClient, long timestamp, Long accountId) {
         TankRatingsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
         playerTankStats.getPlayerStats(accountId).forEach(s -> {
             PlayerTankStatsEntity tankEntity = new PlayerTankStatsEntity();
@@ -103,8 +102,28 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
 
             mapper.save(tankEntity);
         });
+    }
 
-        return new Response();
+    private void savePlayerStats(WotClient wotClient, long timestamp, Long accountId) {
+        RatingsResponse playerStats = wotClient.getPlayerStats(accountId);
+
+        PlayerStatsEntity entity = new PlayerStatsEntity();
+        entity.setAccountId(accountId);
+        entity.setTimestamp(timestamp);
+        entity.setAmountXp(playerStats.findLongStatValue("xp_amount"));
+        entity.setAverageDamage(playerStats.findDoubleStatValue("damage_avg"));
+        entity.setAverageFrags(playerStats.findDoubleStatValue("frags_avg"));
+        entity.setAverageXp(playerStats.findDoubleStatValue("xp_avg"));
+        entity.setBattlesCount(playerStats.findLongStatValue("battles_count"));
+        entity.setFragsCount(playerStats.findLongStatValue("frags_count"));
+        entity.setGlobalRating(playerStats.findDoubleStatValue("global_rating"));
+        entity.setDamageDealt(playerStats.findLongStatValue("damage_dealt"));
+        entity.setMaxXp(playerStats.findLongStatValue("xp_max"));
+        entity.setWinsRatio(playerStats.findDoubleStatValue("wins_ratio"));
+        entity.setHitsRatio(playerStats.findDoubleStatValue("hits_ratio"));
+        entity.setSurvivedRatio(playerStats.findDoubleStatValue("survived_ratio"));
+
+        mapper.save(entity);
     }
 
     public static void main(String[] args) {

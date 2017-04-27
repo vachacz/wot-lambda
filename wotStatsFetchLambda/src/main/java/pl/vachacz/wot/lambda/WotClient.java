@@ -32,10 +32,10 @@ public class WotClient {
         setObjectMapper();
     }
 
-    public Long getAccountId(String hawtank) {
+    public Long getAccountId(String player) {
         HttpRequest request = Unirest.get(WOT_API_ACCOUNT)
                 .queryString("application_id", "demo")
-                .queryString("search", "hawtank")
+                .queryString("search", player)
                 .queryString("type", "exact");
         AccountResponse accResponse = make(request, AccountResponse.class);
         return accResponse.getData().get(0).getAccountId();

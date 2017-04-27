@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getPlayerStats, getPlayerTankStats } from './api/WotMyStatsClient.js';
+import { getPlayers, getPlayerStats } from './api/WotMyStatsClient.js';
 import { Tab, Tabs, Button, ButtonGroup, Navbar, Nav, NavItem, Table, Glyphicon, Tooltip, OverlayTrigger, NavDropdown, MenuItem } from 'react-bootstrap';
 import './App.css';
 
@@ -12,19 +12,23 @@ const emitter = new EventEmitter();
 class MainNavbar extends Component {
   constructor(props) {
     super()
-    this.state = {
-      player: "hawtank"
-    }
+    this.state = { player: "", players: [] }
   }
-  onPlayerSelected(player) {
-    var playerMap = {};
-    playerMap["hawtank"] = 539195479;
-    playerMap["Xaam"] = 501037223;
-
-    this.setState({ player: player })
-    emitter.emit('playerSelected', playerMap[player])
+  componentWillMount() {
+    getPlayers(this)
+  }
+  onPlayerSelected(i) {
+    var player = this.state.players[i]
+    emitter.emit('playerSelected', player.account_id)
+    this.setState({ player: player.player })
   }
   render() {
+    var players = []
+    for (var i=0; i < this.state.players.length; i++) {
+       players.push(
+         <MenuItem onSelect={this.onPlayerSelected.bind(this, i)}>{this.state.players[i].player}</MenuItem>
+       )
+    }
     return (
       <div>
         <Navbar inverse collapseOnSelect>
@@ -37,10 +41,9 @@ class MainNavbar extends Component {
           <Navbar.Collapse>
             <Nav pullRight>
               <NavDropdown title={this.state.player} id="basic-nav-dropdown">
-                <MenuItem onClick={this.onPlayerSelected.bind(this, 'hawtank')}>hawtank</MenuItem>
-                <MenuItem onClick={this.onPlayerSelected.bind(this, 'Xaam')}>Xaam</MenuItem>
+                {players}
               </NavDropdown>
-              <NavItem eventKey={2} href="#">EU</NavItem>
+              <NavItem href="#">EU</NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

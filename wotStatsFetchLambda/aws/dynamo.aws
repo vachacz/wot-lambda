@@ -1,4 +1,10 @@
 aws dynamodb create-table \
+    --table-name wot_player \
+    --attribute-definitions AttributeName=player,AttributeType=S \
+    --key-schema AttributeName=player,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+
+aws dynamodb create-table \
     --table-name wot_vehicles \
     --attribute-definitions AttributeName=tank_id,AttributeType=N \
     --key-schema AttributeName=tank_id,KeyType=HASH \
