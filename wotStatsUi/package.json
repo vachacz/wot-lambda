@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "bootstrap": "^3.3.7",
+    "moment": "^2.18.1",
     "react": "^15.5.4",
     "react-bootstrap": "^0.30.10",
     "react-bootstrap-daterangepicker": "^3.2.2",

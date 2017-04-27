@@ -1,13 +1,29 @@
 import React, { Component } from 'react';
 import { getPlayerStats, getPlayerTankStats } from './api/WotMyStatsClient.js';
-import { Tab, Tabs, Button, ButtonGroup, Navbar, Nav, NavItem, Table, Glyphicon } from 'react-bootstrap';
+import { Tab, Tabs, Button, ButtonGroup, Navbar, Nav, NavItem, Table, Glyphicon, Tooltip, OverlayTrigger, NavDropdown, MenuItem } from 'react-bootstrap';
 import './App.css';
+
+var moment = require('moment');
 
 var DatePicker = require("react-bootstrap-date-picker");
 const EventEmitter = require('events').EventEmitter;
 const emitter = new EventEmitter();
 
 class MainNavbar extends Component {
+  constructor(props) {
+    super()
+    this.state = {
+      player: "hawtank"
+    }
+  }
+  onPlayerSelected(player) {
+    var playerMap = {};
+    playerMap["hawtank"] = 539195479;
+    playerMap["Xaam"] = 501037223;
+
+    this.setState({ player: player })
+    emitter.emit('playerSelected', playerMap[player])
+  }
   render() {
     return (
       <div>
@@ -20,7 +36,10 @@ class MainNavbar extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <NavItem eventKey={1} href="#">hawtank</NavItem>
+              <NavDropdown title={this.state.player} id="basic-nav-dropdown">
+                <MenuItem onClick={this.onPlayerSelected.bind(this, 'hawtank')}>hawtank</MenuItem>
+                <MenuItem onClick={this.onPlayerSelected.bind(this, 'Xaam')}>Xaam</MenuItem>
+              </NavDropdown>
               <NavItem eventKey={2} href="#">EU</NavItem>
             </Nav>
           </Navbar.Collapse>
@@ -115,6 +134,21 @@ class DeltaModeSelector extends Component {
   }
 }
 
+class DateCell extends Component {
+  render() {
+    var dt = moment(parseInt(this.props.timestamp));
+    const tooltip = (<Tooltip id="tooltip-bottom">{dt.format("YYYY-MM-DD HH:mm")}</Tooltip>);
+    return (
+      <td>
+        {dt.format("YYYY-MM-DD") + " "}
+        <OverlayTrigger placement="bottom" overlay={tooltip}>
+          <Glyphicon glyph="time"/>
+        </OverlayTrigger>
+      </td>
+    );
+  }
+}
+
 class PlayerStatsTab extends Component {
   render() {
     return (
@@ -164,30 +198,34 @@ class StatTable extends Component {
     super()
     this.state = {
         playerStats: [],
+        playerId: "539195479",
         deltaModeSelected: "relative"
     };
-    let _this = this;
-    emitter.on('statPresetSelected', function(preset) {
-      _this.setState({ statPresetSelected: preset });
-      var playerStats = getPlayerStats(_this);
-      _this.setState(playerStats);
-    })
-    emitter.on('deltaModeSelected', function(deltaMode) {
-      _this.setState({
-        deltaModeSelected: deltaMode,
-      });
-    })
+    emitter.on('statPresetSelected', (function(preset) {
+      this.setState({ statPresetSelected: preset })
+      getPlayerStats(this, this.state.playerId);
+    }).bind(this))
+
+    emitter.on('deltaModeSelected', (function(deltaMode) {
+      this.setState({ deltaModeSelected: deltaMode })
+    }).bind(this))
+
+    emitter.on('playerSelected', (function(playerId) {
+      this.setState({ playerId: playerId })
+      getPlayerStats(this, playerId);
+    }).bind(this))
   }
   generateHeaderRow() {
     return (
       <tr>
-        <td>Bat cnt</td>
+        <td>Date</td>
+        <td>Battles</td>
         <td>XP <Glyphicon glyph="question-sign" /></td>
-        <td>Frags</td>
-        <td>Damage <Glyphicon glyph="question-sign" /></td>
         <td>Avg XP <Glyphicon glyph="question-sign" /></td>
-        <td>Avg Fr</td>
+        <td>Damage <Glyphicon glyph="question-sign" /></td>
         <td>Avg Dmg</td>
+        <td>Frags</td>
+        <td>Avg Fr</td>
         <td>Hit Rat</td>
         <td>Win Rat</td>
         <td>Surv Rat</td>
@@ -208,15 +246,16 @@ class StatTable extends Component {
       }
       return (
         <tr>
+          <DateCell timestamp={stat.timestamp}/>
           <Stat stats={stat} previousStats={previousStat} property="battlesCount"/>
           <Stat stats={stat} previousStats={previousStat} property="amountXp"/>
-          <Stat stats={stat} previousStats={previousStat} property="fragsCount"/>
-          <Stat stats={stat} previousStats={previousStat} property="damageDealt"/>
           <Stat stats={stat} previousStats={previousStat} property="averageXp" effectiveProperty="amountXp"/>
-          <Stat stats={stat} previousStats={previousStat} property="averageFrags" effectiveProperty="fragsCount"/>
+          <Stat stats={stat} previousStats={previousStat} property="damageDealt"/>
           <Stat stats={stat} previousStats={previousStat} property="averageDamage" effectiveProperty="damageDealt"/>
-          <Stat stats={stat} previousStats={previousStat} property="hitsRatio"/>
+          <Stat stats={stat} previousStats={previousStat} property="fragsCount"/>
+          <Stat stats={stat} previousStats={previousStat} property="averageFrags" effectiveProperty="fragsCount"/>
           <Stat stats={stat} previousStats={previousStat} property="winsRatio"/>
+          <Stat stats={stat} previousStats={previousStat} property="hitsRatio"/>
           <Stat stats={stat} previousStats={previousStat} property="survivedRatio"/>
           <Stat stats={stat} previousStats={previousStat} property="globalRating"/>
           <Stat stats={stat} previousStats={previousStat} property="maxXp"/>
@@ -231,18 +270,18 @@ class StatTable extends Component {
     return (
       <div className="App-clear">
         <Table bsClass="table table-striped table-bordered table-condensed table-hover App-stats-table">
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
-          <col width="90px" />
+          <col width="110px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
+          <col width="83px" />
 
           <thead>{headerRow}</thead>
           <tbody>{statRows}</tbody>
