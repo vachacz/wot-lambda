@@ -73,6 +73,7 @@ public class PlayerStatsEntity {
     private Double avgDamageDealt;
     private Double avgDirectHitsReceived;
     private Double avgDamageReceived;
+    private Double avgExplosionHits;
     private Double avgExplosionHitsReceived;
     private Double avgCapturePoints;
     private Double avgDroppedCapturePoints;
@@ -467,5 +468,13 @@ public class PlayerStatsEntity {
 
     public void setWinsRatio(Double winsRatio) {
         this.winsRatio = winsRatio;
+    }
+
+    public Double getAvgExplosionHits() {
+        return avgExplosionHits;
+    }
+
+    public void setAvgExplosionHits(Double avgExplosionHits) {
+        this.avgExplosionHits = avgExplosionHits;
     }
 }

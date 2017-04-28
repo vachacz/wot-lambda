@@ -38,7 +38,6 @@ public class PlayerTankStatsEntity {
     private Integer wins;
     private Integer losses;
     private Integer piercingsReceived;
-    private Integer noDamageDirectHitsReceived;
     private Integer shots;
     private Integer explosionHitsReceived;
     private Double tankingFactor;
@@ -237,14 +236,6 @@ public class PlayerTankStatsEntity {
 
     public void setPiercingsReceived(Integer piercingsReceived) {
         this.piercingsReceived = piercingsReceived;
-    }
-
-    public Integer getNoDamageDirectHitsReceived() {
-        return noDamageDirectHitsReceived;
-    }
-
-    public void setNoDamageDirectHitsReceived(Integer noDamageDirectHitsReceived) {
-        this.noDamageDirectHitsReceived = noDamageDirectHitsReceived;
     }
 
     public Integer getShots() {

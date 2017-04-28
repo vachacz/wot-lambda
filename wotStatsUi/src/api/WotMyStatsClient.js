@@ -8,7 +8,7 @@ export const getPlayers = (component) => {
 }
 
 export const getPlayerStats = (component, playerId) => {
-  return axios.get(baseurl + "/playerstats?player=" + playerId)
+  return axios.get(baseurl + "/playerstats/" + playerId)
     .then(response => component.setState(response.data));
 }
 

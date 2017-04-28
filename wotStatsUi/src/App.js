@@ -222,18 +222,50 @@ class StatTable extends Component {
     return (
       <tr>
         <td>Date</td>
-        <td>Battles</td>
-        <td>XP <Glyphicon glyph="question-sign" /></td>
-        <td>Avg XP <Glyphicon glyph="question-sign" /></td>
-        <td>Damage <Glyphicon glyph="question-sign" /></td>
-        <td>Avg Dmg</td>
-        <td>Frags</td>
-        <td>Avg Fr</td>
-        <td>Hit Rat</td>
-        <td>Win Rat</td>
-        <td>Surv Rat</td>
-        <td>Rating</td>
-        <td>Max Xp</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
+        <td>head</td>
       </tr>
     );
   }
@@ -250,18 +282,50 @@ class StatTable extends Component {
       return (
         <tr>
           <DateCell timestamp={stat.timestamp}/>
-          <Stat stats={stat} previousStats={previousStat} property="battlesCount"/>
-          <Stat stats={stat} previousStats={previousStat} property="amountXp"/>
-          <Stat stats={stat} previousStats={previousStat} property="averageXp" effectiveProperty="amountXp"/>
+          <Stat stats={stat} previousStats={previousStat} property="battles"/>
+          <Stat stats={stat} previousStats={previousStat} property="wins"/>
+          <Stat stats={stat} previousStats={previousStat} property="losses"/>
+          <Stat stats={stat} previousStats={previousStat} property="draws"/>
+          <Stat stats={stat} previousStats={previousStat} property="frags"/>
+          <Stat stats={stat} previousStats={previousStat} property="spotted"/>
+          <Stat stats={stat} previousStats={previousStat} property="shots"/>
+          <Stat stats={stat} previousStats={previousStat} property="hits"/>
+          <Stat stats={stat} previousStats={previousStat} property="piercings"/>
+          <Stat stats={stat} previousStats={previousStat} property="piercingsReceived"/>
+          <Stat stats={stat} previousStats={previousStat} property="survivedBattles"/>
+          <Stat stats={stat} previousStats={previousStat} property="xp"/>
+          <Stat stats={stat} previousStats={previousStat} property="explosionHits"/>
+          <Stat stats={stat} previousStats={previousStat} property="explosionHitsReceived"/>
+          <Stat stats={stat} previousStats={previousStat} property="directHitsReceived"/>
           <Stat stats={stat} previousStats={previousStat} property="damageDealt"/>
-          <Stat stats={stat} previousStats={previousStat} property="averageDamage" effectiveProperty="damageDealt"/>
-          <Stat stats={stat} previousStats={previousStat} property="fragsCount"/>
-          <Stat stats={stat} previousStats={previousStat} property="averageFrags" effectiveProperty="fragsCount"/>
-          <Stat stats={stat} previousStats={previousStat} property="winsRatio"/>
-          <Stat stats={stat} previousStats={previousStat} property="hitsRatio"/>
-          <Stat stats={stat} previousStats={previousStat} property="survivedRatio"/>
-          <Stat stats={stat} previousStats={previousStat} property="globalRating"/>
+          <Stat stats={stat} previousStats={previousStat} property="damageReceived"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgBattleXp"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgDamageBlocked"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgDamageAssisted"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgDamageAssistedRadio"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgDamageAssistedTrack"/>
+          <Stat stats={stat} previousStats={previousStat} property="capturePoints"/>
+          <Stat stats={stat} previousStats={previousStat} property="droppedCapturePoints"/>
+          <Stat stats={stat} previousStats={previousStat} property="maxDamage"/>
           <Stat stats={stat} previousStats={previousStat} property="maxXp"/>
+          <Stat stats={stat} previousStats={previousStat} property="maxFrags"/>
+          <Stat stats={stat} previousStats={previousStat} property="winsRatio"/>
+          <Stat stats={stat} previousStats={previousStat} property="lossesRatio"/>
+          <Stat stats={stat} previousStats={previousStat} property="drawsRatio"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgFrags"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgSpotted"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgShots" effectiveProperty="shots"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgHits"/>
+          <Stat stats={stat} previousStats={previousStat} property="hitsRatio"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgPiercings"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgPiercingsReceived"/>
+          <Stat stats={stat} previousStats={previousStat} property="survivedBattlesRatio"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgDamageDealt"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgDirectHitsReceived"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgDamageReceived"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgExplosionHitsReceived"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgCapturePoints"/>
+          <Stat stats={stat} previousStats={previousStat} property="avgDroppedCapturePoints"/>
         </tr>
       );
     });
@@ -274,17 +338,50 @@ class StatTable extends Component {
       <div className="App-clear">
         <Table bsClass="table table-striped table-bordered table-condensed table-hover App-stats-table">
           <col width="110px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
-          <col width="83px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
+          <col width="80px" />
 
           <thead>{headerRow}</thead>
           <tbody>{statRows}</tbody>

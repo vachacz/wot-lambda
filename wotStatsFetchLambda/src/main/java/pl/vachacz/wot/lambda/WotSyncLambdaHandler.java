@@ -131,6 +131,9 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
         entity.setAvgDirectHitsReceived(scale(stats.getDirectHitsReceived() / battlesDouble));
 
         entity.setExplosionHits(stats.getExplosionHits());
+        entity.setAvgExplosionHits(scale(stats.getExplosionHits() / battlesDouble));
+
+        entity.setExplosionHitsReceived(stats.getExplosionHitsReceived());
         entity.setAvgExplosionHitsReceived(scale(stats.getExplosionHitsReceived() / battlesDouble));
 
         entity.setAvgDamageBlocked(stats.getAvgDamageBlocked());
