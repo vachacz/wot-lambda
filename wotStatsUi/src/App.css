@@ -23,6 +23,11 @@
   padding: 2px;
 }
 
+.App-menugroup-right {
+  float: right;
+  padding: 2px;
+}
+
 .App-menugroup-header {
   font-size: 90%;
 }
@@ -82,6 +87,20 @@ html[xmlns] .clearfix {
 .App-stats-table {
     text-align: right;
     table-layout: fixed;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.App-stats-table td {
+    min-width: 80px;
+    max-width: 80px;
+    width: 80px;
+}
+
+.App-stats-table td:first-child {
+    min-width: 120px;
+    max-width: 120px;
+    width: 120px;
 }
 
 @keyframes App-logo-spin {

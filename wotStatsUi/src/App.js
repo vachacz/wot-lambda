@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { getPlayers, getPlayerStats } from './api/WotMyStatsClient.js';
+import { getPlayers, getPlayerStats, initialVisibleColumnGroups } from './api/WotMyStatsClient.js';
 import { Tab, Tabs, Button, ButtonGroup, Navbar, Nav, NavItem, Table, Glyphicon, Tooltip, OverlayTrigger, NavDropdown, MenuItem } from 'react-bootstrap';
 import './App.css';
 
 var moment = require('moment');
-
 var DatePicker = require("react-bootstrap-date-picker");
+
 const EventEmitter = require('events').EventEmitter;
 const emitter = new EventEmitter();
 
@@ -74,15 +74,11 @@ class MainNavigation extends Component {
 
 class StatPresetSelector extends Component {
   constructor(props) {
-    super()
-    this.state = {
-      preset: ""
-    }
+    super(props)
+    this.state = { preset: "" }
   }
   onPresetSelected(preset) {
-    this.setState({
-      preset: preset
-    })
+    this.setState({ preset: preset })
     emitter.emit('statPresetSelected', preset)
   }
   render() {
@@ -94,6 +90,44 @@ class StatPresetSelector extends Component {
           <Button bsSize="small" bsStyle="success" onClick={this.onPresetSelected.bind(this, '10weeks')} active={this.state.preset === '10weeks'}>10 weeks</Button>
           <Button bsSize="small" bsStyle="success" onClick={this.onPresetSelected.bind(this, '10moths')} active={this.state.preset === '10moths'}>10 months</Button>
           <Button bsSize="small" bsStyle="success">Custom</Button>
+        </ButtonGroup>
+      </div>
+    );
+  }
+}
+
+class ColumnVisibilitySelector extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      max: initialVisibleColumnGroups.includes("max"),
+      totals: initialVisibleColumnGroups.includes("totals"),
+      avgs: initialVisibleColumnGroups.includes("avgs"),
+      ratios: initialVisibleColumnGroups.includes("ratios")
+    }
+  }
+  onButtonSelected(button) {
+    var newVisibility = !this.state[button]
+    if (newVisibility) {
+      initialVisibleColumnGroups.push(button)
+    } else {
+      var index = initialVisibleColumnGroups.indexOf(button)
+      if (index !== -1) {
+          initialVisibleColumnGroups.splice(index, 1);
+      }
+    }
+    this.setState({ [button]: newVisibility })
+    emitter.emit('columnVisibilityChanged', button, newVisibility)
+  }
+  render() {
+    return (
+      <div className="App-menugroup-right">
+        <div className="App-menugroup-header">Select column visibility <Glyphicon glyph="question-sign" /></div>
+        <ButtonGroup>
+          <Button bsSize="small" bsStyle="primary" onClick={this.onButtonSelected.bind(this, 'ratios')} active={this.state.ratios}>Ratio</Button>
+          <Button bsSize="small" bsStyle="primary" onClick={this.onButtonSelected.bind(this, 'avgs')} active={this.state.avgs}>Avg</Button>
+          <Button bsSize="small" bsStyle="primary" onClick={this.onButtonSelected.bind(this, 'totals')} active={this.state.totals}>Total</Button>
+          <Button bsSize="small" bsStyle="primary" onClick={this.onButtonSelected.bind(this, 'max')} active={this.state.max}>Max</Button>
         </ButtonGroup>
       </div>
     );
@@ -113,15 +147,11 @@ class StartDateSelector extends Component {
 
 class DeltaModeSelector extends Component {
   constructor(props) {
-    super()
-    this.state = {
-      deltaMode: "relative"
-    }
+    super(props)
+    this.state = { deltaMode: "relative" }
   }
   onDeltaModeSelected(deltaMode) {
-    this.setState({
-      deltaMode: deltaMode
-    })
+    this.setState({ deltaMode: deltaMode })
     emitter.emit('deltaModeSelected', deltaMode)
   }
   render() {
@@ -159,13 +189,36 @@ class PlayerStatsTab extends Component {
         <StartDateSelector />
         <StatPresetSelector />
         <DeltaModeSelector />
+        <ColumnVisibilitySelector />
         <StatTable />
       </div>
     );
   }
 }
 
-class Stat extends Component {
+class Visibility extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      group: props.group,
+      visible: initialVisibleColumnGroups.includes(this.props.group)
+    };
+
+    emitter.on('columnVisibilityChanged', (function(visibilityGroup, newVisiblity) {
+      if (this.state.group === visibilityGroup) {
+        this.setState({ visible: newVisiblity })
+      }
+    }).bind(this))
+  }
+  render() {
+    if (!this.state.visible) {
+      return null;
+    }
+    return ( this.props.children )
+  }
+}
+
+class StatCell extends Component {
   render() {
     let stat = this.props.stats[this.props.property]
     let previousStat = this.props.previousStats[this.props.property]
@@ -176,23 +229,23 @@ class Stat extends Component {
 
     let deltaComponent
     if (delta > 0) {
-      deltaComponent = <span className="arrow-up">({delta}<Glyphicon glyph="arrow-up"/>)</span>
+      deltaComponent = <span className="arrow-up"><br/>({delta}<Glyphicon glyph="arrow-up"/>)</span>
     } else if (delta < 0) {
-      deltaComponent = <span className="arrow-down">({delta}<Glyphicon glyph="arrow-down"/>)</span>
+      deltaComponent = <span className="arrow-down"><br/>({delta}<Glyphicon glyph="arrow-down"/>)</span>
     }
 
     let effectivePropertyComponent
     if (this.props.effectiveProperty) {
-      let battleDelta = this.props.stats["battlesCount"] - this.props.previousStats["battlesCount"]
+      let battleDelta = this.props.stats["battles"] - this.props.previousStats["battles"]
       let propertyDelta = this.props.stats[this.props.effectiveProperty] - this.props.previousStats[this.props.effectiveProperty]
       let effectiveAverage = (propertyDelta / battleDelta).toFixed(2);
 
       if (!isNaN(effectiveAverage)) {
-        effectivePropertyComponent = <span className="effective-property">{effectiveAverage}</span>
+        effectivePropertyComponent = <span className="effective-property"><br/>{effectiveAverage}</span>
       }
     }
 
-    return ( <td>{stat}<br/>{deltaComponent}<br/>{effectivePropertyComponent}</td> );
+    return ( <td>{stat}{deltaComponent}{effectivePropertyComponent}</td> );
   }
 }
 
@@ -201,7 +254,7 @@ class StatTable extends Component {
     super()
     this.state = {
         playerStats: [],
-        playerId: "539195479",
+        playerId: "",
         deltaModeSelected: "relative"
     };
     emitter.on('statPresetSelected', (function(preset) {
@@ -222,51 +275,51 @@ class StatTable extends Component {
     return (
       <tr>
         <td>time</td>
-        <td>battles</td>
-        <td>wins</td>
-        <td>wins %</td>
-        <td>losses</td>
-        <td>losses %</td>
-        <td>draws</td>
-        <td>draws %</td>
-        <td>survived</td>
-        <td>survived %</td>
-        <td>damage</td>
-        <td>damage avg</td>
-        <td>ass avg</td>
-        <td>ass radio avg</td>
-        <td>ass track avg</td>
-        <td>xp</td>
-        <td>avg xp</td>
-        <td>frags</td>
-        <td>avg frags</td>
-        <td>spotted</td>
-        <td>avg spotted</td>
-        <td>shots</td>
-        <td>avg shots</td>
-        <td>hits</td>
-        <td>avg hits</td>
-        <td>hits %</td>
-        <td>piercings</td>
-        <td>avg piercings</td>
-        <td>piercings rcv</td>
-        <td>avg piercings rcv</td>
-        <td>expl hits</td>
-        <td>avg expl hits</td>
-        <td>expl hits rcv</td>
-        <td>avg expl hits rcv</td>
-        <td>hits rcv</td>
-        <td>avg hits rcv</td>
-        <td>damage rcv</td>
-        <td>avg damage rcv</td>
-        <td>capture</td>
-        <td>avg capture</td>
-        <td>decap</td>
-        <td>avg decap</td>
-        <td>avg dam block</td>
-        <td>max damage</td>
-        <td>max xp</td>
-        <td>max frags</td>
+        <Visibility group="totals"><td>battles</td></Visibility>
+        <Visibility group="totals"><td>wins</td></Visibility>
+        <Visibility group="ratios"><td>wins %</td></Visibility>
+        <Visibility group="totals"><td>losses</td></Visibility>
+        <Visibility group="ratios"><td>losses %</td></Visibility>
+        <Visibility group="totals"><td>draws</td></Visibility>
+        <Visibility group="ratios"><td>draws %</td></Visibility>
+        <Visibility group="totals"><td>survived</td></Visibility>
+        <Visibility group="ratios"><td>survived %</td></Visibility>
+        <Visibility group="totals"><td>damage</td></Visibility>
+        <Visibility group="avgs"><td>damage avg</td></Visibility>
+        <Visibility group="avgs"><td>ass avg</td></Visibility>
+        <Visibility group="avgs"><td>ass radio avg</td></Visibility>
+        <Visibility group="avgs"><td>ass track avg</td></Visibility>
+        <Visibility group="totals"><td>xp</td></Visibility>
+        <Visibility group="avgs"><td>avg xp</td></Visibility>
+        <Visibility group="totals"><td>frags</td></Visibility>
+        <Visibility group="avgs"><td>avg frags</td></Visibility>
+        <Visibility group="totals"><td>spotted</td></Visibility>
+        <Visibility group="avgs"><td>avg spotted</td></Visibility>
+        <Visibility group="totals"><td>shots</td></Visibility>
+        <Visibility group="avgs"><td>avg shots</td></Visibility>
+        <Visibility group="totals"><td>hits</td></Visibility>
+        <Visibility group="avgs"><td>avg hits</td></Visibility>
+        <Visibility group="ratios"><td>hits %</td></Visibility>
+        <Visibility group="totals"><td>piercings</td></Visibility>
+        <Visibility group="avgs"><td>avg piercings</td></Visibility>
+        <Visibility group="totals"><td>piercings rcv</td></Visibility>
+        <Visibility group="avgs"><td>avg piercings rcv</td></Visibility>
+        <Visibility group="totals"><td>expl hits</td></Visibility>
+        <Visibility group="avgs"><td>avg expl hits</td></Visibility>
+        <Visibility group="totals"><td>expl hits rcv</td></Visibility>
+        <Visibility group="avgs"><td>avg expl hits rcv</td></Visibility>
+        <Visibility group="totals"><td>hits rcv</td></Visibility>
+        <Visibility group="avgs"><td>avg hits rcv</td></Visibility>
+        <Visibility group="totals"><td>damage rcv</td></Visibility>
+        <Visibility group="avgs"><td>avg damage rcv</td></Visibility>
+        <Visibility group="totals"><td>capture</td></Visibility>
+        <Visibility group="avgs"><td>avg capture</td></Visibility>
+        <Visibility group="totals"><td>decap</td></Visibility>
+        <Visibility group="avgs"><td>avg decap</td></Visibility>
+        <Visibility group="avgs"><td>avg dam block</td></Visibility>
+        <Visibility group="max"><td>max damage</td></Visibility>
+        <Visibility group="max"><td>max xp</td></Visibility>
+        <Visibility group="max"><td>max frags</td></Visibility>
       </tr>
     );
   }
@@ -282,73 +335,73 @@ class StatTable extends Component {
       }
       return (
         <tr>
-          <DateCell timestamp={stat.timestamp}/>
-          <Stat stats={stat} previousStats={previousStat} property="battles"/>
+          <DateCell timestamp={stat.timestamp} />
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="battles"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="wins"/>
-          <Stat stats={stat} previousStats={previousStat} property="winsRatio"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="wins"/></Visibility>
+          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="winsRatio"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="losses"/>
-          <Stat stats={stat} previousStats={previousStat} property="lossesRatio"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="losses"/></Visibility>
+          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="lossesRatio"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="draws"/>
-          <Stat stats={stat} previousStats={previousStat} property="drawsRatio"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="draws"/></Visibility>
+          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="drawsRatio"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="survivedBattles"/>
-          <Stat stats={stat} previousStats={previousStat} property="survivedBattlesRatio"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="survivedBattles"/></Visibility>
+          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="survivedBattlesRatio"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="damageDealt"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgDamageDealt"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="damageDealt"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageDealt" effectiveProperty="damageDealt"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="avgDamageAssisted"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgDamageAssistedRadio"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgDamageAssistedTrack"/>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageAssisted"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageAssistedRadio"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageAssistedTrack"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="xp"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgBattleXp"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="xp"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgBattleXp" effectiveProperty="xp"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="frags"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgFrags"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="frags"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgFrags" effectiveProperty="frags"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="spotted"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgSpotted"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="spotted"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgSpotted" effectiveProperty="spotted"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="shots"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgShots" effectiveProperty="shots"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="shots"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgShots" effectiveProperty="shots"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="hits"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgHits"/>
-          <Stat stats={stat} previousStats={previousStat} property="hitsRatio"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="hits"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgHits" effectiveProperty="hits"/></Visibility>
+          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="hitsRatio"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="piercings"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgPiercings"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="piercings"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgPiercings" effectiveProperty="piercings"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="piercingsReceived"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgPiercingsReceived"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="piercingsReceived"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgPiercingsReceived" effectiveProperty="piercingsReceived"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="explosionHits"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgExplosionHits"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="explosionHits"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgExplosionHits" effectiveProperty="explosionHits"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="explosionHitsReceived"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgExplosionHitsReceived"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="explosionHitsReceived"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgExplosionHitsReceived" effectiveProperty="explosionHitsReceived"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="directHitsReceived"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgDirectHitsReceived"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="directHitsReceived"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDirectHitsReceived" effectiveProperty="directHitsReceived"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="damageReceived"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgDamageReceived"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="damageReceived"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageReceived" effectiveProperty="damageReceived"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="capturePoints"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgCapturePoints"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="capturePoints"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgCapturePoints" effectiveProperty="capturePoints"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="droppedCapturePoints"/>
-          <Stat stats={stat} previousStats={previousStat} property="avgDroppedCapturePoints"/>
+          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="droppedCapturePoints"/></Visibility>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDroppedCapturePoints" effectiveProperty="droppedCapturePoints"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="avgDamageBlocked"/>
+          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageBlocked"/></Visibility>
 
-          <Stat stats={stat} previousStats={previousStat} property="maxDamage"/>
-          <Stat stats={stat} previousStats={previousStat} property="maxXp"/>
-          <Stat stats={stat} previousStats={previousStat} property="maxFrags"/>
+          <Visibility group="max"><StatCell stats={stat} previousStats={previousStat} property="maxDamage"/></Visibility>
+          <Visibility group="max"><StatCell stats={stat} previousStats={previousStat} property="maxXp"/></Visibility>
+          <Visibility group="max"><StatCell stats={stat} previousStats={previousStat} property="maxFrags"/></Visibility>
         </tr>
       );
     });
@@ -357,56 +410,10 @@ class StatTable extends Component {
   render() {
     var headerRow = this.generateHeaderRow();
     var statRows = this.generateStatRows();
+    if (this.state.playerStats.length === 0) return <div style={{ clear: "both", color: "red", fontWeight: "bold" }}><br/><br/>Select user from dropdown menu.</div>
     return (
       <div className="App-clear">
-        <Table bsClass="table table-striped table-bordered table-condensed table-hover App-stats-table">
-          <col width="110px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-          <col width="80px" />
-
+        <Table bsClass="App-stats-table table-striped table-bordered table-condensed table-hover">
           <thead>{headerRow}</thead>
           <tbody>{statRows}</tbody>
         </Table>

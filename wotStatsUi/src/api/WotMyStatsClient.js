@@ -12,3 +12,5 @@ export const getPlayerStats = (component, playerId) => {
     .then(response => component.setState(response.data));
 }
 
+export var initialVisibleColumnGroups = [ "avgs", "ratios" ];
+
