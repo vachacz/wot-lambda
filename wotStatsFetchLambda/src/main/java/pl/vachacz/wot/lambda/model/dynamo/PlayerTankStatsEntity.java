@@ -34,7 +34,7 @@ public class PlayerTankStatsEntity {
     private Integer frags;
     private Integer directHitsReceived;
     private Integer hits;
-    private Double battleAvgXp;
+    private Double avgBattleXp;
     private Integer wins;
     private Integer losses;
     private Integer piercingsReceived;
@@ -42,6 +42,26 @@ public class PlayerTankStatsEntity {
     private Integer shots;
     private Integer explosionHitsReceived;
     private Double tankingFactor;
+
+    // calculated fields
+
+    private Double drawsRatio;
+    private Double winsRatio;
+    private Double lossesRatio;
+    private Double survivedBattlesRatio;
+    private Double avgDamageDealt;
+    private Double avgCapturePoints;
+    private Double avgDamageReceived;
+    private Double avgDirectHitsReceived;
+    private Double avgDroppedCapturePoints;
+    private Double avgExplosionHits;
+    private Double avgExplosionHitsReceived;
+    private Double avgFrags;
+    private Double avgHits;
+    private Double avgSpotted;
+    private Double avgShots;
+    private Double avgPiercings;
+    private Double avgPiercingsReceived;
 
     public String getKey() {
         return key;
@@ -187,12 +207,12 @@ public class PlayerTankStatsEntity {
         this.hits = hits;
     }
 
-    public Double getBattleAvgXp() {
-        return battleAvgXp;
+    public Double getAvgBattleXp() {
+        return avgBattleXp;
     }
 
-    public void setBattleAvgXp(Double battleAvgXp) {
-        this.battleAvgXp = battleAvgXp;
+    public void setAvgBattleXp(Double avgBattleXp) {
+        this.avgBattleXp = avgBattleXp;
     }
 
     public Integer getWins() {
@@ -282,4 +302,141 @@ public class PlayerTankStatsEntity {
     public void setMonthlyStat(Boolean monthlyStat) {
         this.monthlyStat = monthlyStat;
     }
+
+    public Double getDrawsRatio() {
+        return drawsRatio;
+    }
+
+    public void setDrawsRatio(Double drawsRatio) {
+        this.drawsRatio = drawsRatio;
+    }
+
+    public Double getWinsRatio() {
+        return winsRatio;
+    }
+
+    public void setWinsRatio(Double winsRatio) {
+        this.winsRatio = winsRatio;
+    }
+
+    public Double getLossesRatio() {
+        return lossesRatio;
+    }
+
+    public void setLossesRatio(Double lossesRatio) {
+        this.lossesRatio = lossesRatio;
+    }
+
+    public Double getSurvivedBattlesRatio() {
+        return survivedBattlesRatio;
+    }
+
+    public void setSurvivedBattlesRatio(Double survivedBattlesRatio) {
+        this.survivedBattlesRatio = survivedBattlesRatio;
+    }
+
+    public Double getAvgDamageDealt() {
+        return avgDamageDealt;
+    }
+
+    public void setAvgDamageDealt(Double avgDamageDealt) {
+        this.avgDamageDealt = avgDamageDealt;
+    }
+
+    public Double getAvgCapturePoints() {
+        return avgCapturePoints;
+    }
+
+    public void setAvgCapturePoints(Double avgCapturePoints) {
+        this.avgCapturePoints = avgCapturePoints;
+    }
+
+    public Double getAvgDamageReceived() {
+        return avgDamageReceived;
+    }
+
+    public void setAvgDamageReceived(Double avgDamageReceived) {
+        this.avgDamageReceived = avgDamageReceived;
+    }
+
+    public Double getAvgDirectHitsReceived() {
+        return avgDirectHitsReceived;
+    }
+
+    public void setAvgDirectHitsReceived(Double avgDirectHitsReceived) {
+        this.avgDirectHitsReceived = avgDirectHitsReceived;
+    }
+
+    public Double getAvgDroppedCapturePoints() {
+        return avgDroppedCapturePoints;
+    }
+
+    public void setAvgDroppedCapturePoints(Double avgDroppedCapturePoints) {
+        this.avgDroppedCapturePoints = avgDroppedCapturePoints;
+    }
+
+    public Double getAvgExplosionHits() {
+        return avgExplosionHits;
+    }
+
+    public void setAvgExplosionHits(Double avgExplosionHits) {
+        this.avgExplosionHits = avgExplosionHits;
+    }
+
+    public Double getAvgExplosionHitsReceived() {
+        return avgExplosionHitsReceived;
+    }
+
+    public void setAvgExplosionHitsReceived(Double avgExplosionHitsReceived) {
+        this.avgExplosionHitsReceived = avgExplosionHitsReceived;
+    }
+
+    public Double getAvgFrags() {
+        return avgFrags;
+    }
+
+    public void setAvgFrags(Double avgFrags) {
+        this.avgFrags = avgFrags;
+    }
+
+    public Double getAvgHits() {
+        return avgHits;
+    }
+
+    public void setAvgHits(Double avgHits) {
+        this.avgHits = avgHits;
+    }
+
+    public Double getAvgSpotted() {
+        return avgSpotted;
+    }
+
+    public void setAvgSpotted(Double avgSpotted) {
+        this.avgSpotted = avgSpotted;
+    }
+
+    public Double getAvgShots() {
+        return avgShots;
+    }
+
+    public void setAvgShots(Double avgShots) {
+        this.avgShots = avgShots;
+    }
+
+    public Double getAvgPiercings() {
+        return avgPiercings;
+    }
+
+    public void setAvgPiercings(Double avgPiercings) {
+        this.avgPiercings = avgPiercings;
+    }
+
+    public Double getAvgPiercingsReceived() {
+        return avgPiercingsReceived;
+    }
+
+    public void setAvgPiercingsReceived(Double avgPiercingsReceived) {
+        this.avgPiercingsReceived = avgPiercingsReceived;
+    }
+
 }

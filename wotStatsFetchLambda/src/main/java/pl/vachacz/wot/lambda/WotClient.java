@@ -10,9 +10,9 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import org.json.JSONObject;
 import pl.vachacz.wot.lambda.model.wot.account.AccountResponse;
-import pl.vachacz.wot.lambda.model.wot.ratings.Rating;
-import pl.vachacz.wot.lambda.model.wot.ratings.RatingsResponse;
-import pl.vachacz.wot.lambda.model.wot.tankrating.TankRatingsResponse;
+import pl.vachacz.wot.lambda.model.wot.playerstats.PlayerStats;
+import pl.vachacz.wot.lambda.model.wot.playerstats.PlayerStatsResponse;
+import pl.vachacz.wot.lambda.model.wot.playertankstats.PlayerTankStatsResponse;
 import pl.vachacz.wot.lambda.model.wot.vehicle.VehiclesResponse;
 
 import java.io.IOException;
@@ -23,17 +23,17 @@ public class WotClient {
 
     private static final String WOT_BASE_URL = "https://api.worldoftanks.eu/wot";
 
-    private static final String WOT_API_ACCOUNT = WOT_BASE_URL + "/account/list/";
+    private static final String WOT_API_PLAYER = WOT_BASE_URL + "/account/list/";
     private static final String WOT_API_TANKS = WOT_BASE_URL + "/encyclopedia/tanks/";
-    private static final String WOT_API_RATINGS = WOT_BASE_URL + "/ratings/accounts/";
-    private static final String WOT_API_TANK_STATS = WOT_BASE_URL + "/tanks/stats/";
+    private static final String WOT_API_PLAYER_STATS = WOT_BASE_URL + "/account/info/";
+    private static final String WOT_API_PLAYER_TANK_STATS = WOT_BASE_URL + "/tanks/stats/";
 
     public WotClient() {
         setObjectMapper();
     }
 
     public Long getAccountId(String player) {
-        HttpRequest request = Unirest.get(WOT_API_ACCOUNT)
+        HttpRequest request = Unirest.get(WOT_API_PLAYER)
                 .queryString("application_id", "demo")
                 .queryString("search", player)
                 .queryString("type", "exact");
@@ -50,38 +50,22 @@ public class WotClient {
         return make(request, VehiclesResponse.class);
     }
 
-    public TankRatingsResponse getPlayerTankStats(Long accountId) {
-        HttpRequest request = Unirest.get(WOT_API_TANK_STATS)
+    public PlayerTankStatsResponse getPlayerTankStats(Long accountId) {
+        HttpRequest request = Unirest.get(WOT_API_PLAYER_TANK_STATS)
                 .queryString("application_id", "demo")
                 .queryString("account_id", accountId)
                 .queryString("fields", "tank_id,all");
 
-        return make(request, TankRatingsResponse.class);
+        return make(request, PlayerTankStatsResponse.class);
     }
 
-    public RatingsResponse getPlayerStats(Long accountId) {
-        HttpRequest request = Unirest.get(WOT_API_RATINGS)
+    public PlayerStatsResponse getPlayerStats(Long accountId) {
+        HttpRequest request = Unirest.get(WOT_API_PLAYER_STATS)
                 .queryString("application_id", "demo")
-                .queryString("type", "all")
+                .queryString("fields", "statistics.all")
                 .queryString("account_id", accountId);
 
-        JsonNode json = makeJson(request).getBody();
-        JSONObject data = json.getObject().getJSONObject("data").getJSONObject(accountId.toString());
-
-        List<Rating> ratings = data.keySet().stream()
-                .filter(key -> {
-                    JSONObject object = data.optJSONObject(key);
-                    return object != null && !object.isNull("value");
-                })
-                .map(key -> {
-                    JSONObject object = data.optJSONObject(key);
-                    return new Rating(key, object.optDouble("value"));
-                })
-                .collect(Collectors.toList());
-
-        RatingsResponse response = new RatingsResponse();
-        response.setRatings(ratings);
-        return response;
+        return make(request, PlayerStatsResponse.class);
     }
 
     public <T> T make(HttpRequest request, Class<T> responseType) {
@@ -90,17 +74,6 @@ public class WotClient {
             HttpResponse<T> response = request.asObject(responseType);
             System.out.println(response.getStatus());
             return response.getBody();
-        } catch (UnirestException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public HttpResponse<JsonNode> makeJson(HttpRequest request) {
-        try {
-            System.out.println(request.getUrl());
-            HttpResponse<JsonNode> response = request.asJson();
-            System.out.println(response.getStatus());
-            return response;
         } catch (UnirestException e) {
             throw new RuntimeException(e);
         }

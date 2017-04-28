@@ -1,8 +1,8 @@
-package pl.vachacz.wot.lambda.model.wot.tankrating;
+package pl.vachacz.wot.lambda.model.wot.playertankstats;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TankRatings {
+public class PlayerTankStats {
 
     private Integer spotted;
 

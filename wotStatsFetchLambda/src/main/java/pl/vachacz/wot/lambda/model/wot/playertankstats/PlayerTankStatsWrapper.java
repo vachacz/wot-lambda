@@ -1,14 +1,14 @@
-package pl.vachacz.wot.lambda.model.wot.tankrating;
+package pl.vachacz.wot.lambda.model.wot.playertankstats;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TankRatingsWrapper {
+public class PlayerTankStatsWrapper {
 
     @JsonProperty("tank_id")
     private Long tankId;
 
     @JsonProperty("all")
-    private TankRatings tankRatings;
+    private PlayerTankStats tankRatings;
 
 
     public Long getTankId() {
@@ -19,11 +19,11 @@ public class TankRatingsWrapper {
         this.tankId = tankId;
     }
 
-    public TankRatings getTankRatings() {
+    public PlayerTankStats getTankRatings() {
         return tankRatings;
     }
 
-    public void setTankRatings(TankRatings tankRatings) {
+    public void setTankRatings(PlayerTankStats tankRatings) {
         this.tankRatings = tankRatings;
     }
 }
