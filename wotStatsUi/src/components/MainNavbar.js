@@ -6,19 +6,18 @@ import emitter from '../const/Const.js';
 export default class MainNavbar extends Component {
   constructor(props) {
     super()
-    this.state = { players: [] }
+    this.state = { players: [], player: "" }
   }
   componentWillMount() {
     getPlayers((players) => { this.setState(players) })
   }
-  onPlayerSelected(i) {
-    var player = this.state.players[i]
+  onPlayerSelected(player) {
     emitter.emit('playerSelected', player.account_id)
     this.setState({ player: player.player })
   }
   render() {
     var players = this.state.players.map((player, index) =>
-      <MenuItem onSelect={ this.onPlayerSelected.bind(this, index) }>{player.player}</MenuItem>
+      <MenuItem key={player.account_id} onSelect={ this.onPlayerSelected.bind(this, player) }>{player.player}</MenuItem>
     )
     return (
       <div>

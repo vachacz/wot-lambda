@@ -87,7 +87,7 @@ export default class StatTable extends Component {
         previousStat = this.state.playerStats[0];
       }
       return (
-        <StatsRow stats={stat} previousStats={previousStat}>
+        <StatsRow key={stat.timestamp} stats={stat} previousStats={previousStat}>
           <DateCell timestamp={stat.timestamp} />
           <StatCell group="totals" property="battles"/>
 

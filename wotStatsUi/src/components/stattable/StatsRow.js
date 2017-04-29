@@ -7,7 +7,7 @@ export default class StatsRow extends Component {
       child => React.cloneElement(child, {...this.props})
     );
     return (
-      <tr>{newChildren}</tr>
+      <tr key={this.props.stats.timestamp}>{newChildren}</tr>
     )
   }
 }
