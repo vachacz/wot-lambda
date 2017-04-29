@@ -78,14 +78,13 @@ export default class StatTable extends Component {
     );
   }
   generateStatRows() {
-    var _state = this.state;
-    var rows = this.state.playerStats.map(function(stat, index) {
+    return this.state.playerStats.map((stat, index) => {
       var previousStat = {};
-      if (_state.deltaMode === "relative") {
-        if (index + 1 < _state.playerStats.length) { previousStat = _state.playerStats[index+1]; }
+      if (this.state.deltaMode === "relative") {
+        if (index + 1 < this.state.playerStats.length) { previousStat = this.state.playerStats[index+1]; }
       }
-      if (_state.deltaMode === "absolute") {
-        previousStat = _state.playerStats[0];
+      if (this.state.deltaMode === "absolute") {
+        previousStat = this.state.playerStats[0];
       }
       return (
         <StatsRow stats={stat} previousStats={previousStat}>
@@ -159,7 +158,6 @@ export default class StatTable extends Component {
         </StatsRow>
       );
     });
-    return rows;
   }
   render() {
     if (this.state.playerStats.length === 0) return <div style={{ clear: "both", color: "red", fontWeight: "bold" }}><br/><br/>Select user from dropdown menu.</div>

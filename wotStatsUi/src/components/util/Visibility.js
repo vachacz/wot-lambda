@@ -11,11 +11,11 @@ export default  class Visibility extends Component {
       visible: initialVisibleColumnGroups.includes(this.props.group)
     };
 
-    emitter.on('columnVisibilityChanged', (function(visibilityGroup, newVisiblity) {
+    emitter.on('columnVisibilityChanged', (visibilityGroup, newVisiblity) => {
       if (this.state.group === visibilityGroup) {
         this.setState({ visible: newVisiblity })
       }
-    }).bind(this))
+    })
   }
   render() {
     if (!this.state.visible) {
