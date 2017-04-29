@@ -5,7 +5,7 @@ import { Button, ButtonGroup, Glyphicon } from 'react-bootstrap';
 import { initialVisibleColumnGroups } from '../../api/WotMyStatsClient.js';
 import emitter from '../../const/Const.js';
 
-class ColumnVisibilitySelector extends Component {
+export default class ColumnVisibilitySelector extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -42,5 +42,3 @@ class ColumnVisibilitySelector extends Component {
     );
   }
 }
-
-export default ColumnVisibilitySelector;

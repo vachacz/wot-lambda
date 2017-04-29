@@ -9,7 +9,7 @@ import StatCell from './StatCell.js';
 import { getPlayerStats } from '../../api/WotMyStatsClient.js';
 import emitter from '../../const/Const.js';
 
-class StatTable extends Component {
+export default class StatTable extends Component {
   constructor () {
     super()
     this.state = {
@@ -181,5 +181,3 @@ class StatTable extends Component {
     );
   }
 }
-
-export default StatTable;

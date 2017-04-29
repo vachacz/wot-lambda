@@ -3,7 +3,7 @@ import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { getPlayers } from '../api/WotMyStatsClient.js';
 import emitter from '../const/Const.js';
 
-class MainNavbar extends Component {
+export default class MainNavbar extends Component {
   constructor(props) {
     super()
     this.state = { player: "", players: [] }
@@ -45,5 +45,3 @@ class MainNavbar extends Component {
     );
   }
 }
-
-export default MainNavbar;

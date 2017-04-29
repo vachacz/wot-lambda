@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Glyphicon } from 'react-bootstrap';
 
-class StatCell extends Component {
+export default class StatCell extends Component {
   render() {
     let stat = this.props.stats[this.props.property]
     let previousStat = this.props.previousStats[this.props.property]
@@ -31,5 +31,3 @@ class StatCell extends Component {
     return ( <td>{stat}{deltaComponent}{effectivePropertyComponent}</td> );
   }
 }
-
-export default StatCell;

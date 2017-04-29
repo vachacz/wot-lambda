@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button, ButtonGroup, Glyphicon } from 'react-bootstrap';
 import emitter from '../../const/Const.js';
 
-class StatPresetSelector extends Component {
+export default class StatPresetSelector extends Component {
   constructor(props) {
     super(props)
     this.state = { preset: "" }
@@ -26,5 +26,3 @@ class StatPresetSelector extends Component {
     );
   }
 }
-
-export default StatPresetSelector;

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button, ButtonGroup, Glyphicon } from 'react-bootstrap';
 import emitter from '../../const/Const.js';
 
-class DeltaModeSelector extends Component {
+export default class DeltaModeSelector extends Component {
   constructor(props) {
     super(props)
     this.state = { deltaMode: "relative" }
@@ -24,5 +24,3 @@ class DeltaModeSelector extends Component {
     );
   }
 }
-
-export default DeltaModeSelector;

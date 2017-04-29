@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { initialVisibleColumnGroups } from '../../api/WotMyStatsClient.js';
 import emitter from '../../const/Const.js';
 
-class Visibility extends Component {
+export default  class Visibility extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -24,5 +24,3 @@ class Visibility extends Component {
     return ( this.props.children )
   }
 }
-
-export default Visibility;

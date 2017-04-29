@@ -7,7 +7,7 @@ import ColumnVisibilitySelector from '../selectors/ColumnVisibilitySelector.js';
 
 import StatTable from '../stattable/StatTable.js';
 
-class PlayerStatsTab extends Component {
+export default class PlayerStatsTab extends Component {
   render() {
     return (
       <div>
@@ -20,5 +20,3 @@ class PlayerStatsTab extends Component {
     );
   }
 }
-
-export default PlayerStatsTab;

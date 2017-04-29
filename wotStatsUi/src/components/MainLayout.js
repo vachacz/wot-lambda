@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 import PlayerStatsTab from './tabs/PlayerStatsTab.js';
 
-class MainLayout extends Component {
+export default class MainLayout extends Component {
   render() {
     return (
       <div className="container">
@@ -21,5 +21,3 @@ class MainLayout extends Component {
     );
   }
 }
-
-export default MainLayout;
