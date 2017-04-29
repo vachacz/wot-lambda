@@ -13,23 +13,18 @@ import emitter from '../../const/Const.js';
 export default class StatTable extends Component {
   constructor () {
     super()
-    this.state = {
-        playerStats: [],
-        playerId: "",
-        deltaModeSelected: "relative"
-    };
+    this.state = { playerStats: [], deltaModeSelected: "relative" };
+
+    emitter.on('playerSelected', (function(playerId) {
+      getPlayerStats(playerId, (playerStats) => {this.setState(playerStats)});
+    }).bind(this))
+
     emitter.on('statPresetSelected', (function(preset) {
-      this.setState({ statPresetSelected: preset })
       getPlayerStats(this, this.state.playerId);
     }).bind(this))
 
     emitter.on('deltaModeSelected', (function(deltaMode) {
       this.setState({ deltaModeSelected: deltaMode })
-    }).bind(this))
-
-    emitter.on('playerSelected', (function(playerId) {
-      this.setState({ playerId: playerId })
-      getPlayerStats(this, playerId);
     }).bind(this))
   }
   generateHeaderRow() {
@@ -169,14 +164,12 @@ export default class StatTable extends Component {
     return rows;
   }
   render() {
-    var headerRow = this.generateHeaderRow();
-    var statRows = this.generateStatRows();
     if (this.state.playerStats.length === 0) return <div style={{ clear: "both", color: "red", fontWeight: "bold" }}><br/><br/>Select user from dropdown menu.</div>
     return (
       <div className="App-clear">
         <Table bsClass="App-stats-table table-striped table-bordered table-condensed table-hover">
-          <thead>{headerRow}</thead>
-          <tbody>{statRows}</tbody>
+          <thead>{ this.generateHeaderRow() }</thead>
+          <tbody>{ this.generateStatRows() }</tbody>
         </Table>
       </div>
     );

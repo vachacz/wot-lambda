@@ -9,7 +9,7 @@ export default class MainNavbar extends Component {
     this.state = { player: "", players: [] }
   }
   componentWillMount() {
-    getPlayers(this)
+    getPlayers((players) => { this.setState(players) })
   }
   onPlayerSelected(i) {
     var player = this.state.players[i]
