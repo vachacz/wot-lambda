@@ -33,10 +33,10 @@ export default class ColumnVisibilitySelector extends Component {
       <div className="App-menugroup-right">
         <div className="App-menugroup-header">Select column visibility <Glyphicon glyph="question-sign" /></div>
         <ButtonGroup>
-          <Button bsSize="small" bsStyle="primary" onClick={this.onButtonSelected.bind(this, 'ratios')} active={this.state.ratios}>Ratio</Button>
-          <Button bsSize="small" bsStyle="primary" onClick={this.onButtonSelected.bind(this, 'avgs')} active={this.state.avgs}>Avg</Button>
-          <Button bsSize="small" bsStyle="primary" onClick={this.onButtonSelected.bind(this, 'totals')} active={this.state.totals}>Total</Button>
-          <Button bsSize="small" bsStyle="primary" onClick={this.onButtonSelected.bind(this, 'max')} active={this.state.max}>Max</Button>
+          <Button bsSize="small" bsStyle="primary" onClick={() => this.onButtonSelected('ratios')} active={this.state.ratios}>Ratio</Button>
+          <Button bsSize="small" bsStyle="primary" onClick={() => this.onButtonSelected('avgs')} active={this.state.avgs}>Avg</Button>
+          <Button bsSize="small" bsStyle="primary" onClick={() => this.onButtonSelected('totals')} active={this.state.totals}>Total</Button>
+          <Button bsSize="small" bsStyle="primary" onClick={() => this.onButtonSelected('max')} active={this.state.max}>Max</Button>
         </ButtonGroup>
       </div>
     );

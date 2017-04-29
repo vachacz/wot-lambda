@@ -17,8 +17,8 @@ export default class DeltaModeSelector extends Component {
       <div className="App-menugroup">
         <div className="App-menugroup-header">Select delta mode <Glyphicon glyph="question-sign" /></div>
         <ButtonGroup>
-          <Button bsSize="small" bsStyle="success" onClick={this.onDeltaModeSelected.bind(this, 'absolute')} active={this.state.deltaMode === 'absolute'}>Absolute</Button>
-          <Button bsSize="small" bsStyle="success" onClick={this.onDeltaModeSelected.bind(this, 'relative')} active={this.state.deltaMode === 'relative'}>Relative</Button>
+          <Button bsSize="small" bsStyle="success" onClick={() => this.onDeltaModeSelected('absolute')} active={this.state.deltaMode === 'absolute'}>Absolute</Button>
+          <Button bsSize="small" bsStyle="success" onClick={() => this.onDeltaModeSelected('relative')} active={this.state.deltaMode === 'relative'}>Relative</Button>
         </ButtonGroup>
       </div>
     );

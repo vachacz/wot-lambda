@@ -6,7 +6,7 @@ import emitter from '../const/Const.js';
 export default class MainNavbar extends Component {
   constructor(props) {
     super()
-    this.state = { player: "", players: [] }
+    this.state = { players: [] }
   }
   componentWillMount() {
     getPlayers((players) => { this.setState(players) })
@@ -17,12 +17,9 @@ export default class MainNavbar extends Component {
     this.setState({ player: player.player })
   }
   render() {
-    var players = []
-    for (var i = 0; i < this.state.players.length; i++) {
-       players.push(
-         <MenuItem onSelect={this.onPlayerSelected.bind(this, i)}>{this.state.players[i].player}</MenuItem>
-       )
-    }
+    var players = this.state.players.map((player, index) =>
+      <MenuItem onSelect={ this.onPlayerSelected.bind(this, index) }>{player.player}</MenuItem>
+    )
     return (
       <div>
         <Navbar inverse collapseOnSelect>
