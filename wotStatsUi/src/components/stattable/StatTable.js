@@ -13,19 +13,17 @@ import emitter from '../../const/Const.js';
 export default class StatTable extends Component {
   constructor () {
     super()
-    this.state = { playerStats: [], deltaModeSelected: "relative" };
+    this.state = { playerStats: [], deltaMode: "relative" };
 
-    emitter.on('playerSelected', (function(playerId) {
-      getPlayerStats(playerId, (playerStats) => {this.setState(playerStats)});
-    }).bind(this))
+    emitter.on('playerSelected', (playerId) =>
+      getPlayerStats(playerId, (playerStats) => this.setState(Object.assign(playerStats, { playerId: playerId })))
+    )
 
-    emitter.on('statPresetSelected', (function(preset) {
-      getPlayerStats(this, this.state.playerId);
-    }).bind(this))
+    emitter.on('statPresetSelected', (preset) =>
+      getPlayerStats(this.state.playerId, (playerStats) => this.setState(playerStats))
+    )
 
-    emitter.on('deltaModeSelected', (function(deltaMode) {
-      this.setState({ deltaModeSelected: deltaMode })
-    }).bind(this))
+    emitter.on('deltaModeSelected', (deltaMode) => this.setState({ deltaMode: deltaMode }))
   }
   generateHeaderRow() {
     return (
@@ -83,10 +81,10 @@ export default class StatTable extends Component {
     var _state = this.state;
     var rows = this.state.playerStats.map(function(stat, index) {
       var previousStat = {};
-      if (_state.deltaModeSelected === "relative") {
+      if (_state.deltaMode === "relative") {
         if (index + 1 < _state.playerStats.length) { previousStat = _state.playerStats[index+1]; }
       }
-      if (_state.deltaModeSelected === "absolute") {
+      if (_state.deltaMode === "absolute") {
         previousStat = _state.playerStats[0];
       }
       return (
