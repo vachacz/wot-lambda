@@ -5,6 +5,7 @@ import { Table } from 'react-bootstrap';
 import Visibility from '../util/Visibility.js';
 import DateCell from './DateCell.js';
 import StatCell from './StatCell.js';
+import StatsRow from './StatsRow.js';
 
 import { getPlayerStats } from '../../api/WotMyStatsClient.js';
 import emitter from '../../const/Const.js';
@@ -94,75 +95,75 @@ export default class StatTable extends Component {
         previousStat = _state.playerStats[0];
       }
       return (
-        <tr>
+        <StatsRow stats={stat} previousStats={previousStat}>
           <DateCell timestamp={stat.timestamp} />
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="battles"/></Visibility>
+          <StatCell group="totals" property="battles"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="wins"/></Visibility>
-          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="winsRatio"/></Visibility>
+          <StatCell group="totals" property="wins"/>
+          <StatCell group="ratios" property="winsRatio"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="losses"/></Visibility>
-          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="lossesRatio"/></Visibility>
+          <StatCell group="totals" property="losses"/>
+          <StatCell group="ratios" property="lossesRatio"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="draws"/></Visibility>
-          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="drawsRatio"/></Visibility>
+          <StatCell group="totals" property="draws"/>
+          <StatCell group="ratios" property="drawsRatio"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="survivedBattles"/></Visibility>
-          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="survivedBattlesRatio"/></Visibility>
+          <StatCell group="totals" property="survivedBattles"/>
+          <StatCell group="ratios" property="survivedBattlesRatio"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="damageDealt"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageDealt" effectiveProperty="damageDealt"/></Visibility>
+          <StatCell group="totals" property="damageDealt"/>
+          <StatCell group="avgs" property="avgDamageDealt" effectiveProperty="damageDealt"/>
 
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageAssisted"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageAssistedRadio"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageAssistedTrack"/></Visibility>
+          <StatCell group="avgs" property="avgDamageAssisted"/>
+          <StatCell group="avgs" property="avgDamageAssistedRadio"/>
+          <StatCell group="avgs" property="avgDamageAssistedTrack"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="xp"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgBattleXp" effectiveProperty="xp"/></Visibility>
+          <StatCell group="totals" property="xp"/>
+          <StatCell group="avgs" property="avgBattleXp" effectiveProperty="xp"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="frags"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgFrags" effectiveProperty="frags"/></Visibility>
+          <StatCell group="totals" property="frags"/>
+          <StatCell group="avgs" property="avgFrags" effectiveProperty="frags"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="spotted"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgSpotted" effectiveProperty="spotted"/></Visibility>
+          <StatCell group="totals" property="spotted"/>
+          <StatCell group="avgs" property="avgSpotted" effectiveProperty="spotted"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="shots"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgShots" effectiveProperty="shots"/></Visibility>
+          <StatCell group="totals" property="shots"/>
+          <StatCell group="avgs" property="avgShots" effectiveProperty="shots"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="hits"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgHits" effectiveProperty="hits"/></Visibility>
-          <Visibility group="ratios"><StatCell stats={stat} previousStats={previousStat} property="hitsRatio"/></Visibility>
+          <StatCell group="totals" property="hits"/>
+          <StatCell group="avgs" property="avgHits" effectiveProperty="hits"/>
+          <StatCell group="ratios" property="hitsRatio"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="piercings"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgPiercings" effectiveProperty="piercings"/></Visibility>
+          <StatCell group="totals" property="piercings"/>
+          <StatCell group="avgs" property="avgPiercings" effectiveProperty="piercings"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="piercingsReceived"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgPiercingsReceived" effectiveProperty="piercingsReceived"/></Visibility>
+          <StatCell group="totals" property="piercingsReceived"/>
+          <StatCell group="avgs" property="avgPiercingsReceived" effectiveProperty="piercingsReceived"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="explosionHits"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgExplosionHits" effectiveProperty="explosionHits"/></Visibility>
+          <StatCell group="totals" property="explosionHits"/>
+          <StatCell group="avgs" property="avgExplosionHits" effectiveProperty="explosionHits"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="explosionHitsReceived"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgExplosionHitsReceived" effectiveProperty="explosionHitsReceived"/></Visibility>
+          <StatCell group="totals" property="explosionHitsReceived"/>
+          <StatCell group="avgs" property="avgExplosionHitsReceived" effectiveProperty="explosionHitsReceived"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="directHitsReceived"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDirectHitsReceived" effectiveProperty="directHitsReceived"/></Visibility>
+          <StatCell group="totals" property="directHitsReceived"/>
+          <StatCell group="avgs" property="avgDirectHitsReceived" effectiveProperty="directHitsReceived"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="damageReceived"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageReceived" effectiveProperty="damageReceived"/></Visibility>
+          <StatCell group="totals" property="damageReceived"/>
+          <StatCell group="avgs" property="avgDamageReceived" effectiveProperty="damageReceived"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="capturePoints"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgCapturePoints" effectiveProperty="capturePoints"/></Visibility>
+          <StatCell group="totals" property="capturePoints"/>
+          <StatCell group="avgs" property="avgCapturePoints" effectiveProperty="capturePoints"/>
 
-          <Visibility group="totals"><StatCell stats={stat} previousStats={previousStat} property="droppedCapturePoints"/></Visibility>
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDroppedCapturePoints" effectiveProperty="droppedCapturePoints"/></Visibility>
+          <StatCell group="totals" property="droppedCapturePoints"/>
+          <StatCell group="avgs" property="avgDroppedCapturePoints" effectiveProperty="droppedCapturePoints"/>
 
-          <Visibility group="avgs"><StatCell stats={stat} previousStats={previousStat} property="avgDamageBlocked"/></Visibility>
+          <StatCell group="avgs" property="avgDamageBlocked"/>
 
-          <Visibility group="max"><StatCell stats={stat} previousStats={previousStat} property="maxDamage"/></Visibility>
-          <Visibility group="max"><StatCell stats={stat} previousStats={previousStat} property="maxXp"/></Visibility>
-          <Visibility group="max"><StatCell stats={stat} previousStats={previousStat} property="maxFrags"/></Visibility>
-        </tr>
+          <StatCell group="max" property="maxDamage"/>
+          <StatCell group="max" property="maxXp"/>
+          <StatCell group="max" property="maxFrags"/>
+        </StatsRow>
       );
     });
     return rows;

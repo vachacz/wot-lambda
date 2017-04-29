@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Glyphicon } from 'react-bootstrap';
+import Visibility from '../util/Visibility.js';
 
 export default class StatCell extends Component {
   render() {
@@ -28,6 +29,9 @@ export default class StatCell extends Component {
       }
     }
 
-    return ( <td>{stat}{deltaComponent}{effectivePropertyComponent}</td> );
+    return (
+      <Visibility group={this.props.group}>
+        <td>{stat}{deltaComponent}{effectivePropertyComponent}</td>
+      </Visibility>);
   }
 }
