@@ -1,6 +1,2 @@
 
-// event emitter
-const EventEmitter = require('events').EventEmitter;
-const emitter = new EventEmitter();
-
-export default emitter
+export const baseurl = "https://c5lu9mesih.execute-api.eu-central-1.amazonaws.com/prod";

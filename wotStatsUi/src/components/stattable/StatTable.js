@@ -7,24 +7,8 @@ import DateCell from './DateCell.js';
 import StatCell from './StatCell.js';
 import StatsRow from './StatsRow.js';
 
-import { getPlayerStats } from '../../api/WotMyStatsClient.js';
-import emitter from '../../const/Const.js';
-
 export default class StatTable extends Component {
-  constructor () {
-    super()
-    this.state = { playerStats: [], deltaMode: "relative" };
 
-    emitter.on('playerSelected', (playerId) =>
-      getPlayerStats(playerId, (playerStats) => this.setState(Object.assign(playerStats, { playerId: playerId })))
-    )
-
-    emitter.on('statPresetSelected', (preset) =>
-      getPlayerStats(this.state.playerId, (playerStats) => this.setState(playerStats))
-    )
-
-    emitter.on('deltaModeSelected', (deltaMode) => this.setState({ deltaMode: deltaMode }))
-  }
   generateHeaderRow() {
     return (
       <tr>
@@ -77,14 +61,16 @@ export default class StatTable extends Component {
       </tr>
     );
   }
+
   generateStatRows() {
-    return this.state.playerStats.map((stat, index) => {
+    var playerStats = this.props.playerStats;
+    return playerStats.map((stat, index) => {
       var previousStat = {};
-      if (this.state.deltaMode === "relative") {
-        if (index + 1 < this.state.playerStats.length) { previousStat = this.state.playerStats[index+1]; }
+      if (this.props.deltaMode === "relative") {
+        if (index + 1 < playerStats.length) { previousStat = playerStats[index+1]; }
       }
-      if (this.state.deltaMode === "absolute") {
-        previousStat = this.state.playerStats[0];
+      if (this.props.deltaMode === "absolute") {
+        previousStat = playerStats[0];
       }
       return (
         <StatsRow key={stat.timestamp} stats={stat} previousStats={previousStat}>
@@ -159,8 +145,9 @@ export default class StatTable extends Component {
       );
     });
   }
+
   render() {
-    if (this.state.playerStats.length === 0) return <div style={{ clear: "both", color: "red", fontWeight: "bold" }}><br/><br/>Select user from dropdown menu.</div>
+    if (this.props.playerStats.length === 0) return <div style={{ clear: "both", color: "red", fontWeight: "bold" }}><br/><br/>Select user from dropdown menu.</div>
     return (
       <div className="App-clear">
         <Table bsClass="App-stats-table table-striped table-bordered table-condensed table-hover">
@@ -171,3 +158,4 @@ export default class StatTable extends Component {
     );
   }
 }
+

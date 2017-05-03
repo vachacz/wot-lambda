@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import { getPlayers } from '../api/WotMyStatsClient.js';
-import emitter from '../const/Const.js';
+import { connect } from "react-redux"
 
-export default class MainNavbar extends Component {
-  constructor(props) {
-    super()
-    this.state = { players: [], player: "" }
-  }
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { fetchPlayers, selectPlayer } from '../actions/actions.js';
+
+class MainNavbar extends Component {
+
   componentWillMount() {
-    getPlayers((players) => { this.setState(players) })
+    this.props.fetchPlayers()
   }
+
   onPlayerSelected(player) {
-    emitter.emit('playerSelected', player.account_id)
-    this.setState({ player: player.player })
+    this.props.selectPlayer(player)
   }
+
   render() {
-    var players = this.state.players.map((player, index) =>
-      <MenuItem key={player.account_id} onSelect={ this.onPlayerSelected.bind(this, player) }>{player.player}</MenuItem>
-    )
+    const { player, players } = this.props;
     return (
       <div>
         <Navbar inverse collapseOnSelect>
@@ -30,8 +27,10 @@ export default class MainNavbar extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <NavDropdown title={this.state.player} id="basic-nav-dropdown">
-                {players}
+              <NavDropdown title={player} id="basic-nav-dropdown">
+                { players.map((player, index) =>
+                  <MenuItem key={player.account_id} onSelect={ this.onPlayerSelected.bind(this, player) }>{player.player}</MenuItem>
+                )}
               </NavDropdown>
               <NavItem href="#">EU</NavItem>
             </Nav>
@@ -41,3 +40,8 @@ export default class MainNavbar extends Component {
     );
   }
 }
+
+export default connect(
+  (store) => ({ players: store.players.players, player: store.players.player }),
+  { fetchPlayers, selectPlayer }
+)(MainNavbar);
