@@ -11,7 +11,6 @@ export default class StatPresetSelector extends Component {
           <Button bsSize="small" bsStyle="success" onClick={() => this.props.presetSelected('10days')} active={this.props.preset === '10days'}>10 days</Button>
           <Button bsSize="small" bsStyle="success" onClick={() => this.props.presetSelected('10weeks')} active={this.props.preset === '10weeks'}>10 weeks</Button>
           <Button bsSize="small" bsStyle="success" onClick={() => this.props.presetSelected('10moths')} active={this.props.preset === '10moths'}>10 months</Button>
-          <Button bsSize="small" bsStyle="success">Custom</Button>
         </ButtonGroup>
       </div>
     );

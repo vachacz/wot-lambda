@@ -95,6 +95,11 @@ html[xmlns] .clearfix {
     min-width: 80px;
     max-width: 80px;
     width: 80px;
+    vertical-align: top;
+}
+
+.App-stats-table td > span {
+    display: block;
 }
 
 .App-stats-table td:first-child {

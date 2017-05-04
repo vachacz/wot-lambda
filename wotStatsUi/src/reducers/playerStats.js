@@ -1,4 +1,9 @@
-import { FETCH_PLAYERS_STATS_FULFILLED, TOGGLE_STATS_COLUMN_GROUP_VISIBILITY, DELTA_MODE_SELECTED } from '../const/ActionTypes.js'
+import {
+  FETCH_PLAYERS_STATS_FULFILLED,
+  TOGGLE_STATS_COLUMN_GROUP_VISIBILITY,
+  DELTA_MODE_SELECTED,
+  TOGGLE_STATS_CELL_VISIBILITY
+} from '../const/ActionTypes.js'
 
 export default function playerStats(state={
     playerStats: [],
@@ -8,16 +13,27 @@ export default function playerStats(state={
       avgs: true,
       ratios: true
     },
+    cellVisibility: {
+      stat: true,
+      delta: true,
+      effective: true
+    },
     deltaMode: 'relative'
   }, action) {
 
   switch (action.type) {
+
     case FETCH_PLAYERS_STATS_FULFILLED:
       return {...state, playerStats: action.payload.playerStats}
 
     case TOGGLE_STATS_COLUMN_GROUP_VISIBILITY: {
       var columnVisibility = state.columnVisibility;
       return {...state, columnVisibility: { ...columnVisibility, [action.payload] : !columnVisibility[action.payload]}}
+    }
+
+    case TOGGLE_STATS_CELL_VISIBILITY: {
+      var cellVisibility = state.cellVisibility;
+      return {...state, cellVisibility: { ...cellVisibility, [action.payload] : !cellVisibility[action.payload]}}
     }
 
     case DELTA_MODE_SELECTED:
