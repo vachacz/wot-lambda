@@ -8,8 +8,11 @@ import store from './store.js';
 import App from './App';
 import './index.css';
 
+import './index.css';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'react-vis/dist/style.css';
 
 ReactDOM.render(
   <Provider store={store}>

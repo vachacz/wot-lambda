@@ -17,8 +17,17 @@ export default function playerStats(state={
 
   switch (action.type) {
 
-    case "FETCH_PLAYER_STATS_FULFILLED":
+    case "FETCH_PLAYER_STATS_FULFILLED": {
+
+//      avgDamageChartModel = [
+//        {},
+//        {},
+//        {},
+//
+//      ]
+
       return {...state, playerStats: action.payload.playerStats}
+    }
 
     case "TOGGLE_STATS_COLUMN_GROUP_VISIBILITY": {
       var columnVisibility = state.columnVisibility;
