@@ -10,10 +10,6 @@ class MainNavbar extends Component {
     this.props.fetchPlayers()
   }
 
-  onPlayerSelected(player) {
-    this.props.selectPlayer(player)
-  }
-
   render() {
     const { player, players } = this.props;
     return (
@@ -29,7 +25,7 @@ class MainNavbar extends Component {
             <Nav pullRight>
               <NavDropdown title={player} id="basic-nav-dropdown">
                 { players.map((player, index) =>
-                  <MenuItem key={player.account_id} onSelect={ this.onPlayerSelected.bind(this, player) }>{player.player}</MenuItem>
+                  <MenuItem key={player.account_id} onSelect={() => this.props.selectPlayer(player)}>{player.player}</MenuItem>
                 )}
               </NavDropdown>
               <NavItem href="#">EU</NavItem>
