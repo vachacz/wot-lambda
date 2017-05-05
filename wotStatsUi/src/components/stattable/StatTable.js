@@ -64,83 +64,75 @@ export default class StatTable extends Component {
   generateStatRows() {
     var playerStats = this.props.playerStats;
     return playerStats.map((stat, index) => {
-      var previousStat = {};
-      if (this.props.deltaMode === "relative") {
-        if (index + 1 < playerStats.length) { previousStat = playerStats[index+1]; }
-      }
-      if (this.props.deltaMode === "absolute") {
-        previousStat = playerStats[0];
-      }
-      var props = { stats: stat, previousStats: previousStat }
       return (
         <tr key={stat.timestamp}>
           <DateCell timestamp={stat.timestamp} />
-          <StatCell {...props} group="totals" property="battles" />
+          <StatCell stats={stat} group="totals" property="battles" />
 
-          <StatCell {...props} group="totals" property="wins" />
-          <StatCell {...props} group="ratios" property="winsRatio" />
+          <StatCell stats={stat} group="totals" property="wins" />
+          <StatCell stats={stat} group="ratios" property="winsRatio" />
 
-          <StatCell {...props} group="totals" property="losses" />
-          <StatCell {...props} group="ratios" property="lossesRatio" />
+          <StatCell stats={stat} group="totals" property="losses" />
+          <StatCell stats={stat} group="ratios" property="lossesRatio" />
 
-          <StatCell {...props} group="totals" property="draws" />
-          <StatCell {...props} group="ratios" property="drawsRatio" />
+          <StatCell stats={stat} group="totals" property="draws" />
+          <StatCell stats={stat} group="ratios" property="drawsRatio" />
 
-          <StatCell {...props} group="totals" property="survivedBattles" />
-          <StatCell {...props} group="ratios" property="survivedBattlesRatio" />
+          <StatCell stats={stat} group="totals" property="survivedBattles" />
+          <StatCell stats={stat} group="ratios" property="survivedBattlesRatio" />
 
-          <StatCell {...props} group="totals" property="damageDealt" />
-          <StatCell {...props} group="avgs" property="avgDamageDealt" effectiveProperty="damageDealt" />
+          <StatCell stats={stat} group="totals" property="damageDealt" />
+          <StatCell stats={stat} group="avgs" property="avgDamageDealt" effectiveProperty="effectiveAvgDamageDealt" />
 
-          <StatCell {...props} group="avgs" property="avgDamageAssisted" />
-          <StatCell {...props} group="avgs" property="avgDamageAssistedRadio" />
-          <StatCell {...props} group="avgs" property="avgDamageAssistedTrack" />
+          <StatCell stats={stat} group="avgs" property="avgDamageAssisted" />
+          <StatCell stats={stat} group="avgs" property="avgDamageAssistedRadio" />
+          <StatCell stats={stat} group="avgs" property="avgDamageAssistedTrack" />
 
-          <StatCell {...props} group="totals" property="xp" />
-          <StatCell {...props} group="avgs" property="avgBattleXp" effectiveProperty="xp" />
+          <StatCell stats={stat} group="totals" property="xp" />
+          <StatCell stats={stat} group="avgs" property="avgBattleXp" effectiveProperty="effectiveAvgBattleXp" />
 
-          <StatCell {...props} group="totals" property="frags" />
-          <StatCell {...props} group="avgs" property="avgFrags" effectiveProperty="frags" />
+          <StatCell stats={stat} group="totals" property="frags" />
+          <StatCell stats={stat} group="avgs" property="avgFrags" effectiveProperty="effectiveAvgFrags" />
 
-          <StatCell {...props} group="totals" property="spotted" />
-          <StatCell {...props} group="avgs" property="avgSpotted" effectiveProperty="spotted" />
+          <StatCell stats={stat} group="totals" property="spotted" />
+          <StatCell stats={stat} group="avgs" property="avgSpotted" effectiveProperty="effectiveAvgSpotted" />
 
-          <StatCell {...props} group="totals" property="shots" />
-          <StatCell {...props} group="avgs" property="avgShots" effectiveProperty="shots" />
+          <StatCell stats={stat} group="totals" property="shots" />
+          <StatCell stats={stat} group="avgs" property="avgShots" effectiveProperty="effectiveAvgShots" />
 
-          <StatCell {...props} group="totals" property="hits" />
-          <StatCell {...props} group="avgs" property="avgHits" effectiveProperty="hits" />
-          <StatCell {...props} group="ratios" property="hitsRatio" />
+          <StatCell stats={stat} group="totals" property="hits" />
+          <StatCell stats={stat} group="avgs" property="avgHits" effectiveProperty="effectiveAvgHits" />
+          <StatCell stats={stat} group="ratios" property="hitsRatio" />
 
-          <StatCell {...props} group="totals" property="piercings" />
-          <StatCell {...props} group="avgs" property="avgPiercings" effectiveProperty="piercings" />
+          <StatCell stats={stat} group="totals" property="piercings" />
+          <StatCell stats={stat} group="avgs" property="avgPiercings" effectiveProperty="effectiveAvgPiercings" />
 
-          <StatCell {...props} group="totals" property="piercingsReceived" />
-          <StatCell {...props} group="avgs" property="avgPiercingsReceived" effectiveProperty="piercingsReceived" />
+          <StatCell stats={stat} group="totals" property="piercingsReceived" />
+          <StatCell stats={stat} group="avgs" property="avgPiercingsReceived" effectiveProperty="effectiveAvgPiercingsReceived" />
 
-          <StatCell {...props} group="totals" property="explosionHits" />
-          <StatCell {...props} group="avgs" property="avgExplosionHits" effectiveProperty="explosionHits" />
+          <StatCell stats={stat} group="totals" property="explosionHits" />
+          <StatCell stats={stat} group="avgs" property="avgExplosionHits" effectiveProperty="effectiveAvgExplosionHits" />
 
-          <StatCell {...props} group="totals" property="explosionHitsReceived" />
-          <StatCell {...props} group="avgs" property="avgExplosionHitsReceived" effectiveProperty="explosionHitsReceived" />
+          <StatCell stats={stat} group="totals" property="explosionHitsReceived" />
+          <StatCell stats={stat} group="avgs" property="avgExplosionHitsReceived" effectiveProperty="effectiveAvgExplosionHitsReceived" />
 
-          <StatCell {...props} group="totals" property="directHitsReceived" />
-          <StatCell {...props} group="avgs" property="avgDirectHitsReceived" effectiveProperty="directHitsReceived" />
+          <StatCell stats={stat} group="totals" property="directHitsReceived" />
+          <StatCell stats={stat} group="avgs" property="avgDirectHitsReceived" effectiveProperty="effectiveAvgDirectHitsReceived" />
 
-          <StatCell {...props} group="totals" property="damageReceived" />
-          <StatCell {...props} group="avgs" property="avgDamageReceived" effectiveProperty="damageReceived" />
+          <StatCell stats={stat} group="totals" property="damageReceived" />
+          <StatCell stats={stat} group="avgs" property="avgDamageReceived" effectiveProperty="effectiveAvgDamageReceived" />
 
-          <StatCell {...props} group="totals" property="capturePoints" />
-          <StatCell {...props} group="avgs" property="avgCapturePoints" effectiveProperty="capturePoints" />
+          <StatCell stats={stat} group="totals" property="capturePoints" />
+          <StatCell stats={stat} group="avgs" property="avgCapturePoints" effectiveProperty="effectiveAvgCapturePoints" />
 
-          <StatCell {...props} group="totals" property="droppedCapturePoints" />
-          <StatCell {...props} group="avgs" property="avgDroppedCapturePoints" effectiveProperty="droppedCapturePoints" />
+          <StatCell stats={stat} group="totals" property="droppedCapturePoints" />
+          <StatCell stats={stat} group="avgs" property="avgDroppedCapturePoints" effectiveProperty="effectiveAvgDroppedCapturePoints" />
 
-          <StatCell {...props} group="avgs" property="avgDamageBlocked" />
+          <StatCell stats={stat} group="avgs" property="avgDamageBlocked" />
 
-          <StatCell {...props} group="max" property="maxDamage" />
-          <StatCell {...props} group="max" property="maxXp" />
-          <StatCell {...props} group="max" property="maxFrags" />
+          <StatCell stats={stat} group="max" property="maxDamage" />
+          <StatCell stats={stat} group="max" property="maxXp" />
+          <StatCell stats={stat} group="max" property="maxFrags" />
         </tr>
       );
     });
@@ -158,4 +150,3 @@ export default class StatTable extends Component {
     );
   }
 }
-

@@ -5,65 +5,53 @@ import { Glyphicon } from 'react-bootstrap';
 
 class StatCell extends Component {
 
-  caluclateDelta() {
-    var stat = this.props.stats[this.props.property]
-    var previousStat = this.props.previousStats[this.props.property]
-    var delta = stat - previousStat
-    if ( delta % 1 !== 0 ) {
-      delta = delta.toFixed(2);
+  getStatComponent() {
+    if (this.props.cellVisibility.stat) {
+      return <span>{this.props.stats[this.props.property]}</span>
     }
-    return delta
   }
 
-  getArrowClass(delta) {
-    if (delta > 0) {
-      return "arrow-up"
-    } else if (delta < 0) {
-      return "arrow-down"
-    }
-    return ""
-  }
-
-  getDeltaComponent(delta) {
+  getDeltaComponent() {
     if  (this.props.cellVisibility.delta) {
+      var delta = this.getPropertyDelta()
       var arrowClass = this.getArrowClass(delta)
       if (delta < 0 || delta > 0) return <span className={arrowClass}>({delta}<Glyphicon glyph={arrowClass}/>)</span>
     }
   }
 
-  getEffectivePropertyComponent() {
-    if (this.props.effectiveProperty && this.props.cellVisibility.effective) {
-      let battleDelta = this.props.stats["battles"] - this.props.previousStats["battles"]
-      let propertyDelta = this.props.stats[this.props.effectiveProperty] - this.props.previousStats[this.props.effectiveProperty]
-      let effectiveAverage = (propertyDelta / battleDelta).toFixed(2);
-
-      if (!isNaN(effectiveAverage)) {
-        return <span className="effective-property">{effectiveAverage}</span>
-      }
-    }
+  getArrowClass(delta) {
+    if (delta > 0) return "arrow-up"
+    if (delta < 0) return "arrow-down"
+    return ""
   }
 
-  getStatComponent(stat) {
-    if (this.props.cellVisibility.stat) {
-      return <span>{stat}</span>
+  getEffectiveStatComponent() {
+    if (this.props.cellVisibility.effective && this.hasEffectivePropertyValue()) {
+      return <span className="effective-property">{this.getEffectivePropertyValue()}</span>
     }
   }
 
   render() {
-    if (!this.props.columnVisibility[this.props.group]) {
-      return null;
+    if (this.props.columnVisibility[this.props.group]) {
+      var statComponent = this.getStatComponent()
+      var deltaComponent = this.getDeltaComponent()
+      var effectiveStatComponent = this.getEffectiveStatComponent()
+
+      return ( <td>{statComponent}{deltaComponent}{effectiveStatComponent}</td> );
     }
+    return null;
+  }
 
-    var stat = this.props.stats[this.props.property]
+  getPropertyDelta() {
+    return this.props.stats[this.props.property + "Delta"]
+  }
 
-    var delta = this.caluclateDelta()
-    var statComponent = this.getStatComponent(stat)
-    var deltaComponent = this.getDeltaComponent(delta)
-    var effectivePropertyComponent = this.getEffectivePropertyComponent()
+  getEffectivePropertyValue() {
+    return this.props.stats[this.props.property + "Effective"]
+  }
 
-    return (
-      <td>{statComponent}{deltaComponent}{effectivePropertyComponent}</td>
-    );
+  hasEffectivePropertyValue() {
+    return ( this.props.property + "Effective" ) in this.props.stats;
   }
 }
 

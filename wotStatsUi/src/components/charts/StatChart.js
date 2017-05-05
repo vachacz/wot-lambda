@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries, LineMarkSeries} from 'react-vis';
+import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineMarkSeries} from 'react-vis';
 import { connect } from "react-redux"
 
 class StatChart extends Component {
@@ -9,28 +9,19 @@ class StatChart extends Component {
     var plot = [];
     var plotEffective = [];
 
-    stats.map((val, index) => {
+    stats.forEach((val, index) => {
       plot.push({x: val.timestamp, y: val.avgDamageDealt});
-
-      var prevVal = stats[index + 1]
-
-      if (prevVal) {
-        var battleDelta = val.battles - prevVal.battles
-        var propertyDelta = val.damageDealt - prevVal.damageDealt
-        var effectiveAverage = (propertyDelta / battleDelta).toFixed(2);
-
-        plotEffective.push({x: val.timestamp, y: effectiveAverage});
-      }
+      plotEffective.push({x: val.timestamp, y: val.avgDamageDealtEffective});
     })
 
     return (
      <XYPlot
        fill="none"
        width={300}
-       height={300}>
+       height={200}>
        <HorizontalGridLines />
-       <LineMarkSeries color="blue" curve={'curveMonotoneX'} data={plot}/>
-       <LineMarkSeries color="red" curve={'curveMonotoneX'} data={plotEffective}/>
+       <LineMarkSeries color="blue" curve="curveMonotoneX" data={plot}/>
+       <LineMarkSeries color="red" curve="curveMonotoneX" data={plotEffective}/>
        <XAxis title="X" />
        <YAxis />
      </XYPlot>
