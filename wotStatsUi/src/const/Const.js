@@ -48,3 +48,20 @@ export const playerStatsModelDefinition = [
   { property: "maxXp" },
   { property: "maxFrags" }
 ]
+
+export const playerStatsChartsDefinition = [
+  "avgDamageDealt",
+  "avgBattleXp",
+  "avgFrags",
+  "avgSpotted",
+  "avgShots",
+  "avgHits",
+  "avgPiercings",
+  "avgPiercingsReceived",
+  "avgExplosionHits",
+  "avgExplosionHitsReceived",
+  "avgDirectHitsReceived",
+  "avgDamageReceived",
+  "avgCapturePoints",
+  "avgDroppedCapturePoints"
+]

@@ -1,30 +1,28 @@
 import React, { Component } from 'react';
-import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineMarkSeries} from 'react-vis';
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineMarkSeries } from 'react-vis';
+import { Panel } from 'react-bootstrap';
 import { connect } from "react-redux"
 
 class StatChart extends Component {
   render() {
-    var stats = this.props.playerStats;
-
-    var plot = [];
-    var plotEffective = [];
-
-    stats.forEach((val, index) => {
-      plot.push({x: val.timestamp, y: val.avgDamageDealt});
-      plotEffective.push({x: val.timestamp, y: val.avgDamageDealtEffective});
-    })
-
     return (
-     <XYPlot
-       fill="none"
-       width={300}
-       height={200}>
-       <HorizontalGridLines />
-       <LineMarkSeries color="blue" curve="curveMonotoneX" data={plot}/>
-       <LineMarkSeries color="red" curve="curveMonotoneX" data={plotEffective}/>
-       <XAxis title="X" />
-       <YAxis />
-     </XYPlot>
+     <Panel header={this.props.property}>
+       <div className="App-chart-panel">
+         <XYPlot fill="none" width={252} height={200}>
+           <HorizontalGridLines />
+           <LineMarkSeries color="green" curve="curveMonotoneX" data={this.props.statData}/>
+           <XAxis title="X" />
+           <YAxis />
+         </XYPlot>
+         <XYPlot fill="none" width={252} height={200}>
+           <HorizontalGridLines />
+           <LineMarkSeries color="green" curve="curveMonotoneX" data={this.props.statData}/>
+           <LineMarkSeries color="blue" curve="curveMonotoneX" data={this.props.effectiveStatData}/>
+           <XAxis title="X" />
+           <YAxis />
+         </XYPlot>
+       </div>
+     </Panel>
     )}
 }
 

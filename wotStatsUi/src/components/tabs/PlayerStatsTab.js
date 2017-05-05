@@ -13,7 +13,7 @@ import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '..
 
 class PlayerStatsTab extends Component {
   render() {
-    var { playerStats, columnVisibility, cellVisibility, deltaMode } = this.props.playerStats;
+    var { playerStats, columnVisibility, cellVisibility, deltaMode, charts } = this.props.playerStats;
 
     return (
       <div>
@@ -24,13 +24,13 @@ class PlayerStatsTab extends Component {
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility}/>
         <StatTable deltaMode={deltaMode} playerStats={playerStats}/>
 
-        <StatChartPanel />
+        <StatChartPanel charts={charts}/>
       </div>
     );
   }
 }
 
 export default connect(
-  (store) => ({ playerStats: store.playerStats }),
+  (store) => ({ playerStats: store.playerStats, charts: store.charts }),
   { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode }
 )(PlayerStatsTab);

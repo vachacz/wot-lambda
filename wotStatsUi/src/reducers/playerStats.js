@@ -1,8 +1,9 @@
 
-import { playerStatsModelDefinition } from '../const/Const.js';
+import { playerStatsModelDefinition, playerStatsChartsDefinition } from '../const/Const.js';
 
 export default function playerStats(state={
     playerStats: [],
+    charts: [],
     columnVisibility: {
       max: false,
       totals: false,
@@ -46,11 +47,25 @@ export default function playerStats(state={
     });
   }
 
+  function recalculateCharts(stats) {
+    return playerStatsChartsDefinition.map((property) => {
+      var modelStat = [];
+      var modelEffective = [];
+
+      stats.forEach((val) => {
+        modelStat.push({x: val.timestamp, y: val[property]});
+        modelEffective.push({x: val.timestamp, y: val[property + "Effective"]});
+      })
+      return { property: property, statData: modelStat, effectiveStatData: modelEffective }
+    });
+  }
+
   switch (action.type) {
 
     case "FETCH_PLAYER_STATS_FULFILLED": {
-      var stats = recalculateStats(action.payload.playerStats, state.deltaMode)
-      return {...state, playerStats: stats}
+      var newStats = recalculateStats(action.payload.playerStats, state.deltaMode)
+      var charts = recalculateCharts(newStats)
+      return {...state, playerStats: newStats, charts: charts}
     }
 
     case "TOGGLE_STATS_COLUMN_GROUP_VISIBILITY": {
@@ -65,7 +80,8 @@ export default function playerStats(state={
 
     case "DELTA_MODE_SELECTED": {
       var newStats = recalculateStats(state.playerStats, action.payload)
-      return {...state, deltaMode: action.payload, playerStats: newStats}
+      var charts = recalculateCharts(newStats)
+      return {...state, deltaMode: action.payload, playerStats: newStats, charts: charts}
     }
 
     default:

@@ -108,6 +108,17 @@ html[xmlns] .clearfix {
     width: 120px;
 }
 
+.App-charts > div {
+    float: left;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.App-chart-panel > div{
+    float: left;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
