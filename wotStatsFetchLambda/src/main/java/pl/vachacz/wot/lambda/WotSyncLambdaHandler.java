@@ -88,53 +88,53 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
         entity.setBattles(stats.getBattles());
 
         entity.setWins(stats.getWins());
-        entity.setWinsRatio(scale(100 * stats.getWins() / battlesDouble));
+        entity.setWinsRatio(scale2(100 * stats.getWins() / battlesDouble));
 
         entity.setLosses(stats.getLosses());
-        entity.setLossesRatio(scale(100 * stats.getLosses() / battlesDouble));
+        entity.setLossesRatio(scale2(100 * stats.getLosses() / battlesDouble));
 
         entity.setDraws(stats.getDraws());
-        entity.setDrawsRatio(scale(100 * stats.getDraws() / battlesDouble));
+        entity.setDrawsRatio(scale2(100 * stats.getDraws() / battlesDouble));
 
         entity.setFrags(stats.getFrags());
-        entity.setAvgFrags(scale(stats.getFrags() / battlesDouble));
+        entity.setAvgFrags(scale3(stats.getFrags() / battlesDouble));
 
         entity.setSpotted(stats.getSpotted());
-        entity.setAvgSpotted(scale(stats.getSpotted() / battlesDouble));
+        entity.setAvgSpotted(scale3(stats.getSpotted() / battlesDouble));
 
         entity.setShots(stats.getShots());
-        entity.setAvgShots(scale(stats.getShots() / battlesDouble));
+        entity.setAvgShots(scale3(stats.getShots() / battlesDouble));
 
         entity.setHits(stats.getHits());
-        entity.setAvgHits(scale(stats.getHits() / battlesDouble));
-        entity.setHitsRatio(scale(100 * stats.getHits() / new Double(stats.getShots())));
+        entity.setAvgHits(scale3(stats.getHits() / battlesDouble));
+        entity.setHitsRatio(scale2(100 * stats.getHits() / new Double(stats.getShots())));
 
         entity.setPiercings(stats.getPiercings());
-        entity.setAvgPiercings(scale(stats.getPiercings() / battlesDouble));
+        entity.setAvgPiercings(scale3(stats.getPiercings() / battlesDouble));
 
         entity.setPiercingsReceived(stats.getPiercingsReceived());
-        entity.setAvgPiercingsReceived(scale(stats.getPiercingsReceived() / battlesDouble));
+        entity.setAvgPiercingsReceived(scale3(stats.getPiercingsReceived() / battlesDouble));
 
         entity.setSurvivedBattles(stats.getSurvivedBattles());
-        entity.setSurvivedBattlesRatio(scale(100 * stats.getSurvivedBattles() / battlesDouble));
+        entity.setSurvivedBattlesRatio(scale2(100 * stats.getSurvivedBattles() / battlesDouble));
 
         entity.setXp(stats.getXp());
         entity.setAvgBattleXp(stats.getAvgBattleXp());
 
         entity.setDamageDealt(stats.getDamageDealt());
-        entity.setAvgDamageDealt(scale(stats.getDamageDealt() / battlesDouble));
+        entity.setAvgDamageDealt(scale2(stats.getDamageDealt() / battlesDouble));
 
         entity.setDamageReceived(stats.getDamageReceived());
-        entity.setAvgDamageReceived(scale(stats.getDamageReceived() / battlesDouble));
+        entity.setAvgDamageReceived(scale2(stats.getDamageReceived() / battlesDouble));
 
         entity.setDirectHitsReceived(stats.getDirectHitsReceived());
-        entity.setAvgDirectHitsReceived(scale(stats.getDirectHitsReceived() / battlesDouble));
+        entity.setAvgDirectHitsReceived(scale3(stats.getDirectHitsReceived() / battlesDouble));
 
         entity.setExplosionHits(stats.getExplosionHits());
-        entity.setAvgExplosionHits(scale(stats.getExplosionHits() / battlesDouble));
+        entity.setAvgExplosionHits(scale3(stats.getExplosionHits() / battlesDouble));
 
         entity.setExplosionHitsReceived(stats.getExplosionHitsReceived());
-        entity.setAvgExplosionHitsReceived(scale(stats.getExplosionHitsReceived() / battlesDouble));
+        entity.setAvgExplosionHitsReceived(scale3(stats.getExplosionHitsReceived() / battlesDouble));
 
         entity.setAvgDamageBlocked(stats.getAvgDamageBlocked());
         entity.setAvgDamageAssisted(stats.getAvgDamageAssisted());
@@ -142,10 +142,10 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
         entity.setAvgDamageAssistedTrack(stats.getAvgDamageAssistedTrack());
 
         entity.setCapturePoints(stats.getCapturePoints());
-        entity.setAvgCapturePoints(scale(stats.getCapturePoints() / battlesDouble));
+        entity.setAvgCapturePoints(scale2(stats.getCapturePoints() / battlesDouble));
 
         entity.setDroppedCapturePoints(stats.getDroppedCapturePoints());
-        entity.setAvgDroppedCapturePoints(scale(stats.getDroppedCapturePoints() / battlesDouble));
+        entity.setAvgDroppedCapturePoints(scale2(stats.getDroppedCapturePoints() / battlesDouble));
 
         entity.setMaxDamage(stats.getMaxDamage());
         entity.setMaxXp(stats.getMaxXp());
@@ -154,11 +154,18 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
         mapper.save(entity);
     }
 
-    private Double scale(Double toBeTruncated) {
+    private Double scale2(Double toBeTruncated) {
         if (toBeTruncated == null || Double.isNaN(toBeTruncated)) {
             return null;
         }
         return BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    private Double scale3(Double toBeTruncated) {
+        if (toBeTruncated == null || Double.isNaN(toBeTruncated)) {
+            return null;
+        }
+        return BigDecimal.valueOf(toBeTruncated).setScale(3, RoundingMode.HALF_UP).doubleValue();
     }
 
     private Optional<Integer> getBattleCountFromLastStat(Long accountId) {
@@ -199,16 +206,16 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
             tankEntity.setBattles(tankStats.getBattles());
 
             tankEntity.setDraws(tankStats.getDraws());
-            tankEntity.setDrawsRatio(scale(100 * tankStats.getDraws() / battlesDouble));
+            tankEntity.setDrawsRatio(scale2(100 * tankStats.getDraws() / battlesDouble));
 
             tankEntity.setWins(tankStats.getWins());
-            tankEntity.setWinsRatio(scale(100 * tankStats.getWins() / battlesDouble));
+            tankEntity.setWinsRatio(scale2(100 * tankStats.getWins() / battlesDouble));
 
             tankEntity.setLosses(tankStats.getLosses());
-            tankEntity.setLossesRatio(scale(100 * tankStats.getLosses() / battlesDouble));
+            tankEntity.setLossesRatio(scale2(100 * tankStats.getLosses() / battlesDouble));
 
             tankEntity.setSurvivedBattles(tankStats.getSurvivedBattles());
-            tankEntity.setSurvivedBattlesRatio(scale(100 * tankStats.getSurvivedBattles() / battlesDouble));
+            tankEntity.setSurvivedBattlesRatio(scale2(100 * tankStats.getSurvivedBattles() / battlesDouble));
 
             tankEntity.setXp(tankStats.getXp());
             tankEntity.setAvgBattleXp(tankStats.getBattleAvgXp());
@@ -216,43 +223,43 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
             tankEntity.setAvgDamageBlocked(tankStats.getAvgDamageBlocked());
 
             tankEntity.setDamageDealt(tankStats.getDamageDealt());
-            tankEntity.setAvgDamageDealt(scale(tankStats.getDamageDealt() / battlesDouble));
+            tankEntity.setAvgDamageDealt(scale2(tankStats.getDamageDealt() / battlesDouble));
 
             tankEntity.setCapturePoints(tankStats.getCapturePoints());
-            tankEntity.setAvgCapturePoints(scale(tankStats.getCapturePoints() / battlesDouble));
+            tankEntity.setAvgCapturePoints(scale2(tankStats.getCapturePoints() / battlesDouble));
 
             tankEntity.setDamageReceived(tankStats.getDamageReceived());
-            tankEntity.setAvgDamageReceived(scale(tankStats.getDamageReceived() / battlesDouble));
+            tankEntity.setAvgDamageReceived(scale2(tankStats.getDamageReceived() / battlesDouble));
 
             tankEntity.setDirectHitsReceived(tankStats.getDirectHitsReceived());
-            tankEntity.setAvgDirectHitsReceived(scale(tankStats.getDirectHitsReceived() / battlesDouble));
+            tankEntity.setAvgDirectHitsReceived(scale2(tankStats.getDirectHitsReceived() / battlesDouble));
 
             tankEntity.setDroppedCapturePoints(tankStats.getDroppedCapturePoints());
-            tankEntity.setAvgDroppedCapturePoints(scale(tankStats.getDroppedCapturePoints() / battlesDouble));
+            tankEntity.setAvgDroppedCapturePoints(scale2(tankStats.getDroppedCapturePoints() / battlesDouble));
 
             tankEntity.setExplosionHits(tankStats.getExplosionHits());
-            tankEntity.setAvgExplosionHits(scale(tankStats.getExplosionHits() / battlesDouble));
+            tankEntity.setAvgExplosionHits(scale2(tankStats.getExplosionHits() / battlesDouble));
 
             tankEntity.setExplosionHitsReceived(tankStats.getExplosionHitsReceived());
-            tankEntity.setAvgExplosionHitsReceived(scale(tankStats.getExplosionHitsReceived() / battlesDouble));
+            tankEntity.setAvgExplosionHitsReceived(scale2(tankStats.getExplosionHitsReceived() / battlesDouble));
 
             tankEntity.setFrags(tankStats.getFrags());
-            tankEntity.setAvgFrags(scale(tankStats.getFrags() / battlesDouble));
+            tankEntity.setAvgFrags(scale2(tankStats.getFrags() / battlesDouble));
 
             tankEntity.setHits(tankStats.getHits());
-            tankEntity.setAvgHits(scale(tankStats.getHits() / battlesDouble));
+            tankEntity.setAvgHits(scale2(tankStats.getHits() / battlesDouble));
 
             tankEntity.setSpotted(tankStats.getSpotted());
-            tankEntity.setAvgSpotted(scale(tankStats.getSpotted() / battlesDouble));
+            tankEntity.setAvgSpotted(scale2(tankStats.getSpotted() / battlesDouble));
 
             tankEntity.setShots(tankStats.getShots());
-            tankEntity.setAvgShots(scale(tankStats.getShots() / battlesDouble));
+            tankEntity.setAvgShots(scale2(tankStats.getShots() / battlesDouble));
 
             tankEntity.setPiercings(tankStats.getPiercings());
-            tankEntity.setAvgPiercings(scale(tankStats.getPiercings() / battlesDouble));
+            tankEntity.setAvgPiercings(scale2(tankStats.getPiercings() / battlesDouble));
 
             tankEntity.setPiercingsReceived(tankStats.getPiercingsReceived());
-            tankEntity.setAvgPiercingsReceived(scale(tankStats.getPiercingsReceived() / battlesDouble));
+            tankEntity.setAvgPiercingsReceived(scale2(tankStats.getPiercingsReceived() / battlesDouble));
 
             mapper.save(tankEntity);
         });

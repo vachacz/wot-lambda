@@ -47,6 +47,14 @@ export default function playerStats(state={
     });
   }
 
+  function getMax(value) {
+    return Math.min(value + 1, value * 1.01);
+  }
+
+  function getMin(value) {
+    return Math.max(value - 1, value * 0.99);
+  }
+
   function recalculateCharts(stats) {
     return playerStatsChartsDefinition.map((property) => {
       var modelStat = [];
@@ -54,19 +62,21 @@ export default function playerStats(state={
 
       stats.forEach((val) => {
         modelStat.push({x: val.timestamp, y: val[property]});
-        modelEffective.push({x: val.timestamp, y: val[property + "Effective"]});
+        if (val[property + "Effective"]) {
+          modelEffective.push({x: val.timestamp, y: val[property + "Effective"]});
+        }
       })
 
       var minStat = Math.min(...modelStat.map((stat) => stat.y))
       var maxStat = Math.max(...modelStat.map((stat) => stat.y))
-      var minEffectiveStat = Math.min(...modelEffective.filter((stat) => stat.y).map((stat) => stat.y))
-      var maxEffectiveStat = Math.max(...modelEffective.filter((stat) => stat.y).map((stat) => stat.y))
+      var minEffectiveStat = Math.min(...modelEffective.map((stat) => stat.y))
+      var maxEffectiveStat = Math.max(...modelEffective.map((stat) => stat.y))
 
-      var effectiveStatChartMin = 0.9 * Math.min( minStat, minEffectiveStat )
-      var effectiveStatChartMax = 1.1 * Math.max( maxStat, maxEffectiveStat )
+      var effectiveStatChartMin = getMin(Math.min( minStat, minEffectiveStat ))
+      var effectiveStatChartMax = getMax(Math.max( maxStat, maxEffectiveStat ))
 
       return { property: property, statData: modelStat, effectiveStatData: modelEffective,
-        statChartRange: [ 0.99 * minStat, 1.01 * maxStat ],
+        statChartRange: [ getMin(minStat), getMax(maxStat) ],
         effectiveStatChartRange: [ effectiveStatChartMin, effectiveStatChartMax ]}
     });
   }
