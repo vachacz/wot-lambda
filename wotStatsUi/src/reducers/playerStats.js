@@ -1,4 +1,3 @@
-
 import { playerStatsModelDefinition, playerStatsChartsDefinition } from '../const/Const.js';
 
 export default function playerStats(state={
@@ -56,7 +55,9 @@ export default function playerStats(state={
   }
 
   function recalculateCharts(stats) {
-    return playerStatsChartsDefinition.map((property) => {
+    return playerStatsChartsDefinition.map((definition) => {
+
+      var { property, title } = definition;
       var modelStat = [];
       var modelEffective = [];
 
@@ -75,7 +76,7 @@ export default function playerStats(state={
       var effectiveStatChartMin = getMin(Math.min( minStat, minEffectiveStat ))
       var effectiveStatChartMax = getMax(Math.max( maxStat, maxEffectiveStat ))
 
-      return { property: property, statData: modelStat, effectiveStatData: modelEffective,
+      return { property: property, title: title, statData: modelStat, effectiveStatData: modelEffective,
         statChartRange: [ getMin(minStat), getMax(maxStat) ],
         effectiveStatChartRange: [ effectiveStatChartMin, effectiveStatChartMax ]}
     });
