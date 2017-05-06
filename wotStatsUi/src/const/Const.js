@@ -58,10 +58,6 @@ export const playerStatsChartsDefinition = [
   "avgHits",
   "avgPiercings",
   "avgPiercingsReceived",
-  "avgExplosionHits",
-  "avgExplosionHitsReceived",
   "avgDirectHitsReceived",
-  "avgDamageReceived",
-  "avgCapturePoints",
-  "avgDroppedCapturePoints"
+  "avgDamageReceived"
 ]

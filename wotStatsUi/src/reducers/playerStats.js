@@ -56,7 +56,18 @@ export default function playerStats(state={
         modelStat.push({x: val.timestamp, y: val[property]});
         modelEffective.push({x: val.timestamp, y: val[property + "Effective"]});
       })
-      return { property: property, statData: modelStat, effectiveStatData: modelEffective }
+
+      var minStat = Math.min(...modelStat.map((stat) => stat.y))
+      var maxStat = Math.max(...modelStat.map((stat) => stat.y))
+      var minEffectiveStat = Math.min(...modelEffective.filter((stat) => stat.y).map((stat) => stat.y))
+      var maxEffectiveStat = Math.max(...modelEffective.filter((stat) => stat.y).map((stat) => stat.y))
+
+      var effectiveStatChartMin = 0.9 * Math.min( minStat, minEffectiveStat )
+      var effectiveStatChartMax = 1.1 * Math.max( maxStat, maxEffectiveStat )
+
+      return { property: property, statData: modelStat, effectiveStatData: modelEffective,
+        statChartRange: [ 0.99 * minStat, 1.01 * maxStat ],
+        effectiveStatChartRange: [ effectiveStatChartMin, effectiveStatChartMax ]}
     });
   }
 

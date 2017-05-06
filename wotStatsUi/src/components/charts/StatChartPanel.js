@@ -6,7 +6,8 @@ export default class ChartPanel extends Component {
   generateCharts() {
     return this.props.charts.map((chart) => {
       return (
-        <StatChart property={chart.property} statData={chart.statData} effectiveStatData={chart.effectiveStatData}/>
+        <StatChart property={chart.property} statData={chart.statData} effectiveStatData={chart.effectiveStatData}
+            statChartRange={chart.statChartRange} effectiveStatChartRange={chart.effectiveStatChartRange}/>
       );
     });
   }
