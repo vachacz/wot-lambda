@@ -39,6 +39,7 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
                 entity.setTankId(s.getTankId());
                 entity.setLevel(s.getLevel());
                 entity.setName(s.getName());
+                entity.setNation(s.getNation());
                 entity.setType(s.getType());
 
                 mapper.save(entity);

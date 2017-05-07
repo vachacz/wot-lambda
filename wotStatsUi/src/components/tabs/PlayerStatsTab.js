@@ -10,6 +10,7 @@ import StatTable from '../stattable/StatTable.js';
 import StatChartPanel from '../charts/StatChartPanel.js';
 
 import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '../../actions/actions.js';
+import { playerStatsModelDefinition } from '../../const/Const.js';
 
 class PlayerStatsTab extends Component {
   render() {
@@ -22,7 +23,7 @@ class PlayerStatsTab extends Component {
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode}/>
         <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility}/>
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility}/>
-        <StatTable deltaMode={deltaMode} playerStats={playerStats}/>
+        <StatTable definition={playerStatsModelDefinition} deltaMode={deltaMode} playerStats={playerStats}/>
 
         <StatChartPanel charts={charts}/>
       </div>
@@ -31,6 +32,6 @@ class PlayerStatsTab extends Component {
 }
 
 export default connect(
-  (store) => ({ playerStats: store.playerStats, charts: store.charts }),
+  (store) => ({ playerStats: store.playerStats }),
   { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode }
 )(PlayerStatsTab);

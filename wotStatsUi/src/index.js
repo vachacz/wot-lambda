@@ -13,6 +13,7 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'react-vis/dist/style.css';
+import 'react-select/dist/react-select.css';
 
 ReactDOM.render(
   <Provider store={store}>

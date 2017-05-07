@@ -40,3 +40,37 @@ export function selectDeltaMode(mode) {
     dispatch({type: "DELTA_MODE_SELECTED", payload: mode})
   }
 }
+
+export function fetchTanks() {
+  return dispatch => {
+    axios.get(baseurl + "/tanks")
+      .then((response) => {
+        dispatch({type: "FETCH_TANKS_FULFILLED", payload: response.data})
+      }
+    )
+  }
+}
+
+export function selectTankTier(selectedTiers) {
+  return dispatch => {
+    dispatch({type: "TANK_TIER_SELECTED", payload: selectedTiers })
+  }
+}
+
+export function selectTankType(selectedTypes) {
+  return dispatch => {
+    dispatch({type: "TANK_TYPE_SELECTED", payload: selectedTypes })
+  }
+}
+
+export function selectTankNation(selectedNations) {
+  return dispatch => {
+    dispatch({type: "TANK_NATION_SELECTED", payload: selectedNations })
+  }
+}
+
+export function selectTank(selectedTank) {
+  return dispatch => {
+    dispatch({type: "TANK_SELECTED", payload: selectedTank })
+  }
+}
