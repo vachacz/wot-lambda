@@ -18,7 +18,8 @@ export default function playerStats(state={
     tankSelection: {
       tier: "",
       type: "",
-      nation: ""
+      nation: "",
+      tank: ""
     },
     deltaMode: 'relative'
   }, action) {
@@ -66,8 +67,8 @@ export default function playerStats(state={
     }
 
     case "TANK_SELECTED": {
-      var newState = { ...state.tankSelection, nation: action.payload }
-      return {...state, tankSelection: newState}
+      var newState = { ...state.tankSelection, tank: action.payload }
+      return {...state, tankSelection: newState }
     }
 
     default:

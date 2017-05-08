@@ -128,6 +128,11 @@ html[xmlns] .clearfix {
     padding-right: 10px;
 }
 
+.App-tankselect-last {
+    width: 365px;
+    float: left;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
