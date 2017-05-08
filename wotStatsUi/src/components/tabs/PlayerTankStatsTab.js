@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
-import { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks } from  '../../actions/actions.js';
 
 import TankSelector from '../selectors/TankSelector.js';
+
+import { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks } from  '../../actions/actions.js';
 
 class PlayerTankStatsTab extends Component {
 
@@ -11,11 +12,13 @@ class PlayerTankStatsTab extends Component {
   }
 
   render() {
-    var { tanks, tankSelection } = this.props.playerTankStats;
-    return <TankSelector tanks={tanks}
-        tankSelection={tankSelection} selectTankTier={selectTankTier}
-        selectTankType={selectTankType} selectTankNation={selectTankNation}
-    />
+    var { tanksFiltered, tankSelection } = this.props.playerTankStats;
+    return (
+      <TankSelector tanks={ tanksFiltered }
+          tankSelection={tankSelection} selectTankTier={this.props.selectTankTier}
+          selectTankType={this.props.selectTankType} selectTankNation={this.props.selectTankNation}
+      />
+    );
   }
 }
 

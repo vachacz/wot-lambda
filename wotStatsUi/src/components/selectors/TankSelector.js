@@ -21,22 +21,23 @@ export default class TankSelector extends Component {
      ];
 
      var tanktypes = [
-       { value: "1", label: "Tank destroyer" },
-       { value: "2", label: "Artillery" },
-       { value: "3", label: "Light tank" },
-       { value: "4", label: "Medium tank" },
-       { value: "5", label: "Heavy tank" }
+       { value: "AT-SPG",     label: "Tank destroyer" },
+       { value: "SPG",        label: "Artillery" },
+       { value: "lightTank",  label: "Light tank" },
+       { value: "mediumTank", label: "Medium tank" },
+       { value: "heavyTank",  label: "Heavy tank" }
      ];
 
      var countries = [
-       { value: "1", label: "Germany" },
-       { value: "2", label: "Sweden" },
-       { value: "3", label: "China" },
-       { value: "4", label: "Japan" },
-       { value: "5", label: "ZSSR" },
-       { value: "6", label: "France" },
-       { value: "7", label: "UK" },
-       { value: "8", label: "Czech" }
+       { value: "germany", label: "Germany" },
+       { value: "sweden",  label: "Sweden" },
+       { value: "china",   label: "China" },
+       { value: "japan",   label: "Japan" },
+       { value: "ussr",    label: "USSR" },
+       { value: "france",  label: "France" },
+       { value: "uk",      label: "United Kingdom" },
+       { value: "czech",   label: "Czech" },
+       { value: "usa",     label: "USA" }
      ];
 
     var { tier, type, nation, tank } = this.props.tankSelection;
@@ -57,7 +58,7 @@ export default class TankSelector extends Component {
         </div>
         <div className="App-tankselect">
           <div className="App-menugroup-header">Tank selection <Glyphicon glyph="question-sign" /></div>
-          <Select name="select-countries"  value={tank} options={this.props.tanks} onChange={(val) => this.props.selectTank(val)} labelKey="name" valueKey="tank_id" />
+          <Select name="select-tank" value={tank} options={this.props.tanks} onChange={(val) => this.props.selectTank(val)} labelKey="name" valueKey="tank_id" />
         </div>
       </div>
     );
