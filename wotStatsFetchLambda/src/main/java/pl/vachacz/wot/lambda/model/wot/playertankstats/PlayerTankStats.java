@@ -4,6 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PlayerTankStats {
 
+//    "avg_damage_assisted": 327.18,
+//    "avg_damage_assisted_track": 68.55,
+//    "avg_damage_assisted_radio": 258.64,
+//    "max_xp": 2409,
+//    "max_damage": 7228,
+//    "max_frags": 8,
+
     private Integer spotted;
 
     @JsonProperty("avg_damage_blocked")
