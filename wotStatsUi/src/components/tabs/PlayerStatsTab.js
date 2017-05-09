@@ -29,7 +29,8 @@ class PlayerStatsTab extends Component {
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode}/>
         <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility}/>
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility}/>
-        <StatTable definition={playerStatsModelDefinition} deltaMode={deltaMode} playerStats={playerStats}/>
+        <StatTable definition={playerStatsModelDefinition} deltaMode={deltaMode} playerStats={playerStats}
+             cellVisibility={cellVisibility} columnVisibility={columnVisibility} />
 
         <StatChartPanel charts={charts}/>
       </div>

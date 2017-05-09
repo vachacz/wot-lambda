@@ -19,16 +19,16 @@ export default class StatTable extends Component {
 
   generateHeaderCells() {
     return this.props.definition.map((def) => {
-      return <StatHeader group={def.group} desc={def.header} />
+      return <StatHeader group={def.group} desc={def.header} columnVisibility={this.props.columnVisibility} />
     });
   }
 
   generateCells(stat) {
     return this.props.definition.map((def) => {
       if ("effectiveProperty" in def) {
-        return <StatCell stats={stat} group={def.group} property={def.property} effectiveProperty={def.effectiveProperty} />
+        return <StatCell stats={stat} group={def.group} property={def.property} cellVisibility={this.props.cellVisibility} columnVisibility={this.props.columnVisibility} effectiveProperty={def.effectiveProperty}/>
       } else {
-        return <StatCell stats={stat} group={def.group} property={def.property} />
+        return <StatCell stats={stat} group={def.group} property={def.property} cellVisibility={this.props.cellVisibility} columnVisibility={this.props.columnVisibility} />
       }
     });
   }

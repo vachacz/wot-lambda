@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 
 import { Glyphicon } from 'react-bootstrap';
 
-class StatCell extends Component {
+export default class StatCell extends Component {
 
   getStatComponent() {
     if (this.props.cellVisibility.stat) {
@@ -54,7 +54,3 @@ class StatCell extends Component {
     return ( this.props.property + "Effective" ) in this.props.stats;
   }
 }
-
-export default connect(
-  (store) => ({ cellVisibility: store.playerStats.cellVisibility, columnVisibility: store.playerStats.columnVisibility })
-)(StatCell);
