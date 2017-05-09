@@ -1,6 +1,7 @@
 
 export default function playersReducer(state={
     player: "",
+    accountId: "",
     players: []
   }, action) {
 
@@ -10,7 +11,7 @@ export default function playersReducer(state={
       return {...state, players: action.payload.players}
 
     case "PLAYER_SELECTED":
-      return {...state, player: action.payload.player}
+      return {...state, player: action.payload.player, accountId: action.payload.account_id}
 
     default:
       return state;
