@@ -45,7 +45,6 @@ export default class StatTable extends Component {
   }
 
   render() {
-    if (this.props.playerStats.length === 0) return <div style={{ clear: "both", color: "red", fontWeight: "bold" }}><br/><br/>Select user from dropdown menu.</div>
     return (
       <div className="App-clear">
         <Table bsClass="App-stats-table table-striped table-bordered table-condensed table-hover">

@@ -70,7 +70,10 @@ export function selectTankNation(selectedNations) {
 }
 
 export function selectTank(selectedTank) {
-  return dispatch => {
-    dispatch({type: "TANK_SELECTED", payload: selectedTank })
-  }
+  return (dispatch, getState) => axios.get(baseurl + "/playerstats/" + getState().players.player.account_id + "/tank/" + selectedTank.tank_id)
+    .then((response) => {
+      dispatch({type: "TANK_SELECTED", payload: selectedTank })
+      dispatch({type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: response.data})
+    }
+  )
 }

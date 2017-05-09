@@ -7,6 +7,9 @@ import { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTank
 import { playerTanksStatsModelDefinition } from '../../const/Const.js';
 import StatTable from '../stattable/StatTable.js';
 
+const noStatsWarning = <div className="App-clear"><h3>No stats for this selection!</h3></div>
+const noPlayerWarning = <h3>Select player first!</h3>
+
 class PlayerTankStatsTab extends Component {
 
   componentWillMount() {
@@ -15,22 +18,24 @@ class PlayerTankStatsTab extends Component {
 
   render() {
     var { tanksFiltered, tankSelection, playerTankStats, deltaMode } = this.props.playerTankStats;
+    if (!this.props.player) {
+      return noPlayerWarning;
+    }
+
     return (
       <div>
         <TankSelector tanks={ tanksFiltered } tankSelection={tankSelection}
-            selectTank={this.props.selectTank}
-            selectTankTier={this.props.selectTankTier}
-            selectTankType={this.props.selectTankType}
-            selectTankNation={this.props.selectTankNation} />
-
-        { playerTankStats.length > 0 && <StatTable definition={playerTanksStatsModelDefinition} deltaMode={deltaMode} playerStats={playerTankStats}/> }
-        { playerTankStats.length === 0 && tankSelection.tank && <div className="App-clear"><h3>No stats for this tank!</h3></div>}
+          selectTank={this.props.selectTank}
+          selectTankTier={this.props.selectTankTier}
+          selectTankType={this.props.selectTankType}
+          selectTankNation={this.props.selectTankNation} />
+        { playerTankStats.length === 0 ? noStatsWarning : <StatTable definition={playerTanksStatsModelDefinition} deltaMode={deltaMode} playerStats={playerTankStats}/>}
       </div>
     );
   }
 }
 
 export default connect(
-  (store) => ({ playerTankStats: store.playerTankStats }),
+  (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player }),
   { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks }
 )(PlayerTankStatsTab);

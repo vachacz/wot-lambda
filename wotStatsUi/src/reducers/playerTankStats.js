@@ -71,6 +71,10 @@ export default function playerStats(state={
       return {...state, tankSelection: newState }
     }
 
+    case "FETCH_PLAYER_TANK_STATS_FULFILLED": {
+      return {...state, playerTankStats: action.payload.playerTankStats }
+    }
+
     default:
       return state;
   }

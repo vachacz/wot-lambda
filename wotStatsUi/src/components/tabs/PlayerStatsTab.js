@@ -13,8 +13,14 @@ import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '..
 import { playerStatsModelDefinition } from '../../const/Const.js';
 
 class PlayerStatsTab extends Component {
+
+
   render() {
     var { playerStats, columnVisibility, cellVisibility, deltaMode, charts } = this.props.playerStats;
+
+    if (playerStats.length === 0) {
+      return <h3>Select player first!</h3>
+    }
 
     return (
       <div>
