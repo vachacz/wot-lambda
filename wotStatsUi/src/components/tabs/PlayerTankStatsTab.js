@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 
-import TankSelector from '../selectors/TankSelector.js';
-
-import { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks } from  '../../actions/actions.js';
 import { playerTanksStatsModelDefinition } from '../../const/Const.js';
+import { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks,
+    toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '../../actions/playerTankStatsActions.js';
 
-import StartDateSelector from '../selectors/StartDateSelector.js';
-import StatPresetSelector from '../selectors/StatPresetSelector.js';
 import DeltaModeSelector from '../selectors/DeltaModeSelector.js';
 import CellVisibilitySelector from '../selectors/CellVisibilitySelector.js';
 import ColumnVisibilitySelector from '../selectors/ColumnVisibilitySelector.js';
 import StatTable from '../stattable/StatTable.js';
 import StatChartPanel from '../charts/StatChartPanel.js';
-
-import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '../../actions/tankStatsActions.js';
+import TankSelector from '../selectors/TankSelector.js';
 
 const noStatsWarning = <div className="App-clear"><h3>No stats for this selection!</h3></div>
 const noPlayerWarning = <h3>Select player first!</h3>
@@ -26,8 +22,7 @@ class PlayerTankStatsTab extends Component {
   }
 
   renderStatTable() {
-    var { tanksFiltered, tankSelection, playerTankStats, deltaMode, cellVisibility, charts,
-        columnVisibility, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } = this.props.playerTankStats;
+    var { playerTankStats, cellVisibility, charts, deltaMode, columnVisibility } = this.props.playerTankStats;
 
     return (
       <div>
@@ -43,7 +38,7 @@ class PlayerTankStatsTab extends Component {
   }
 
   render() {
-    var { tanksFiltered, tankSelection, playerTankStats, deltaMode } = this.props.playerTankStats;
+    var { tanksFiltered, tankSelection, playerTankStats } = this.props.playerTankStats;
     if (!this.props.player) {
       return noPlayerWarning;
     }

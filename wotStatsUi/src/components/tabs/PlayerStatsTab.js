@@ -9,7 +9,7 @@ import ColumnVisibilitySelector from '../selectors/ColumnVisibilitySelector.js';
 import StatTable from '../stattable/StatTable.js';
 import StatChartPanel from '../charts/StatChartPanel.js';
 
-import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '../../actions/actions.js';
+import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '../../actions/playerStatsActions.js';
 import { playerStatsModelDefinition } from '../../const/Const.js';
 
 class PlayerStatsTab extends Component {

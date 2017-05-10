@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import { fetchPlayers, selectPlayer } from '../actions/actions.js';
+import { fetchPlayers, selectPlayer } from '../actions/playerActions.js';
 
 class MainNavbar extends Component {
 

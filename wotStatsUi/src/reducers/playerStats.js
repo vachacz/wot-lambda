@@ -21,24 +21,24 @@ export default function playerStats(state={
   switch (action.type) {
 
     case "FETCH_PLAYER_STATS_FULFILLED": {
-      var newStats = recalculateStats(playerStatsModelDefinition, action.payload.playerStats, state.deltaMode)
-      var charts = recalculateCharts(playerStatsChartsDefinition, newStats)
+      let newStats = recalculateStats(playerStatsModelDefinition, action.payload.playerStats, state.deltaMode)
+      let charts = recalculateCharts(playerStatsChartsDefinition, newStats)
       return {...state, playerStats: newStats, charts: charts}
     }
 
     case "TOGGLE_STATS_COLUMN_GROUP_VISIBILITY": {
-      var columnVisibility = state.columnVisibility;
+      let columnVisibility = state.columnVisibility;
       return {...state, columnVisibility: { ...columnVisibility, [action.payload] : !columnVisibility[action.payload]}}
     }
 
     case "TOGGLE_STATS_CELL_VISIBILITY": {
-      var cellVisibility = state.cellVisibility;
+      let cellVisibility = state.cellVisibility;
       return {...state, cellVisibility: { ...cellVisibility, [action.payload] : !cellVisibility[action.payload]}}
     }
 
     case "DELTA_MODE_SELECTED": {
-      var newStats = recalculateStats(playerStatsModelDefinition, state.playerStats, action.payload)
-      var charts = recalculateCharts(playerStatsChartsDefinition, newStats)
+      let newStats = recalculateStats(playerStatsModelDefinition, state.playerStats, action.payload)
+      let charts = recalculateCharts(playerStatsChartsDefinition, newStats)
       return {...state, deltaMode: action.payload, playerStats: newStats, charts: charts}
     }
 
