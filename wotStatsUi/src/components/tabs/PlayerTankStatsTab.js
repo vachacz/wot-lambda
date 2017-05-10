@@ -14,6 +14,8 @@ import ColumnVisibilitySelector from '../selectors/ColumnVisibilitySelector.js';
 import StatTable from '../stattable/StatTable.js';
 import StatChartPanel from '../charts/StatChartPanel.js';
 
+import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '../../actions/tankStatsActions.js';
+
 const noStatsWarning = <div className="App-clear"><h3>No stats for this selection!</h3></div>
 const noPlayerWarning = <h3>Select player first!</h3>
 
@@ -27,8 +29,6 @@ class PlayerTankStatsTab extends Component {
     var { tanksFiltered, tankSelection, playerTankStats, deltaMode, cellVisibility, columnVisibility } = this.props.playerTankStats;
     return (
       <div>
-        // <StartDateSelector />
-        // <StatPresetSelector />
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode}/>
         <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility}/>
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility}/>

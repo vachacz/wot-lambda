@@ -110,6 +110,19 @@ export const playerStatsChartsDefinition = [
   { property: "avgDirectHitsReceived",    title: "Average direct hits received" },
 ]
 
+export const playerTankStatsChartsDefinition = [
+//  { property: "avgDamageDealt",           title: "Average damage dealt" },
+//  { property: "avgDamageReceived",        title: "Average damage received" },
+//  { property: "avgBattleXp",              title: "Average battle experience" },
+//  { property: "avgFrags",                 title: "Average frags" },
+//  { property: "avgSpotted",               title: "Average spotted enemies" },
+//  { property: "avgShots",                 title: "Average shots" },
+//  { property: "avgHits",                  title: "Average hits" },
+//  { property: "avgPiercings",             title: "Average piercings" },
+//  { property: "avgPiercingsReceived",     title: "Average piercings received" },
+//  { property: "avgDirectHitsReceived",    title: "Average direct hits received" },
+]
+
 export const tiers = [
   { value: "1", label: "Tier I" },
   { value: "2", label: "Tier II" },

@@ -3,6 +3,7 @@ package pl.vachacz.wot.lambda.model.dynamo;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @DynamoDBTable(tableName = "wot_player_tank_stats")
 public class PlayerTankStatsEntity {
@@ -41,6 +42,61 @@ public class PlayerTankStatsEntity {
     private Integer shots;
     private Integer explosionHitsReceived;
     private Double tankingFactor;
+
+    public Double getAvgDamageAssisted() {
+        return avgDamageAssisted;
+    }
+
+    public void setAvgDamageAssisted(Double avgDamageAssisted) {
+        this.avgDamageAssisted = avgDamageAssisted;
+    }
+
+    public Double getAvgDamageAssistedTrack() {
+        return avgDamageAssistedTrack;
+    }
+
+    public void setAvgDamageAssistedTrack(Double avgDamageAssistedTrack) {
+        this.avgDamageAssistedTrack = avgDamageAssistedTrack;
+    }
+
+    public Double getAvgDamageAssistedRadio() {
+        return avgDamageAssistedRadio;
+    }
+
+    public void setAvgDamageAssistedRadio(Double avgDamageAssistedRadio) {
+        this.avgDamageAssistedRadio = avgDamageAssistedRadio;
+    }
+
+    public Integer getMaxXp() {
+        return maxXp;
+    }
+
+    public void setMaxXp(Integer maxXp) {
+        this.maxXp = maxXp;
+    }
+
+    public Integer getMaxDamage() {
+        return maxDamage;
+    }
+
+    public void setMaxDamage(Integer maxDamage) {
+        this.maxDamage = maxDamage;
+    }
+
+    public Integer getMaxFrags() {
+        return maxFrags;
+    }
+
+    public void setMaxFrags(Integer maxFrags) {
+        this.maxFrags = maxFrags;
+    }
+
+    private Double avgDamageAssisted;
+    private Double avgDamageAssistedTrack;
+    private Double avgDamageAssistedRadio;
+    private Integer maxXp;
+    private Integer maxDamage;
+    private Integer maxFrags;
 
     // calculated fields
 

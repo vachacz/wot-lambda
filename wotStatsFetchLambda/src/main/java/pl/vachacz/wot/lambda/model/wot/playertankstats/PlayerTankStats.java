@@ -4,13 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PlayerTankStats {
 
-//    "avg_damage_assisted": 327.18,
-//    "avg_damage_assisted_track": 68.55,
-//    "avg_damage_assisted_radio": 258.64,
-//    "max_xp": 2409,
-//    "max_damage": 7228,
-//    "max_frags": 8,
-
     private Integer spotted;
 
     @JsonProperty("avg_damage_blocked")
@@ -63,6 +56,72 @@ public class PlayerTankStats {
 
     @JsonProperty("tanking_factor")
     private Double tankingFactor;
+
+    @JsonProperty("avg_damage_assisted")
+    private Double avgDamageAssisted;
+
+    @JsonProperty("avg_damage_assisted_track")
+    private Double avgDamageAssistedTrack;
+
+    @JsonProperty("avg_damage_assisted_radio")
+    private Double avgDamageAssistedRadio;
+
+    @JsonProperty("max_xp")
+    private Integer maxXp;
+
+    @JsonProperty("max_damage")
+    private Integer maxDamage;
+
+    @JsonProperty("max_frags")
+    private Integer maxFrags;
+
+    public Double getAvgDamageAssisted() {
+        return avgDamageAssisted;
+    }
+
+    public void setAvgDamageAssisted(Double avgDamageAssisted) {
+        this.avgDamageAssisted = avgDamageAssisted;
+    }
+
+    public Double getAvgDamageAssistedTrack() {
+        return avgDamageAssistedTrack;
+    }
+
+    public void setAvgDamageAssistedTrack(Double avgDamageAssistedTrack) {
+        this.avgDamageAssistedTrack = avgDamageAssistedTrack;
+    }
+
+    public Double getAvgDamageAssistedRadio() {
+        return avgDamageAssistedRadio;
+    }
+
+    public void setAvgDamageAssistedRadio(Double avgDamageAssistedRadio) {
+        this.avgDamageAssistedRadio = avgDamageAssistedRadio;
+    }
+
+    public Integer getMaxXp() {
+        return maxXp;
+    }
+
+    public void setMaxXp(Integer maxXp) {
+        this.maxXp = maxXp;
+    }
+
+    public Integer getMaxDamage() {
+        return maxDamage;
+    }
+
+    public void setMaxDamage(Integer maxDamage) {
+        this.maxDamage = maxDamage;
+    }
+
+    public Integer getMaxFrags() {
+        return maxFrags;
+    }
+
+    public void setMaxFrags(Integer maxFrags) {
+        this.maxFrags = maxFrags;
+    }
 
     public Integer getSpotted() {
         return spotted;

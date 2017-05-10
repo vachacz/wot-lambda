@@ -7,6 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerEntity;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerStatsEntity;
 import pl.vachacz.wot.lambda.model.dynamo.PlayerTankStatsEntity;
@@ -239,28 +240,36 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
             tankEntity.setAvgDroppedCapturePoints(scale2(tankStats.getDroppedCapturePoints() / battlesDouble));
 
             tankEntity.setExplosionHits(tankStats.getExplosionHits());
-            tankEntity.setAvgExplosionHits(scale2(tankStats.getExplosionHits() / battlesDouble));
+            tankEntity.setAvgExplosionHits(scale3(tankStats.getExplosionHits() / battlesDouble));
 
             tankEntity.setExplosionHitsReceived(tankStats.getExplosionHitsReceived());
-            tankEntity.setAvgExplosionHitsReceived(scale2(tankStats.getExplosionHitsReceived() / battlesDouble));
+            tankEntity.setAvgExplosionHitsReceived(scale3(tankStats.getExplosionHitsReceived() / battlesDouble));
 
             tankEntity.setFrags(tankStats.getFrags());
-            tankEntity.setAvgFrags(scale2(tankStats.getFrags() / battlesDouble));
+            tankEntity.setAvgFrags(scale3(tankStats.getFrags() / battlesDouble));
 
             tankEntity.setHits(tankStats.getHits());
-            tankEntity.setAvgHits(scale2(tankStats.getHits() / battlesDouble));
+            tankEntity.setAvgHits(scale3(tankStats.getHits() / battlesDouble));
 
             tankEntity.setSpotted(tankStats.getSpotted());
-            tankEntity.setAvgSpotted(scale2(tankStats.getSpotted() / battlesDouble));
+            tankEntity.setAvgSpotted(scale3(tankStats.getSpotted() / battlesDouble));
 
             tankEntity.setShots(tankStats.getShots());
-            tankEntity.setAvgShots(scale2(tankStats.getShots() / battlesDouble));
+            tankEntity.setAvgShots(scale3(tankStats.getShots() / battlesDouble));
 
             tankEntity.setPiercings(tankStats.getPiercings());
-            tankEntity.setAvgPiercings(scale2(tankStats.getPiercings() / battlesDouble));
+            tankEntity.setAvgPiercings(scale3(tankStats.getPiercings() / battlesDouble));
 
             tankEntity.setPiercingsReceived(tankStats.getPiercingsReceived());
-            tankEntity.setAvgPiercingsReceived(scale2(tankStats.getPiercingsReceived() / battlesDouble));
+            tankEntity.setAvgPiercingsReceived(scale3(tankStats.getPiercingsReceived() / battlesDouble));
+
+            tankEntity.setAvgDamageAssisted(scale2(tankStats.getAvgDamageAssisted()));
+            tankEntity.setAvgDamageAssistedRadio(scale2(tankStats.getAvgDamageAssistedRadio()));
+            tankEntity.setAvgDamageAssistedTrack(scale2(tankStats.getAvgDamageAssistedTrack()));
+
+            tankEntity.setMaxXp(tankStats.getMaxXp());
+            tankEntity.setMaxDamage(tankStats.getMaxDamage());
+            tankEntity.setMaxFrags(tankStats.getMaxFrags());
 
             mapper.save(tankEntity);
         });
