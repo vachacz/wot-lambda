@@ -14,7 +14,6 @@ import { playerStatsModelDefinition } from '../../const/Const.js';
 
 class PlayerStatsTab extends Component {
 
-
   render() {
     var { playerStats, columnVisibility, cellVisibility, deltaMode, charts } = this.props.playerStats;
 

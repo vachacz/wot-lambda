@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux"
-
 import { Glyphicon } from 'react-bootstrap';
 
 export default class StatCell extends Component {

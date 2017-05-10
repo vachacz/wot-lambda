@@ -26,7 +26,9 @@ class PlayerTankStatsTab extends Component {
   }
 
   renderStatTable() {
-    var { tanksFiltered, tankSelection, playerTankStats, deltaMode, cellVisibility, columnVisibility } = this.props.playerTankStats;
+    var { tanksFiltered, tankSelection, playerTankStats, deltaMode, cellVisibility, charts,
+        columnVisibility, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } = this.props.playerTankStats;
+
     return (
       <div>
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode}/>
@@ -34,6 +36,8 @@ class PlayerTankStatsTab extends Component {
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility}/>
         <StatTable definition={playerTanksStatsModelDefinition} deltaMode={deltaMode}
             playerStats={playerTankStats} cellVisibility={cellVisibility} columnVisibility={columnVisibility}/>
+
+        <StatChartPanel charts={charts}/>
       </div>
     );
   }
@@ -59,5 +63,5 @@ class PlayerTankStatsTab extends Component {
 
 export default connect(
   (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player }),
-  { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks }
+  { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode }
 )(PlayerTankStatsTab);
