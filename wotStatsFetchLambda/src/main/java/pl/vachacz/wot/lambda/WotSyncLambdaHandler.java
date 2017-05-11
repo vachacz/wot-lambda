@@ -64,7 +64,6 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
             savePlayerStats(wotClient, timestamp, player.getAccountId());
             savePlayerTankStats(wotClient, timestamp, player.getAccountId());
 
-            long endTime = System.currentTimeMillis();
             System.out.println("====> Finished in " + ((System.currentTimeMillis() - startTime) / 1000) + " seconds");
         });
 
@@ -250,6 +249,7 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
 
             tankEntity.setHits(tankStats.getHits());
             tankEntity.setAvgHits(scale3(tankStats.getHits() / battlesDouble));
+            tankEntity.setHitsRatio(scale2(100 * tankStats.getHits() / new Double(tankStats.getShots())));
 
             tankEntity.setSpotted(tankStats.getSpotted());
             tankEntity.setAvgSpotted(scale3(tankStats.getSpotted() / battlesDouble));
@@ -262,14 +262,6 @@ public class WotSyncLambdaHandler implements RequestHandler<Request, Response> {
 
             tankEntity.setPiercingsReceived(tankStats.getPiercingsReceived());
             tankEntity.setAvgPiercingsReceived(scale3(tankStats.getPiercingsReceived() / battlesDouble));
-
-            tankEntity.setAvgDamageAssisted(scale2(tankStats.getAvgDamageAssisted()));
-            tankEntity.setAvgDamageAssistedRadio(scale2(tankStats.getAvgDamageAssistedRadio()));
-            tankEntity.setAvgDamageAssistedTrack(scale2(tankStats.getAvgDamageAssistedTrack()));
-
-            tankEntity.setMaxXp(tankStats.getMaxXp());
-            tankEntity.setMaxDamage(tankStats.getMaxDamage());
-            tankEntity.setMaxFrags(tankStats.getMaxFrags());
 
             mapper.save(tankEntity);
         });

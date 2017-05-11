@@ -7,7 +7,7 @@ export default class MainLayout extends Component {
   render() {
     return (
       <div className="container">
-        <Tabs defaultActiveKey={2} id="uncontrolled-tab-example">
+        <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Player" className="clearfix">
             <PlayerStatsTab />
           </Tab>

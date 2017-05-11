@@ -61,9 +61,6 @@ export const playerTanksStatsModelDefinition = [
   { header: "survived %",        group: "ratios",       property: "survivedBattlesRatio" },
   { header: "damage",            group: "totals",       property: "damageDealt" },
   { header: "avg damage",        group: "avgs",         property: "avgDamageDealt",         effectiveProperty: "damageDealt" },
-  { header: "avg ass",           group: "avgs",         property: "avgDamageAssisted" },
-  { header: "avg ass radio",     group: "avgs",         property: "avgDamageAssistedRadio" },
-  { header: "avg ass track",     group: "avgs",         property: "avgDamageAssistedTrack" },
   { header: "xp",                group: "totals",       property: "xp" },
   { header: "avg xp",            group: "avgs",         property: "avgBattleXp",            effectiveProperty: "xp" },
   { header: "frags",             group: "totals",       property: "frags" },
@@ -91,10 +88,7 @@ export const playerTanksStatsModelDefinition = [
   { header: "avg cap",           group: "avgs",         property: "avgCapturePoints",         effectiveProperty: "capturePoints" },
   { header: "decap",             group: "totals",       property: "droppedCapturePoints" },
   { header: "avg decap",         group: "avgs",         property: "avgDroppedCapturePoints",  effectiveProperty: "droppedCapturePoints" },
-  { header: "avg blocked",       group: "avgs",         property: "avgDamageBlocked" },
-  { header: "max damage",        group: "max",          property: "maxDamage" },
-  { header: "max xp",            group: "max",          property: "maxXp" },
-  { header: "max frags",         group: "max",          property: "maxFrags" }
+  { header: "avg blocked",       group: "avgs",         property: "avgDamageBlocked" }
 ]
 
 export const playerStatsChartsDefinition = [

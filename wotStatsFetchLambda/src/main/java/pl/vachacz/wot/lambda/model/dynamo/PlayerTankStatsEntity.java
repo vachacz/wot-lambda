@@ -43,65 +43,11 @@ public class PlayerTankStatsEntity {
     private Integer explosionHitsReceived;
     private Double tankingFactor;
 
-    public Double getAvgDamageAssisted() {
-        return avgDamageAssisted;
-    }
-
-    public void setAvgDamageAssisted(Double avgDamageAssisted) {
-        this.avgDamageAssisted = avgDamageAssisted;
-    }
-
-    public Double getAvgDamageAssistedTrack() {
-        return avgDamageAssistedTrack;
-    }
-
-    public void setAvgDamageAssistedTrack(Double avgDamageAssistedTrack) {
-        this.avgDamageAssistedTrack = avgDamageAssistedTrack;
-    }
-
-    public Double getAvgDamageAssistedRadio() {
-        return avgDamageAssistedRadio;
-    }
-
-    public void setAvgDamageAssistedRadio(Double avgDamageAssistedRadio) {
-        this.avgDamageAssistedRadio = avgDamageAssistedRadio;
-    }
-
-    public Integer getMaxXp() {
-        return maxXp;
-    }
-
-    public void setMaxXp(Integer maxXp) {
-        this.maxXp = maxXp;
-    }
-
-    public Integer getMaxDamage() {
-        return maxDamage;
-    }
-
-    public void setMaxDamage(Integer maxDamage) {
-        this.maxDamage = maxDamage;
-    }
-
-    public Integer getMaxFrags() {
-        return maxFrags;
-    }
-
-    public void setMaxFrags(Integer maxFrags) {
-        this.maxFrags = maxFrags;
-    }
-
-    private Double avgDamageAssisted;
-    private Double avgDamageAssistedTrack;
-    private Double avgDamageAssistedRadio;
-    private Integer maxXp;
-    private Integer maxDamage;
-    private Integer maxFrags;
-
     // calculated fields
 
     private Double drawsRatio;
     private Double winsRatio;
+    private Double hitsRatio;
     private Double lossesRatio;
     private Double survivedBattlesRatio;
     private Double avgDamageDealt;
@@ -486,4 +432,11 @@ public class PlayerTankStatsEntity {
         this.avgPiercingsReceived = avgPiercingsReceived;
     }
 
+    public Double getHitsRatio() {
+        return hitsRatio;
+    }
+
+    public void setHitsRatio(Double hitsRatio) {
+        this.hitsRatio = hitsRatio;
+    }
 }

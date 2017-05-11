@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 
-import StartDateSelector from '../selectors/StartDateSelector.js';
 import StatPresetSelector from '../selectors/StatPresetSelector.js';
 import DeltaModeSelector from '../selectors/DeltaModeSelector.js';
 import CellVisibilitySelector from '../selectors/CellVisibilitySelector.js';
@@ -23,7 +22,6 @@ class PlayerStatsTab extends Component {
 
     return (
       <div>
-        <StartDateSelector />
         <StatPresetSelector />
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode}/>
         <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility}/>
