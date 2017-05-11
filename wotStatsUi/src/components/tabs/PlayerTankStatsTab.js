@@ -45,11 +45,12 @@ class PlayerTankStatsTab extends Component {
 
     return (
       <div>
-        <TankSelector tanks={ tanksFiltered } tankSelection={tankSelection}
+        <TankSelector tanks={tanksFiltered} tankSelection={tankSelection}
           selectTank={this.props.selectTank}
           selectTankTier={this.props.selectTankTier}
           selectTankType={this.props.selectTankType}
           selectTankNation={this.props.selectTankNation} />
+        <h3 className="App-clear" style={{ "overflow-y": "hidden" }}>{tankSelection.tank.name}</h3>
         { playerTankStats.length === 0 ? noStatsWarning : this.renderStatTable() }
       </div>
     );

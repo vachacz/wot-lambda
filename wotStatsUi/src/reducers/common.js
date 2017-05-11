@@ -13,12 +13,12 @@ export function recalculateStats(statsDefinition, stats, deltaMode) {
     var battleDelta = stat.battles - previousStat.battles
 
     statsDefinition.forEach((config) => {
-      var statDelta = (stat[config.property] - previousStat[config.property]).toFixed(2)
+      var statDelta = parseFloat((stat[config.property] - previousStat[config.property]).toFixed(2))
       stat[config.property + "Delta"] = statDelta
 
       if (config.hasOwnProperty("effectiveProperty")) {
         var effectiveStatDelta = stat[config.effectiveProperty] - previousStat[config.effectiveProperty]
-        var effectiveValue = (effectiveStatDelta / battleDelta).toFixed(2);
+        var effectiveValue = parseFloat((effectiveStatDelta / battleDelta).toFixed(2));
         if (!isNaN(effectiveValue)) {
           stat[config.property + "Effective"] = effectiveValue
         }
