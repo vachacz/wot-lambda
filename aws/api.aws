@@ -1,0 +1,1 @@
+aws apigateway get-export --rest-api-id c5lu9mesih --stage-name prod --export-type swagger --parameters extensions='integrations' ./api/api.json

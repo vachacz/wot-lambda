@@ -1,0 +1,364 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "2017-05-12T16:16:21Z",
+    "title" : "WotStatsApi"
+  },
+  "host" : "c5lu9mesih.execute-api.eu-central-1.amazonaws.com",
+  "basePath" : "/prod",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/players" : {
+      "get" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "credentials" : "arn:aws:iam::592294659655:role/wotDynamoRead",
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              },
+              "responseTemplates" : {
+                "application/json" : "#set($inputRoot = $input.path('$'))\n{\n    \"players\": [\n        #foreach($elem in $inputRoot.Items) {\n            \"player\": \"$elem.player.S\",\n            \"account_id\": \"$elem.account_id.N\"\n        }#if($foreach.hasNext),#end\n\t#end\n    ]\n}"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ \"TableName\": \"wot_player\" }"
+          },
+          "uri" : "arn:aws:apigateway:eu-central-1:dynamodb:action/Scan",
+          "passthroughBehavior" : "when_no_templates",
+          "httpMethod" : "POST",
+          "contentHandling" : "CONVERT_TO_TEXT",
+          "type" : "aws"
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{\"statusCode\": 200}"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
+        }
+      }
+    },
+    "/playerstats/{player}" : {
+      "get" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "player",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "credentials" : "arn:aws:iam::592294659655:role/wotDynamoRead",
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              },
+              "responseTemplates" : {
+                "application/json" : "#set($inputRoot = $input.path('$'))\n{\n    \"playerStats\": [\n        #foreach($elem in $inputRoot.Items) {\n            \"timestamp\": \"$elem.timestamp.N\",\n            \"battles\": \"$elem.battles.N\",\n            \"wins\": \"$elem.wins.N\",\n            \"losses\": \"$elem.losses.N\",\n            \"draws\": \"$elem.draws.N\",\n            \"frags\": \"$elem.frags.N\",\n            \"spotted\": \"$elem.spotted.N\",\n            \"shots\": \"$elem.shots.N\",\n            \"hits\": \"$elem.hits.N\",\n            \"piercings\": \"$elem.piercings.N\",\n            \"piercingsReceived\": \"$elem.piercingsReceived.N\",\n            \"survivedBattles\": \"$elem.survivedBattles.N\",\n            \"xp\": \"$elem.xp.N\",\n            \"explosionHits\": \"$elem.explosionHits.N\",\n            \"explosionHitsReceived\": \"$elem.explosionHitsReceived.N\",\n            \"directHitsReceived\": \"$elem.directHitsReceived.N\",\n            \"damageDealt\": \"$elem.damageDealt.N\",\n            \"damageReceived\": \"$elem.damageReceived.N\",\n            \"avgBattleXp\": \"$elem.avgBattleXp.N\",\n            \"avgDamageBlocked\": \"$elem.avgDamageBlocked.N\",\n            \"avgDamageAssisted\": \"$elem.avgDamageAssisted.N\",\n            \"avgDamageAssistedRadio\": \"$elem.avgDamageAssistedRadio.N\",\n            \"avgDamageAssistedTrack\": \"$elem.avgDamageAssistedTrack.N\",\n            \"noDamageDirectHitsReceived\": \"$elem.noDamageDirectHitsReceived.N\",\n            \"capturePoints\": \"$elem.capturePoints.N\",\n            \"droppedCapturePoints\": \"$elem.droppedCapturePoints.N\",\n            \"maxDamage\": \"$elem.maxDamage.N\",\n            \"maxXp\": \"$elem.maxXp.N\",\n            \"maxFrags\": \"$elem.maxFrags.N\",\n            \"winsRatio\": \"$elem.winsRatio.N\",\n            \"lossesRatio\": \"$elem.lossesRatio.N\",\n            \"drawsRatio\": \"$elem.drawsRatio.N\",\n            \"avgFrags\": \"$elem.avgFrags.N\",\n            \"avgSpotted\": \"$elem.avgSpotted.N\",\n            \"avgShots\": \"$elem.avgShots.N\",\n            \"avgHits\": \"$elem.avgHits.N\",\n            \"hitsRatio\": \"$elem.hitsRatio.N\",\n            \"avgPiercings\": \"$elem.avgPiercings.N\",\n            \"avgPiercingsReceived\": \"$elem.avgPiercingsReceived.N\",\n            \"survivedBattlesRatio\": \"$elem.survivedBattlesRatio.N\",\n            \"avgDamageDealt\": \"$elem.avgDamageDealt.N\",\n            \"avgDirectHitsReceived\": \"$elem.avgDirectHitsReceived.N\",\n            \"avgDamageReceived\": \"$elem.avgDamageReceived.N\",\n            \"avgExplosionHitsReceived\": \"$elem.avgExplosionHitsReceived.N\",\n            \"avgCapturePoints\": \"$elem.avgCapturePoints.N\",\n            \"avgExplosionHits\": \"$elem.avgExplosionHits.N\",\n            \"avgDroppedCapturePoints\": \"$elem.avgDroppedCapturePoints.N\"\n        }#if($foreach.hasNext),#end\n\t#end\n    ]\n}"
+              }
+            }
+          },
+          "requestParameters" : {
+            "integration.request.path.player" : "method.request.path.player"
+          },
+          "requestTemplates" : {
+            "application/json" : "{ \n    \"TableName\": \"wot_player_stats\",\n    \"KeyConditionExpression\": \"account_id = :val\",\n    \"ExpressionAttributeValues\": {\n        \":val\": { \"N\": \"$input.params('player')\" }\n    },\n    \"ScanIndexForward\": false,\n    \"Limit\": 15\n}"
+          },
+          "uri" : "arn:aws:apigateway:eu-central-1:dynamodb:action/Query",
+          "passthroughBehavior" : "when_no_templates",
+          "httpMethod" : "POST",
+          "type" : "aws"
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{\"statusCode\": 200}"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
+        }
+      }
+    },
+    "/playerstats/{player}/tank/{tankId}" : {
+      "get" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "player",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tankId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "credentials" : "arn:aws:iam::592294659655:role/wotDynamoRead",
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              },
+              "responseTemplates" : {
+                "application/json" : "#set($inputRoot = $input.path('$'))\n{\n    \"playerTankStats\": [\n        #foreach($elem in $inputRoot.Items) {\n            \"droppedCapturePoints\": \"$elem.droppedCapturePoints.N\",\n            \"damageDealt\": \"$elem.damageDealt.N\",\n            \"winsRatio\": \"$elem.winsRatio.N\",\n            \"tankId\": \"$elem.tankId.N\",\n            \"composite_key\": \"$elem.composite_key.N\",\n            \"capturePoints\": \"$elem.capturePoints.N\",\n            \"drawsRatio\": \"$elem.drawsRatio.N\",\n            \"avgExplosionHits\": \"$elem.avgExplosionHits.N\",\n            \"spotted\": \"$elem.spotted.N\",\n            \"damageReceived\": \"$elem.damageReceived.N\",\n            \"losses\": \"$elem.losses.N\",\n            \"avgSpotted\": \"$elem.avgSpotted.N\",\n            \"avgHits\": \"$elem.avgHits.N\",\n            \"avgPiercings\": \"$elem.avgPiercings.N\",\n            \"avgFrags\": \"$elem.avgFrags.N\",\n            \"survivedBattles\": \"$elem.survivedBattles.N\",\n            \"avgDamageDealt\": \"$elem.avgDamageDealt.N\",\n            \"wins\": \"$elem.wins.N\",\n            \"directHitsReceived\": \"$elem.directHitsReceived.N\",\n            \"shots\": \"$elem.shots.N\",\n            \"accountId\": \"$elem.accountId.N\",\n            \"draws\": \"$elem.draws.N\",\n            \"frags\": \"$elem.frags.N\",\n            \"piercingsReceived\": \"$elem.piercingsReceived.N\",\n            \"timestamp\": \"$elem.timestamp.N\",\n            \"avgDroppedCapturePoints\": \"$elem.avgDroppedCapturePoints.N\",\n            \"avgCapturePoints\": \"$elem.avgCapturePoints.N\",\n            \"avgBattleXp\": \"$elem.avgBattleXp.N\",\n            \"explosionHits\": \"$elem.explosionHits.N\",\n            \"explosionHitsReceived\": \"$elem.explosionHitsReceived.N\",\n            \"avgShots\": \"$elem.avgShots.N\",\n            \"avgExplosionHitsReceived\": \"$elem.avgExplosionHitsReceived.N\",\n            \"lossesRatio\": \"$elem.lossesRatio.N\",\n            \"survivedBattlesRatio\": \"$elem.survivedBattlesRatio.N\",\n            \"battles\": \"$elem.battles.N\",\n            \"xp\": \"$elem.xp.N\",\n            \"piercings\": \"$elem.piercings.N\",\n            \"avgDamageBlocked\": \"$elem.avgDamageBlocked.N\",\n            \"avgPiercingsReceived\": \"$elem.avgPiercingsReceived.N\",\n            \"avgDamageReceived\": \"$elem.avgDamageReceived.N\",\n            \"avgDirectHitsReceived\": \"$elem.avgDirectHitsReceived.N\",\n            \"hits\": \"$elem.hits.N\",\n            \"hitsRatio\": \"$elem.hitsRatio.N\",\n            \"avgDamageAssisted\" : \"$elem.hits.avgDamageAssisted\",\n            \"avgDamageAssistedTrack\" : \"$elem.hits.avgDamageAssistedTrack\",\n            \"avgDamageAssistedRadio\" : \"$elem.hits.avgDamageAssistedRadio\",\n            \"maxXp\" : \"$elem.hits.maxXp\",\n            \"maxDamage\" : \"$elem.hits.maxDamage\",\n            \"maxFrags\" : \"$elem.hits.maxFrags\"\n        }#if($foreach.hasNext),#end\n\t#end\n    ]\n}"
+              }
+            }
+          },
+          "requestParameters" : {
+            "integration.request.path.player" : "method.request.path.player",
+            "integration.request.path.tankId" : "method.request.path.tankId"
+          },
+          "requestTemplates" : {
+            "application/json" : "#set($player = $input.params('player'))\n#set($tank = $input.params('tankId'))\n#set($param = \"${player}|${tank}\")\n{ \n    \"TableName\": \"wot_player_tank_stats\",\n    \"KeyConditionExpression\": \"composite_key = :val\",\n    \"ExpressionAttributeValues\": {\n        \":val\": { \"S\": \"$param\" }\n    },\n    \"ScanIndexForward\": false,\n    \"Limit\": 15\n}"
+          },
+          "uri" : "arn:aws:apigateway:eu-central-1:dynamodb:action/Query",
+          "passthroughBehavior" : "when_no_templates",
+          "httpMethod" : "POST",
+          "type" : "aws"
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{\"statusCode\": 200}"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
+        }
+      }
+    },
+    "/tanks" : {
+      "get" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "credentials" : "arn:aws:iam::592294659655:role/wotDynamoRead",
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              },
+              "responseTemplates" : {
+                "application/json" : "#set($inputRoot = $input.path('$'))\n{\n    \"tanks\": [\n        #foreach($elem in $inputRoot.Items) {\n            \"tank_id\": \"$elem.tank_id.N\",\n            \"level\": \"$elem.level.N\",\n            \"name\": \"$elem.name.S\",\n            \"nation\": \"$elem.nation.S\",\n            \"type\": \"$elem.type.S\"\n        }#if($foreach.hasNext),#end\n\t#end\n    ]\n}"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ \"TableName\": \"wot_vehicles\" }"
+          },
+          "uri" : "arn:aws:apigateway:eu-central-1:dynamodb:action/Scan",
+          "passthroughBehavior" : "when_no_templates",
+          "httpMethod" : "POST",
+          "contentHandling" : "CONVERT_TO_TEXT",
+          "type" : "aws"
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{\"statusCode\": 200}"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Empty" : {
+      "type" : "object",
+      "title" : "Empty Schema"
+    }
+  }
+}

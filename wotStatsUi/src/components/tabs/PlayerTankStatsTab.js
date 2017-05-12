@@ -22,10 +22,11 @@ class PlayerTankStatsTab extends Component {
   }
 
   renderStatTable() {
-    var { playerTankStats, cellVisibility, charts, deltaMode, columnVisibility } = this.props.playerTankStats;
+    var { playerTankStats, cellVisibility, charts, deltaMode, columnVisibility,tankSelection } = this.props.playerTankStats;
 
     return (
       <div>
+        <h3 className="App-clear" style={{ "overflow-y": "hidden" }}>{tankSelection.tank.name}</h3>
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode}/>
         <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility}/>
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility}/>
@@ -50,7 +51,6 @@ class PlayerTankStatsTab extends Component {
           selectTankTier={this.props.selectTankTier}
           selectTankType={this.props.selectTankType}
           selectTankNation={this.props.selectTankNation} />
-        <h3 className="App-clear" style={{ "overflow-y": "hidden" }}>{tankSelection.tank.name}</h3>
         { playerTankStats.length === 0 ? noStatsWarning : this.renderStatTable() }
       </div>
     );

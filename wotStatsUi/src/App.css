@@ -68,6 +68,10 @@ html[xmlns] .clearfix {
     overflow: auto;
 }
 
+.Select-menu-outer {
+    x-index: 3;
+}
+
 .arrow-up {
     color: green;
     font-size: 80%;
