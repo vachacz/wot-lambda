@@ -8,9 +8,9 @@ export default class StatPresetSelector extends Component {
       <div className="App-menugroup">
         <div className="App-menugroup-header">Select stat preset <Glyphicon glyph="question-sign" /></div>
         <ButtonGroup>
-          <Button bsSize="small" bsStyle="success" onClick={() => this.props.presetSelected('10days')} active={this.props.preset === '10days'}>10 days</Button>
-          <Button bsSize="small" bsStyle="success" onClick={() => this.props.presetSelected('10weeks')} active={this.props.preset === '10weeks'}>10 weeks</Button>
-          <Button bsSize="small" bsStyle="success" onClick={() => this.props.presetSelected('10moths')} active={this.props.preset === '10moths'}>10 months</Button>
+          <Button bsSize="small" bsStyle="success" onClick={() => this.props.selectMaxResults(10)} active={this.props.maxResults === 10}>last 10</Button>
+          <Button bsSize="small" bsStyle="success" onClick={() => this.props.selectMaxResults(20)} active={this.props.maxResults === 20}>last 20</Button>
+          <Button bsSize="small" bsStyle="success" onClick={() => this.props.selectMaxResults(50)} active={this.props.maxResults === 50}>last 50</Button>
         </ButtonGroup>
       </div>
     );

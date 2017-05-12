@@ -8,13 +8,13 @@ import ColumnVisibilitySelector from '../selectors/ColumnVisibilitySelector.js';
 import StatTable from '../stattable/StatTable.js';
 import StatChartPanel from '../charts/StatChartPanel.js';
 
-import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode } from '../../actions/playerStatsActions.js';
+import { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults } from '../../actions/playerStatsActions.js';
 import { playerStatsModelDefinition } from '../../const/Const.js';
 
 class PlayerStatsTab extends Component {
 
   render() {
-    var { playerStats, columnVisibility, cellVisibility, deltaMode, charts } = this.props.playerStats;
+    var { playerStats, columnVisibility, cellVisibility, deltaMode, charts, maxResults } = this.props.playerStats;
 
     if (playerStats.length === 0) {
       return <h3>Select player first!</h3>
@@ -22,10 +22,10 @@ class PlayerStatsTab extends Component {
 
     return (
       <div>
-        <StatPresetSelector />
-        <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode}/>
-        <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility}/>
-        <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility}/>
+        <StatPresetSelector maxResults={maxResults} selectMaxResults={this.props.selectMaxResults} />
+        <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode} />
+        <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility} />
+        <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility} />
         <StatTable definition={playerStatsModelDefinition} deltaMode={deltaMode} playerStats={playerStats}
              cellVisibility={cellVisibility} columnVisibility={columnVisibility} />
 
@@ -37,5 +37,5 @@ class PlayerStatsTab extends Component {
 
 export default connect(
   (store) => ({ playerStats: store.playerStats }),
-  { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode }
+  { toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults }
 )(PlayerStatsTab);

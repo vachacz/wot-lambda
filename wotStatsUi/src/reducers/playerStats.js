@@ -15,7 +15,8 @@ export default function playerStats(state={
       delta: true,
       effective: true
     },
-    deltaMode: 'relative'
+    deltaMode: 'relative',
+    maxResults: 10
   }, action) {
 
   switch (action.type) {
@@ -40,6 +41,10 @@ export default function playerStats(state={
       let newStats = recalculateStats(playerStatsModelDefinition, state.playerStats, action.payload)
       let charts = recalculateCharts(playerStatsChartsDefinition, newStats)
       return {...state, deltaMode: action.payload, playerStats: newStats, charts: charts}
+    }
+
+    case "MAX_RESULTS_SELECTED": {
+      return {...state, maxResults: action.payload }
     }
 
     default:

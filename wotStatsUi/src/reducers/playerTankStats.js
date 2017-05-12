@@ -23,7 +23,8 @@ export default function playerStats(state={
       nation: "",
       tank: ""
     },
-    deltaMode: 'relative'
+    deltaMode: 'relative',
+    maxResults: 10
   }, action) {
 
   function filterTanks(tanks, tankSelection) {
@@ -93,6 +94,10 @@ export default function playerStats(state={
       let newStats = recalculateStats(playerTanksStatsModelDefinition, state.playerTankStats, action.payload)
       let charts = recalculateCharts(playerTankStatsChartsDefinition, newStats)
       return {...state, deltaMode: action.payload, playerTankStats: newStats, charts: charts }
+    }
+
+    case "TANK_STATS_MAX_RESULTS_SELECTED": {
+      return {...state, maxResults: action.payload }
     }
 
     default:
