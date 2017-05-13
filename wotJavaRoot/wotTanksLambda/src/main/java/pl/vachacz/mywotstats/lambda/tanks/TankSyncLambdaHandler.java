@@ -1,11 +1,5 @@
 package pl.vachacz.mywotstats.lambda.tanks;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,23 +9,19 @@ import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
+import pl.vachacz.mywotstats.dynamo.WotDynamo;
 import pl.vachacz.mywotstats.dynamo.model.VehicleEntity;
 import pl.vachacz.mywotstats.lambda.tanks.model.TankExpectedRatings;
 import pl.vachacz.mywotstats.lambda.tanks.model.TankExpectedRatingsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.vehicle.VehiclesResponse;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TankSyncLambdaHandler implements RequestHandler<Request, Response> {
 
-    private AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-            .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://dynamodb.eu-central-1.amazonaws.com", "eu-central-1"))
-            .build();
-
-    private DynamoDBMapper mapper = new DynamoDBMapper(client);
+    private WotDynamo wotDynamo = new WotDynamo();
     private WotClient wotClient = new WotClient();
 
     private TankSyncLambdaHandler() {
@@ -50,7 +40,7 @@ public class TankSyncLambdaHandler implements RequestHandler<Request, Response> 
         VehiclesResponse vehicles = wotClient.getVehicles();
 
         vehicles.getVehicleList().forEach(tank -> {
-            VehicleEntity loaded = mapper.load(VehicleEntity.class, tank.getTankId());
+            VehicleEntity loaded = wotDynamo.findVehicleById(tank.getTankId());
             if (loaded == null) {
                 VehicleEntity entity = new VehicleEntity();
                 entity.setTankId(tank.getTankId());
@@ -68,7 +58,8 @@ public class TankSyncLambdaHandler implements RequestHandler<Request, Response> 
                     entity.setExpSpot(ratings.getExpSpot());
                     entity.setExpWinRate(ratings.getExpWinRate());
                 }
-                mapper.save(entity);
+
+                wotDynamo.save(entity);
             }
         });
 

@@ -58,6 +58,7 @@ public class PlayerStatsEntity {
 
     // additional calculated fields
 
+    private Double wn8;
     private Double winsRatio;
     private Double lossesRatio;
     private Double drawsRatio;
@@ -475,5 +476,13 @@ public class PlayerStatsEntity {
 
     public void setAvgExplosionHits(Double avgExplosionHits) {
         this.avgExplosionHits = avgExplosionHits;
+    }
+
+    public Double getWn8() {
+        return wn8;
+    }
+
+    public void setWn8(Double wn8) {
+        this.wn8 = wn8;
     }
 }

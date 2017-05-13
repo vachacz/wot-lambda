@@ -7,10 +7,10 @@ import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
+import pl.vachacz.mywotstats.lambda.tanks.model.account.AccountResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.vehicle.VehiclesResponse;
-import pl.vachacz.mywotstats.lambda.tanks.model.account.AccountResponse;
 
 import java.io.IOException;
 

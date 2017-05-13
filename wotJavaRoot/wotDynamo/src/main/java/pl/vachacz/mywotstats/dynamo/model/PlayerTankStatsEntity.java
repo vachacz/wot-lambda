@@ -3,7 +3,6 @@ package pl.vachacz.mywotstats.dynamo.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @DynamoDBTable(tableName = "wot_player_tank_stats")
 public class PlayerTankStatsEntity {
@@ -45,6 +44,7 @@ public class PlayerTankStatsEntity {
 
     // calculated fields
 
+    private Double wn8;
     private Double drawsRatio;
     private Double winsRatio;
     private Double hitsRatio;
@@ -438,5 +438,13 @@ public class PlayerTankStatsEntity {
 
     public void setHitsRatio(Double hitsRatio) {
         this.hitsRatio = hitsRatio;
+    }
+
+    public Double getWn8() {
+        return wn8;
+    }
+
+    public void setWn8(Double wn8) {
+        this.wn8 = wn8;
     }
 }

@@ -1,37 +1,30 @@
 package pl.vachacz.mywotstats.lambda.tanks;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import pl.vachacz.mywotstats.dynamo.WotDynamo;
 import pl.vachacz.mywotstats.dynamo.model.PlayerEntity;
 import pl.vachacz.mywotstats.dynamo.model.PlayerStatsEntity;
 import pl.vachacz.mywotstats.dynamo.model.PlayerTankStatsEntity;
-import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStats;
 import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStats;
+import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsResponse;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Optional;
 
 public class StatsSyncLambdaHandler implements RequestHandler<Request, Response> {
 
-    private AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://dynamodb.eu-central-1.amazonaws.com", "eu-central-1"))
-        .build();
-
-    private DynamoDBMapper mapper = new DynamoDBMapper(client);
     private WotClient wotClient = new WotClient();
+    private WotDynamo wotDynamo = new WotDynamo();
 
     public Response handleRequest(Request input, Context context) {
 
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        PaginatedScanList<PlayerEntity> players = mapper.scan(PlayerEntity.class, scan);
+        PaginatedScanList<PlayerEntity> players = wotDynamo.getAllPlayers();
 
         players.forEach(player -> {
             System.out.println("====> Processing player : " + player.getPlayer());
@@ -40,7 +33,7 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
             if (player.getAccountId() == null) {
                 Long accountId = wotClient.getAccountId(player.getPlayer());
                 player.setAccountId(accountId);
-                mapper.save(player);
+                wotDynamo.save(player);
             }
 
             long timestamp = Calendar.getInstance().getTimeInMillis();
@@ -57,7 +50,7 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
         PlayerStatsResponse playerStats = wotClient.getPlayerStats(accountId);
         PlayerStats stats = playerStats.getStats();
 
-        Optional<Integer> battles = getBattleCountFromLastStat(accountId);
+        Optional<Integer> battles = wotDynamo.getBattleCountFromLastStat(accountId);
         if (battles.isPresent() && battles.get().equals(stats.getBattles())) {
             System.out.println("No new battles for player " + accountId + " found. Skipping.");
             return;
@@ -135,36 +128,7 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
         entity.setMaxXp(stats.getMaxXp());
         entity.setMaxFrags(stats.getMaxFrags());
 
-        mapper.save(entity);
-    }
-
-    private Double scale2(Double toBeTruncated) {
-        if (toBeTruncated == null || Double.isNaN(toBeTruncated)) {
-            return null;
-        }
-        return BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue();
-    }
-
-    private Double scale3(Double toBeTruncated) {
-        if (toBeTruncated == null || Double.isNaN(toBeTruncated)) {
-            return null;
-        }
-        return BigDecimal.valueOf(toBeTruncated).setScale(3, RoundingMode.HALF_UP).doubleValue();
-    }
-
-    private Optional<Integer> getBattleCountFromLastStat(Long accountId) {
-        Map<String, AttributeValue> eav = new HashMap<>();
-        eav.put(":val", new AttributeValue().withN(accountId + ""));
-
-        DynamoDBQueryExpression<PlayerStatsEntity> query = new DynamoDBQueryExpression<PlayerStatsEntity>()
-                .withLimit(1)
-                .withKeyConditionExpression("account_id = :val")
-                .withConsistentRead(false)
-                .withProjectionExpression("battles")
-                .withExpressionAttributeValues(eav)
-                .withScanIndexForward(false);
-        PaginatedQueryList<PlayerStatsEntity> res = mapper.query(PlayerStatsEntity.class, query);
-        return res.stream().map(PlayerStatsEntity::getBattles).findFirst();
+        wotDynamo.save(entity);
     }
 
     private void savePlayerTankStats(long timestamp, Long accountId) {
@@ -179,7 +143,7 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
 
             PlayerTankStats tankStats = s.getTankRatings();
 
-            Optional<Integer> battles = getTankBattleCountFromLastStat(accountId, s.getTankId());
+            Optional<Integer> battles = wotDynamo.getTankBattleCountFromLastStat(accountId, s.getTankId());
             if (battles.isPresent() && battles.get().equals(tankStats.getBattles())) {
                 System.out.println("No new battles for player " + accountId + " and tank " + s.getTankId() + " found. Skipping.");
                 return;
@@ -246,23 +210,22 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
             tankEntity.setPiercingsReceived(tankStats.getPiercingsReceived());
             tankEntity.setAvgPiercingsReceived(scale3(tankStats.getPiercingsReceived() / battlesDouble));
 
-            mapper.save(tankEntity);
+            wotDynamo.save(tankEntity);
         });
     }
 
-    private Optional<Integer> getTankBattleCountFromLastStat(Long accountId, Long tankId) {
-        Map<String, AttributeValue> eav = new HashMap<>();
-        eav.put(":val", new AttributeValue().withS(accountId + "|" + tankId));
+    private Double scale2(Double toBeTruncated) {
+        if (toBeTruncated == null || Double.isNaN(toBeTruncated)) {
+            return null;
+        }
+        return BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
 
-        DynamoDBQueryExpression<PlayerTankStatsEntity> query = new DynamoDBQueryExpression<PlayerTankStatsEntity>()
-                .withLimit(1)
-                .withKeyConditionExpression("composite_key = :val")
-                .withExpressionAttributeValues(eav)
-                .withProjectionExpression("battles")
-                .withConsistentRead(false)
-                .withScanIndexForward(false);
-        PaginatedQueryList<PlayerTankStatsEntity> res = mapper.query(PlayerTankStatsEntity.class, query);
-        return res.stream().map(PlayerTankStatsEntity::getBattles).findFirst();
+    private Double scale3(Double toBeTruncated) {
+        if (toBeTruncated == null || Double.isNaN(toBeTruncated)) {
+            return null;
+        }
+        return BigDecimal.valueOf(toBeTruncated).setScale(3, RoundingMode.HALF_UP).doubleValue();
     }
 
     public static void main(String[] args) {
