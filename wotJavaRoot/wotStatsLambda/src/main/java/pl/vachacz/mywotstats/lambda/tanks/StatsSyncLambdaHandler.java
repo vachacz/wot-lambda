@@ -7,14 +7,17 @@ import pl.vachacz.mywotstats.dynamo.WotDynamo;
 import pl.vachacz.mywotstats.dynamo.model.PlayerEntity;
 import pl.vachacz.mywotstats.dynamo.model.PlayerStatsEntity;
 import pl.vachacz.mywotstats.dynamo.model.PlayerTankStatsEntity;
+import pl.vachacz.mywotstats.dynamo.model.VehicleEntity;
 import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStats;
 import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStats;
 import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsResponse;
+import pl.vachacz.mywotstats.lambda.tanks.model.vehicle.Vehicle;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Optional;
 
 public class StatsSyncLambdaHandler implements RequestHandler<Request, Response> {
@@ -132,6 +135,7 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
     }
 
     private void savePlayerTankStats(long timestamp, Long accountId) {
+        Map<Long, VehicleEntity> vehiclesMap = wotDynamo.getAllVehiclesAsMap();
         PlayerTankStatsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
         playerTankStats.getPlayerStats(accountId).forEach(s -> {
 
@@ -145,7 +149,12 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
 
             Optional<Integer> battles = wotDynamo.getTankBattleCountFromLastStat(accountId, s.getTankId());
             if (battles.isPresent() && battles.get().equals(tankStats.getBattles())) {
-                System.out.println("No new battles for player " + accountId + " and tank " + s.getTankId() + " found. Skipping.");
+                System.out.println("No new battles for [player:" + accountId + "] and [tank:" + s.getTankId() + "] found. Skipping.");
+                return;
+            }
+
+            if (tankStats.getBattles().equals(0)) {
+                System.out.println("Tank has no battles. [player: " + accountId + "] and [Tank: " + s.getTankId() + "]. Skipping.");
                 return;
             }
 
@@ -210,8 +219,29 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
             tankEntity.setPiercingsReceived(tankStats.getPiercingsReceived());
             tankEntity.setAvgPiercingsReceived(scale3(tankStats.getPiercingsReceived() / battlesDouble));
 
+            tankEntity.setWn8(scale2(computeWn8(tankEntity, vehiclesMap)));
+
             wotDynamo.save(tankEntity);
         });
+    }
+
+    private Double computeWn8(PlayerTankStatsEntity tankEntity, Map<Long, VehicleEntity> vehiclesMap) {
+
+        VehicleEntity vehicle = vehiclesMap.get(tankEntity.getTankId());
+
+        Double rDAMAGE = tankEntity.getAvgDamageDealt() / vehicle.getExpDamage();
+        Double rSPOT   = tankEntity.getAvgSpotted() / vehicle.getExpSpot();
+        Double rFRAG   = tankEntity.getAvgFrags() / vehicle.getExpFrag();
+        Double rDEF    = tankEntity.getAvgDroppedCapturePoints() / vehicle.getExpDef();
+        Double rWIN    = tankEntity.getWinsRatio() / vehicle.getExpWinRate();
+
+        Double rWINc    = Math.max(0,                     (rWIN    - 0.71) / (1 - 0.71) );
+        Double rDAMAGEc = Math.max(0,                     (rDAMAGE - 0.22) / (1 - 0.22) );
+        Double rFRAGc   = Math.max(0, Math.min(rDAMAGEc + 0.2, (rFRAG   - 0.12) / (1 - 0.12)));
+        Double rSPOTc   = Math.max(0, Math.min(rDAMAGEc + 0.1, (rSPOT   - 0.38) / (1 - 0.38)));
+        Double rDEFc    = Math.max(0, Math.min(rDAMAGEc + 0.1, (rDEF    - 0.10) / (1 - 0.10)));
+
+        return 980*rDAMAGEc + 210*rDAMAGEc*rFRAGc + 155*rFRAGc*rSPOTc + 75*rDEFc*rFRAGc + 145 * Math.min(1.8, rWINc);
     }
 
     private Double scale2(Double toBeTruncated) {

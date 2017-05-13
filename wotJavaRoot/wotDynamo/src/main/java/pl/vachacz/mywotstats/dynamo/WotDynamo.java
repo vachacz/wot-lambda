@@ -13,6 +13,7 @@ import pl.vachacz.mywotstats.dynamo.model.VehicleEntity;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class WotDynamo {
 
@@ -25,6 +26,15 @@ public class WotDynamo {
     public PaginatedScanList<PlayerEntity> getAllPlayers() {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         return mapper.scan(PlayerEntity.class, scan);
+    }
+
+    PaginatedScanList<VehicleEntity> getAllVehicles() {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        return mapper.scan(VehicleEntity.class, scan);
+    }
+
+    public Map<Long, VehicleEntity> getAllVehiclesAsMap() {
+        return getAllVehicles().stream().collect(Collectors.toMap(VehicleEntity::getTankId, item -> item));
     }
 
     public void save(PlayerEntity player) {
