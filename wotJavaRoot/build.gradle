@@ -1,0 +1,11 @@
+allprojects {
+  apply plugin: 'java'
+  apply plugin: 'maven'
+
+  group = 'pl.vachacz.wot'
+  version = '0.1-SNAPSHOT'
+
+  repositories {
+    mavenCentral()
+  }
+}
