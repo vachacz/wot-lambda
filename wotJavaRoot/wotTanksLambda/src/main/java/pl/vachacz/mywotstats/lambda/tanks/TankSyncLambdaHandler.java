@@ -42,6 +42,7 @@ public class TankSyncLambdaHandler implements RequestHandler<Request, Response> 
                     entity.setExpWinRate(ratings.getExpWinRate());
                 }
 
+                System.out.println("Saving new tank : " + tank.getTankId() + " " + tank.getName());
                 wotDynamo.save(entity);
             }
         });

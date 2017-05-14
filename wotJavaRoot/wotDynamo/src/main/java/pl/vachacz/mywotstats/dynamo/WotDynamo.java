@@ -37,6 +37,11 @@ public class WotDynamo {
         return getAllVehicles().stream().collect(Collectors.toMap(VehicleEntity::getTankId, item -> item));
     }
 
+    public PaginatedScanList<PlayerTankStatsEntity> getAllPlayerTankStats() {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        return mapper.scan(PlayerTankStatsEntity.class, scan);
+    }
+
     public void save(PlayerEntity player) {
         mapper.save(player);
     }
