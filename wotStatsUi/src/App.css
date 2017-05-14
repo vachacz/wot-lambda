@@ -72,16 +72,6 @@ html[xmlns] .clearfix {
     x-index: 3;
 }
 
-.arrow-up {
-    color: green;
-    font-size: 80%;
-}
-
-.arrow-down {
-    color: red;
-    font-size: 80%;
-}
-
 .effective-property {
     color: blue;
     font-weight: bold;
@@ -89,7 +79,7 @@ html[xmlns] .clearfix {
 }
 
 .App-stats-table {
-    text-align: right;
+    text-align: center;
     table-layout: fixed;
     width: auto;
     margin-bottom: 20px;
@@ -104,6 +94,8 @@ html[xmlns] .clearfix {
 
 .App-stats-table td > span {
     display: block;
+    margin-bottom: 1px;
+    margin-top: 1px;
 }
 
 .App-stats-table td:first-child {
@@ -149,7 +141,41 @@ html[xmlns] .clearfix {
 
 .wn8 {
     border-radius: 25px;
-    text-align: center;
+}
+
+.effective-plus {
+    background-color: #98d22d;
+    color: white;
+    font-size: 90%;
+    border-radius: 25px;
+}
+
+.effective-minus {
+    background-color: #dc6f6f;
+    color: white;
+    font-size: 90%;
+    border-radius: 25px;
+}
+
+.effective-zero {
+    background-color: #cccccc;
+    color: white;
+    font-size: 90%;
+    border-radius: 25px;
+}
+
+.arrow-up {
+    background-color: #98d22d;
+    color: white;
+    font-size: 90%;
+    border-radius: 25px;
+}
+
+.arrow-down {
+    background-color: #dc6f6f;
+    color: white;
+    font-size: 90%;
+    border-radius: 25px;
 }
 
 @keyframes App-logo-spin {

@@ -6,9 +6,10 @@ export default class StatCell extends Component {
   getStatComponent() {
     if (this.props.cellVisibility.stat) {
       if (this.props.wn8ColorRange) {
-        return <span className={this.getWn8Class()}>{this.props.stats[this.props.property]}</span>
+        var val = this.props.stats[this.props.property];
+        return <span className={this.getWn8Class(val)}>{val}</span>
       }
-      return <span>{this.props.stats[this.props.property]}</span>
+      return <span>{this.getPropertyValue()}</span>
     }
   }
 
@@ -16,7 +17,7 @@ export default class StatCell extends Component {
     if  (this.props.cellVisibility.delta) {
       var delta = this.getPropertyDelta()
       var arrowClass = this.getArrowClass(delta)
-      if (delta < 0 || delta > 0) return <span className={arrowClass}>({delta}<Glyphicon glyph={arrowClass}/>)</span>
+      if (delta < 0 || delta > 0) return <span className={arrowClass}>{delta}<Glyphicon glyph={arrowClass}/></span>
     }
   }
 
@@ -27,13 +28,25 @@ export default class StatCell extends Component {
   }
 
   getEffectiveStatComponent() {
-    if (this.props.cellVisibility.effective && this.hasEffectivePropertyValue()) {
-      return <span className="effective-property">{this.getEffectivePropertyValue()}</span>
+    if (this.props.cellVisibility.effective) {
+      var value = this.getPropertyValue()
+      var effective = this.getEffectivePropertyValue()
+      if (this.props.wn8ColorRange) {
+        return <span className={this.getWn8Class(effective)}>{effective}</span>
+      }
+      if (this.hasEffectivePropertyValue()) {
+        if (effective > value) {
+          return <span className="effective-plus">{effective}</span>
+        }
+        if (effective < value) {
+          return <span className="effective-minus">{effective}</span>
+        }
+        return <span className="effective-zero">{effective}</span>
+      }
     }
   }
 
-  getWn8Class() {
-    var val = this.props.stats[this.props.property]
+  getWn8Class(val) {
     if (val < 500) return "wn8 wn8-verybad";
     if (val < 700) return "wn8 wn8-bad";
     if (val < 900) return "wn8 wn8-belowaverage";
@@ -51,13 +64,17 @@ export default class StatCell extends Component {
       var deltaComponent = this.getDeltaComponent()
       var effectiveStatComponent = this.getEffectiveStatComponent()
 
-      return ( <td>{statComponent}{deltaComponent}{effectiveStatComponent}</td> );
+      return ( <td>{statComponent}{effectiveStatComponent}{deltaComponent}</td> );
     }
     return null;
   }
 
   getPropertyDelta() {
     return this.props.stats[this.props.property + "Delta"]
+  }
+
+  getPropertyValue() {
+    return this.props.stats[this.props.property]
   }
 
   getEffectivePropertyValue() {

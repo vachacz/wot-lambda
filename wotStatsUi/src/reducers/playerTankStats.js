@@ -10,12 +10,13 @@ export default function playerStats(state={
       max: false,
       totals: false,
       avgs: true,
-      ratios: true
+      ratios: true,
+      visible: true
     },
     cellVisibility: {
       stat: true,
-      delta: true,
-      effective: true
+      delta: false,
+      effective: false
     },
     tankSelection: {
       tier: "",

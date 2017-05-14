@@ -24,8 +24,29 @@ export function recalculateStats(statsDefinition, stats, deltaMode) {
         }
       }
     })
+    var wn8Effective = calculateEffectiveWn8(stat)
+    if (!isNaN(wn8Effective)) {
+        stat["wn8Effective"] = wn8Effective
+    }
+
     return stat;
   });
+}
+
+function calculateEffectiveWn8(stat) {
+    var rDAMAGE = stat["avgDamageDealtEffective"] / 802.78
+    var rSPOT   = stat["avgSpottedEffective"] / 0.77
+    var rFRAG   = stat["avgFragsEffective"] / 1.05
+    var rDEF    = stat["avgDroppedCapturePointsEffective"] / 1.08
+    var rWIN    = stat["winsRatio"] / 53.2
+
+    var rWINc    = Math.max(0,                     (rWIN    - 0.71) / (1 - 0.71) );
+    var rDAMAGEc = Math.max(0,                     (rDAMAGE - 0.22) / (1 - 0.22) );
+    var rFRAGc   = Math.max(0, Math.min(rDAMAGEc + 0.2, (rFRAG   - 0.12) / (1 - 0.12)));
+    var rSPOTc   = Math.max(0, Math.min(rDAMAGEc + 0.1, (rSPOT   - 0.38) / (1 - 0.38)));
+    var rDEFc    = Math.max(0, Math.min(rDAMAGEc + 0.1, (rDEF    - 0.10) / (1 - 0.10)));
+
+    return (980*rDAMAGEc + 210*rDAMAGEc*rFRAGc + 155*rFRAGc*rSPOTc + 75*rDEFc*rFRAGc + 145 * Math.min(1.8, rWINc)).toFixed(2);
 }
 
 export function recalculateCharts(chartDefinition, stats) {
