@@ -51,7 +51,7 @@ export const playerStatsModelDefinition = [
 
 export const playerTanksStatsModelDefinition = [
   { header: "battles"          , group: "totals",       property: "battles" },
-  { header: "wn8"              , group: "totals",       property: "wn8" },
+  { header: "wn8"              , group: "totals",       property: "wn8",                    wn8ColorRange: true },
   { header: "wins"             , group: "totals",       property: "wins" },
   { header: "wins %",            group: "ratios",       property: "winsRatio" },
   { header: "losses",            group: "totals",       property: "losses" },

@@ -137,6 +137,21 @@ html[xmlns] .clearfix {
     float: left;
 }
 
+.wn8-verybad { background-color: #000000; color: white; }
+.wn8-bad { background-color: #cd3333; color: white; }
+.wn8-belowaverage { background-color: #d77900; color: white; }
+.wn8-average { background-color: #d7b600; color: white; }
+.wn8-good { background-color: #6d9521; color: white; }
+.wn8-verygood { background-color: #4c762e; color: white; }
+.wn8-great { background-color: #4a92b7; color: white; }
+.wn8-unicum { background-color: #83579d; color: white; }
+.wn8-superunicum { background-color: #5a3175; color: white; }
+
+.wn8 {
+    border-radius: 25px;
+    text-align: center;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

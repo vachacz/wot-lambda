@@ -5,6 +5,9 @@ export default class StatCell extends Component {
 
   getStatComponent() {
     if (this.props.cellVisibility.stat) {
+      if (this.props.wn8ColorRange) {
+        return <span className={this.getWn8Class()}>{this.props.stats[this.props.property]}</span>
+      }
       return <span>{this.props.stats[this.props.property]}</span>
     }
   }
@@ -27,6 +30,19 @@ export default class StatCell extends Component {
     if (this.props.cellVisibility.effective && this.hasEffectivePropertyValue()) {
       return <span className="effective-property">{this.getEffectivePropertyValue()}</span>
     }
+  }
+
+  getWn8Class() {
+    var val = this.props.stats[this.props.property]
+    if (val < 500) return "wn8 wn8-verybad";
+    if (val < 700) return "wn8 wn8-bad";
+    if (val < 900) return "wn8 wn8-belowaverage";
+    if (val < 1100) return "wn8 wn8-average";
+    if (val < 1350) return "wn8 wn8-good";
+    if (val < 1550) return "wn8 wn8-verygood";
+    if (val < 1850) return "wn8 wn8-great";
+    if (val < 2050) return "wn8 wn8-unicum";
+    return "wn8 wn8-superunicum";
   }
 
   render() {

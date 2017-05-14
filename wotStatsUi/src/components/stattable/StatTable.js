@@ -25,11 +25,16 @@ export default class StatTable extends Component {
 
   generateCells(stat) {
     return this.props.definition.map((def) => {
+
+      var additionalProps = {}
       if ("effectiveProperty" in def) {
-        return <StatCell stats={stat} group={def.group} property={def.property} cellVisibility={this.props.cellVisibility} columnVisibility={this.props.columnVisibility} effectiveProperty={def.effectiveProperty}/>
-      } else {
-        return <StatCell stats={stat} group={def.group} property={def.property} cellVisibility={this.props.cellVisibility} columnVisibility={this.props.columnVisibility} />
+        additionalProps["effectiveProperty"] = def.effectiveProperty
       }
+      if ("wn8ColorRange" in def) {
+        additionalProps["wn8ColorRange"] = def.wn8ColorRange
+      }
+
+      return <StatCell stats={stat} group={def.group} property={def.property} cellVisibility={this.props.cellVisibility} columnVisibility={this.props.columnVisibility} {...additionalProps} />
     });
   }
 
