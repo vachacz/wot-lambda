@@ -28,6 +28,10 @@
   padding: 2px;
 }
 
+.App-menugroup-right > div {
+  z-index: 0;
+}
+
 .App-menugroup-header {
   font-size: 90%;
 }
