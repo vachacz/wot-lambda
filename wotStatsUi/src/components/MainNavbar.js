@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import { fetchPlayers, selectPlayer } from '../actions/playerActions.js';
+
+import { selectPlayer } from '../actions/playerActions.js';
 
 class MainNavbar extends Component {
-
-  componentWillMount() {
-    this.props.fetchPlayers()
-  }
 
   render() {
     const { player, players } = this.props;
@@ -39,5 +36,5 @@ class MainNavbar extends Component {
 
 export default connect(
   (store) => ({ players: store.players.players, player: store.players.player }),
-  { fetchPlayers, selectPlayer }
+  { selectPlayer }
 )(MainNavbar);

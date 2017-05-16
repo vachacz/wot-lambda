@@ -1,5 +1,6 @@
 
 export const baseurl = "https://c5lu9mesih.execute-api.eu-central-1.amazonaws.com/prod";
+export const wn8url = "http://www.wnefficiency.net/exp/expected_tank_values_30.json";
 
 export const playerStatsModelDefinition = [
   { header: "battles"          , group: "visible", property: "battles" },

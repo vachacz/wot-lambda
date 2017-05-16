@@ -1,10 +1,12 @@
 import { playerTanksStatsModelDefinition, playerTankStatsChartsDefinition } from '../const/Const.js';
 import { recalculateStats, recalculateCharts } from './common.js'
 
-export default function playerStats(state={
+export default function playerTankStats(state={
     tanks: [],
+    tankMap: {},
     tanksFiltered: [],
     playerTankStats: [],
+    wnEfficiencies: {},
     charts: [],
     columnVisibility: {
       max: false,
@@ -49,7 +51,11 @@ export default function playerStats(state={
 
     case "FETCH_TANKS_FULFILLED": {
       let filtered = filterTanks(action.payload.tanks, state.tankSelection);
-      return {...state, tanks: action.payload.tanks, tanksFiltered: filtered }
+      let tankMap = action.payload.tanks.reduce(function(map, obj) {
+        map[obj.tank_id] = obj;
+        return map;
+      }, {});
+      return {...state, tanks: action.payload.tanks, tankMap: tankMap, tanksFiltered: filtered }
     }
 
     case "TANK_TIER_SELECTED": {
@@ -76,7 +82,8 @@ export default function playerStats(state={
     }
 
     case "FETCH_PLAYER_TANK_STATS_FULFILLED": {
-      let newStats = recalculateStats(playerTanksStatsModelDefinition, action.payload.playerTankStats, state.deltaMode)
+      let wnEff = state.tankMap[state.tankSelection.tank.tank_id]
+      let newStats = recalculateStats(playerTanksStatsModelDefinition, action.payload.playerTankStats, state.deltaMode, wnEff)
       let charts = recalculateCharts(playerTankStatsChartsDefinition, newStats)
       return {...state, playerTankStats: newStats, charts: charts }
     }
@@ -92,7 +99,8 @@ export default function playerStats(state={
     }
 
     case "TANK_STATS_DELTA_MODE_SELECTED": {
-      let newStats = recalculateStats(playerTanksStatsModelDefinition, state.playerTankStats, action.payload)
+      let wnEff = state.tankMap[state.tankSelection.tank.tank_id]
+      let newStats = recalculateStats(playerTanksStatsModelDefinition, state.playerTankStats, action.payload, wnEff)
       let charts = recalculateCharts(playerTankStatsChartsDefinition, newStats)
       return {...state, deltaMode: action.payload, playerTankStats: newStats, charts: charts }
     }

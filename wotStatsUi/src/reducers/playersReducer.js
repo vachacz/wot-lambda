@@ -1,5 +1,5 @@
 
-export default function playersReducer(state={
+export default function players(state={
     player: "",
     accountId: "",
     players: []

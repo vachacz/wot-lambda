@@ -1,5 +1,5 @@
 
-export function recalculateStats(statsDefinition, stats, deltaMode) {
+export function recalculateStats(statsDefinition, stats, deltaMode, wnEfficiency) {
   return stats.map((oldStat, index) => {
     var stat = Object.assign({}, oldStat)
     var previousStat = {}
@@ -24,21 +24,24 @@ export function recalculateStats(statsDefinition, stats, deltaMode) {
         }
       }
     })
-    var wn8Effective = calculateEffectiveWn8(stat)
-    if (!isNaN(wn8Effective)) {
+
+    if (wnEfficiency) {
+      var wn8Effective = calculateEffectiveWn8(stat, wnEfficiency)
+      if (!isNaN(wn8Effective)) {
         stat["wn8Effective"] = wn8Effective
+      }
     }
 
     return stat;
   });
 }
 
-function calculateEffectiveWn8(stat) {
-    var rDAMAGE = stat["avgDamageDealtEffective"] / 802.78
-    var rSPOT   = stat["avgSpottedEffective"] / 0.77
-    var rFRAG   = stat["avgFragsEffective"] / 1.05
-    var rDEF    = stat["avgDroppedCapturePointsEffective"] / 1.08
-    var rWIN    = stat["winsRatio"] / 53.2
+function calculateEffectiveWn8(stat, wnEfficiency) {
+    var rDAMAGE = stat["avgDamageDealtEffective"]          / wnEfficiency.expDamage
+    var rSPOT   = stat["avgSpottedEffective"]              / wnEfficiency.expSpot
+    var rFRAG   = stat["avgFragsEffective"]                / wnEfficiency.expFrag
+    var rDEF    = stat["avgDroppedCapturePointsEffective"] / wnEfficiency.expDef
+    var rWIN    = stat["winsRatio"]                        / wnEfficiency.expWinRate
 
     var rWINc    = Math.max(0,                     (rWIN    - 0.71) / (1 - 0.71) );
     var rDAMAGEc = Math.max(0,                     (rDAMAGE - 0.22) / (1 - 0.22) );
