@@ -1,5 +1,5 @@
 import { playerTanksStatsModelDefinition, playerTankStatsChartsDefinition } from '../const/Const.js';
-import { recalculateStats, recalculateCharts } from './common.js'
+import { recalculateStats, recalculateCharts, calculateAndMergeWn8 } from './common.js'
 
 export default function playerTankStats(state={
     tanks: [],
@@ -82,8 +82,11 @@ export default function playerTankStats(state={
     }
 
     case "FETCH_PLAYER_TANK_STATS_FULFILLED": {
-      let wnEff = state.tankMap[state.tankSelection.tank.tank_id]
-      let newStats = recalculateStats(playerTanksStatsModelDefinition, action.payload.playerTankStats, state.deltaMode, wnEff)
+      let newStats = recalculateStats(playerTanksStatsModelDefinition, action.payload.playerTankStats, state.deltaMode)
+
+      let expectedTankWnStats = state.tankMap[state.tankSelection.tank.tank_id]
+      calculateAndMergeWn8(newStats, expectedTankWnStats)
+
       let charts = recalculateCharts(playerTankStatsChartsDefinition, newStats)
       return {...state, playerTankStats: newStats, charts: charts }
     }
@@ -99,8 +102,11 @@ export default function playerTankStats(state={
     }
 
     case "TANK_STATS_DELTA_MODE_SELECTED": {
-      let wnEff = state.tankMap[state.tankSelection.tank.tank_id]
-      let newStats = recalculateStats(playerTanksStatsModelDefinition, state.playerTankStats, action.payload, wnEff)
+      let newStats = recalculateStats(playerTanksStatsModelDefinition, state.playerTankStats, action.payload)
+
+      let expectedTankWnStats = state.tankMap[state.tankSelection.tank.tank_id]
+      calculateAndMergeWn8(newStats, expectedTankWnStats)
+
       let charts = recalculateCharts(playerTankStatsChartsDefinition, newStats)
       return {...state, deltaMode: action.payload, playerTankStats: newStats, charts: charts }
     }

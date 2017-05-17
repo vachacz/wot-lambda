@@ -1,5 +1,5 @@
 
-export function recalculateStats(statsDefinition, stats, deltaMode, wnEfficiency) {
+export function recalculateStats(statsDefinition, stats, deltaMode) {
   return stats.map((oldStat, index) => {
     var stat = Object.assign({}, oldStat)
     var previousStat = {}
@@ -24,15 +24,16 @@ export function recalculateStats(statsDefinition, stats, deltaMode, wnEfficiency
         }
       }
     })
-
-    if (wnEfficiency) {
-      var wn8Effective = calculateEffectiveWn8(stat, wnEfficiency)
-      if (!isNaN(wn8Effective)) {
-        stat["wn8Effective"] = wn8Effective
-      }
-    }
-
     return stat;
+  });
+}
+
+export function calculateAndMergeWn8(stats, expectedTankWnStats) {
+  stats.forEach((stat) => {
+    var wn8Effective = calculateEffectiveWn8(stat, expectedTankWnStats)
+    if (!isNaN(wn8Effective)) {
+      stat["wn8Effective"] = wn8Effective
+    }
   });
 }
 
