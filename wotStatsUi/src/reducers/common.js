@@ -38,11 +38,11 @@ export function calculateAndMergeWn8(stats, expectedTankWnStats) {
 }
 
 function calculateEffectiveWn8(stat, wnEfficiency) {
-    var rDAMAGE = stat["avgDamageDealtEffective"]          / wnEfficiency.expDamage
-    var rSPOT   = stat["avgSpottedEffective"]              / wnEfficiency.expSpot
-    var rFRAG   = stat["avgFragsEffective"]                / wnEfficiency.expFrag
-    var rDEF    = stat["avgDroppedCapturePointsEffective"] / wnEfficiency.expDef
-    var rWIN    = stat["winsRatio"]                        / wnEfficiency.expWinRate
+    var rDAMAGE = stat["avgDamageDealtEffective"]          / wnEfficiency.expDamage;
+    var rSPOT   = stat["avgSpottedEffective"]              / wnEfficiency.expSpot;
+    var rFRAG   = stat["avgFragsEffective"]                / wnEfficiency.expFrag;
+    var rDEF    = stat["avgDroppedCapturePointsEffective"] / wnEfficiency.expDef;
+    var rWIN    = stat["winsRatio"]                        / wnEfficiency.expWinRate;
 
     var rWINc    = Math.max(0,                     (rWIN    - 0.71) / (1 - 0.71) );
     var rDAMAGEc = Math.max(0,                     (rDAMAGE - 0.22) / (1 - 0.22) );
@@ -54,6 +54,12 @@ function calculateEffectiveWn8(stat, wnEfficiency) {
 }
 
 export function recalculateCharts(chartDefinition, stats) {
+  var charts = [];
+  charts.push(...recalculateEffectiveCharts(chartDefinition, stats));
+  return charts;
+}
+
+function recalculateEffectiveCharts(chartDefinition, stats) {
   return chartDefinition.map((definition) => {
 
     var { property, title } = definition;
@@ -67,17 +73,25 @@ export function recalculateCharts(chartDefinition, stats) {
       }
     })
 
-    var minStat = Math.min(...modelStat.map((stat) => stat.y))
-    var maxStat = Math.max(...modelStat.map((stat) => stat.y))
-    var minEffectiveStat = Math.min(...modelEffective.map((stat) => stat.y))
-    var maxEffectiveStat = Math.max(...modelEffective.map((stat) => stat.y))
+    var statValues = modelStat.map((stat) => stat.y);
+    var minStat = Math.min(...statValues);
+    var maxStat = Math.max(...statValues);
 
-    var effectiveStatChartMin = getMin(Math.min( minStat, minEffectiveStat ))
-    var effectiveStatChartMax = getMax(Math.max( maxStat, maxEffectiveStat ))
+    var effectiveStatValues = modelEffective.map((stat) => stat.y);
+    var minEffectiveStat = Math.min(...effectiveStatValues);
+    var maxEffectiveStat = Math.max(...effectiveStatValues);
 
-    return { property: property, title: title, statData: modelStat, effectiveStatData: modelEffective,
+    var effectiveStatChartMin = Math.min( minStat, minEffectiveStat );
+    var effectiveStatChartMax = Math.max( maxStat, maxEffectiveStat );
+
+    return {
+      type: "effective",
+      title: title,
+      statChartData: modelStat,
       statChartRange: [ getMin(minStat), getMax(maxStat) ],
-      effectiveStatChartRange: [ effectiveStatChartMin, effectiveStatChartMax ]}
+      effectiveStatChartData: modelEffective,
+      effectiveStatChartRange: [ getMin(effectiveStatChartMin), getMax(effectiveStatChartMax) ]
+    }
   });
 }
 

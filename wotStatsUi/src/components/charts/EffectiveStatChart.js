@@ -4,7 +4,7 @@ import { Panel } from 'react-bootstrap';
 
 var moment = require('moment');
 
-export default class StatChart extends Component {
+export default class EffectiveStatChart extends Component {
 
   render() {
     return (
@@ -13,15 +13,15 @@ export default class StatChart extends Component {
 
          <XYPlot fill="none" width={258} height={200} yDomain={ this.props.statChartRange }>
            <HorizontalGridLines />
-           <LineMarkSeries color="green" curve="curveMonotoneX" data={this.props.statData} />
+           <LineMarkSeries color="green" curve="curveMonotoneX" data={this.props.statChartData} />
            <XAxis tickFormat={(value) => moment(parseInt(value, 10)).format("D/MM")}/>
            <YAxis />
          </XYPlot>
 
          <XYPlot fill="none" width={258} height={200} yDomain={ this.props.effectiveStatChartRange }>
            <HorizontalGridLines />
-           <LineMarkSeries color="green" curve="curveMonotoneX" data={this.props.statData} />
-           <LineMarkSeries color="blue" curve="curveMonotoneX" data={this.props.effectiveStatData} />
+           <LineMarkSeries color="green" curve="curveMonotoneX" data={this.props.statChartData} />
+           <LineMarkSeries color="blue" curve="curveMonotoneX" data={this.props.effectiveStatChartData} />
            <XAxis tickFormat={(value) => moment(parseInt(value, 10)).format("D/MM")}/>
            <YAxis />
          </XYPlot>
