@@ -14,6 +14,8 @@ export default class ChartPanel extends Component {
             return <ComparisonChart {...chart} />;
          case "stat":
             return <SingleStatChart {...chart} />;
+         case "category":
+            return <div className="App-clear" style={{ width: "100%" }}><h3>{chart.categoryTitle}</h3></div>;
          default:
             return <span>Unknown chart</span>;
        }
@@ -23,7 +25,7 @@ export default class ChartPanel extends Component {
   render() {
     return (
       <div className="App-charts">
-        {this.generateCharts()}
+        { this.generateCharts() }
       </div>
     );
   }

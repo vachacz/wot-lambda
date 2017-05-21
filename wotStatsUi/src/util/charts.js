@@ -1,9 +1,16 @@
 export function recalculateCharts(chartDefinition, stats) {
   var charts = [];
+  charts.push(category("Ratio charts"));
   charts.push(...recalculateSingleStatCharts(stats));
+  charts.push(category("Comparision charts"));
   charts.push(...recalculateComparisonCharts(stats));
+  charts.push(category("Effective stat charts"));
   charts.push(...recalculateEffectiveCharts(chartDefinition, stats));
   return charts;
+}
+
+function category(title) {
+  return { type: "category", categoryTitle: title }
 }
 
 function recalculateEffectiveCharts(chartDefinition, stats) {
