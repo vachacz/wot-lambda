@@ -55,44 +55,86 @@ function calculateEffectiveWn8(stat, wnEfficiency) {
 
 export function recalculateCharts(chartDefinition, stats) {
   var charts = [];
+  charts.push(...recalculateSingleStatCharts(stats));
+  charts.push(...recalculateComparisonCharts(stats));
   charts.push(...recalculateEffectiveCharts(chartDefinition, stats));
   return charts;
 }
 
 function recalculateEffectiveCharts(chartDefinition, stats) {
   return chartDefinition.map((definition) => {
-
-    var { property, title } = definition;
-    var modelStat = [];
-    var modelEffective = [];
-
-    stats.forEach((val) => {
-      modelStat.push({x: val.timestamp, y: val[property]});
-      if (val[property + "Effective"]) {
-        modelEffective.push({x: val.timestamp, y: val[property + "Effective"]});
-      }
-    })
-
-    var statValues = modelStat.map((stat) => stat.y);
-    var minStat = Math.min(...statValues);
-    var maxStat = Math.max(...statValues);
-
-    var effectiveStatValues = modelEffective.map((stat) => stat.y);
-    var minEffectiveStat = Math.min(...effectiveStatValues);
-    var maxEffectiveStat = Math.max(...effectiveStatValues);
-
-    var effectiveStatChartMin = Math.min( minStat, minEffectiveStat );
-    var effectiveStatChartMax = Math.max( maxStat, maxEffectiveStat );
-
+    var statSeries = buildSeries(stats, definition.property);
+    var effectiveStatSeries = buildSeries(stats, definition.property + "Effective");
     return {
       type: "effective",
-      title: title,
-      statChartData: modelStat,
-      statChartRange: [ getMin(minStat), getMax(maxStat) ],
-      effectiveStatChartData: modelEffective,
-      effectiveStatChartRange: [ getMin(effectiveStatChartMin), getMax(effectiveStatChartMax) ]
+      title: definition.title,
+      statSeries: statSeries,
+      statSeriesRange: computeSeriesRange(statSeries),
+      effectiveStatSeries: effectiveStatSeries,
+      effectiveStatSeriesRange: computeSeriesRange(statSeries, effectiveStatSeries)
     }
   });
+}
+
+function recalculateSingleStatCharts(stats) {
+  return [
+    recalculateSingleStatChart(stats, "Wins ratio",     "winsRatio"),
+    recalculateSingleStatChart(stats, "Survived ratio", "survivedBattlesRatio"),
+    recalculateSingleStatChart(stats, "Hits ratio",     "hitsRatio")
+  ];
+}
+
+function recalculateSingleStatChart(stats, chartTitle, prop) {
+  var series = buildSeries(stats, prop);
+  return {
+    type: "stat",
+    title: chartTitle,
+    series: series,
+    range: computeSeriesRange(series)
+  }
+}
+
+function recalculateComparisonCharts(stats) {
+  return [
+    recalculateComparisonChart(stats, "Damage dealt vs received",  "avgDamageDealt", "avgDamageReceived",     "Dealt", "Received"),
+    recalculateComparisonChart(stats, "Win ratio vs Losses ratio", "winsRatio",      "lossesRatio",           "Wins",  "Losses"),
+    recalculateComparisonChart(stats, "Hits vs Hits received",     "avgHits",        "avgDirectHitsReceived", "Hits",  "Hits received"),
+  ];
+}
+
+function recalculateComparisonChart(stats, chartTitle, prop1, prop2, title1, title2) {
+  var winsRatioSeries = buildSeries(stats, prop1);
+  var lossesRatioSeries = buildSeries(stats, prop2);
+  return {
+    type: "comparison",
+    title: chartTitle,
+    series1: winsRatioSeries,
+    series2: lossesRatioSeries,
+    series1Title: title1,
+    series2Title: title2,
+    range: computeSeriesRange(winsRatioSeries, lossesRatioSeries)
+  }
+}
+
+function buildSeries(stats, property) {
+  var series = [];
+  stats.forEach((val) => {
+    if (val[property]) {
+      series.push({x: val.timestamp, y: val[property]});
+    }
+  });
+  return series;
+}
+
+function computeSeriesRange(...seriesList) {
+  var mins = [];
+  var maxs = [];
+  seriesList.forEach((series) => {
+    var seriesValues = series.map((stat) => stat.y);
+    mins.push(Math.min(...seriesValues));
+    maxs.push(Math.max(...seriesValues));
+  });
+  return [ getMin(Math.min(...mins)), getMax(Math.max(...maxs)) ];
 }
 
 function getMax(value) {

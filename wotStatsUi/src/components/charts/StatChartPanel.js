@@ -1,25 +1,21 @@
 import React, { Component } from 'react';
 import EffectiveStatChart from './EffectiveStatChart.js';
+import ComparisonChart from './ComparisonChart.js';
+import SingleStatChart from './SingleStatChart.js';
 
 export default class ChartPanel extends Component {
-
-  effectiveStatChart(chart) {
-    return (
-      <EffectiveStatChart
-          title={chart.title}
-          statChartData={chart.statChartData}
-          statChartRange={chart.statChartRange}
-          effectiveStatChartData={chart.effectiveStatChartData}
-          effectiveStatChartRange={chart.effectiveStatChartRange}
-      />
-    );
-  }
 
   generateCharts() {
     return this.props.charts.map((chart) => {
       switch (chart.type) {
-         case "effective": return this.effectiveStatChart(chart);
-         default: return;
+         case "effective":
+            return <EffectiveStatChart {...chart} />
+         case "comparison":
+            return <ComparisonChart {...chart} />;
+         case "stat":
+            return <SingleStatChart {...chart} />;
+         default:
+            return <span>Unknown chart</span>;
        }
     });
   }
