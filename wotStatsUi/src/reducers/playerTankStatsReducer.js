@@ -1,5 +1,6 @@
 import { playerTanksStatsModelDefinition, playerTankStatsChartsDefinition } from '../const/Const.js';
-import { recalculateStats, recalculateCharts, calculateAndMergeWn8 } from './common.js'
+import { recalculateStats, calculateAndMergeWn8 } from '../util/stats.js'
+import { recalculateCharts } from '../util/charts.js'
 
 export default function playerTankStats(state={
     tanks: [],

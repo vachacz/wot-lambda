@@ -1,5 +1,6 @@
 import { playerStatsModelDefinition, playerStatsChartsDefinition } from '../const/Const.js';
-import { recalculateStats, recalculateCharts } from './common.js'
+import { recalculateStats } from '../util/stats.js'
+import { recalculateCharts } from '../util/charts.js'
 
 export default function playerStats(state={
     playerStats: [],
