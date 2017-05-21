@@ -101,12 +101,13 @@ export const playerStatsChartsDefinition = [
   { property: "avgSpotted",               title: "Average spotted enemies" },
   { property: "avgShots",                 title: "Average shots" },
   { property: "avgHits",                  title: "Average hits" },
+  { property: "avgDirectHitsReceived",    title: "Average direct hits received" },
   { property: "avgPiercings",             title: "Average piercings" },
   { property: "avgPiercingsReceived",     title: "Average piercings received" },
-  { property: "avgDirectHitsReceived",    title: "Average direct hits received" },
 ]
 
 export const playerTankStatsChartsDefinition = [
+  { property: "wn8",                      title: "Wn8 efficiency" },
   { property: "avgDamageDealt",           title: "Average damage dealt" },
   { property: "avgDamageReceived",        title: "Average damage received" },
   { property: "avgBattleXp",              title: "Average battle experience" },
@@ -114,9 +115,9 @@ export const playerTankStatsChartsDefinition = [
   { property: "avgSpotted",               title: "Average spotted enemies" },
   { property: "avgShots",                 title: "Average shots" },
   { property: "avgHits",                  title: "Average hits" },
+  { property: "avgDirectHitsReceived",    title: "Average direct hits received" },
   { property: "avgPiercings",             title: "Average piercings" },
   { property: "avgPiercingsReceived",     title: "Average piercings received" },
-  { property: "avgDirectHitsReceived",    title: "Average direct hits received" },
 ]
 
 export const tiers = [

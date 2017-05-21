@@ -96,9 +96,12 @@ function recalculateSingleStatChart(stats, chartTitle, prop) {
 
 function recalculateComparisonCharts(stats) {
   return [
-    recalculateComparisonChart(stats, "Damage dealt vs received",  "avgDamageDealt", "avgDamageReceived",     "Dealt", "Received"),
     recalculateComparisonChart(stats, "Win ratio vs Losses ratio", "winsRatio",      "lossesRatio",           "Wins",  "Losses"),
+    recalculateComparisonChart(stats, "Damage dealt vs received",  "avgDamageDealt", "avgDamageReceived",     "Dealt", "Received"),
+    recalculateComparisonChart(stats, "Effective damage dealt vs received",  "avgDamageDealtEffective", "avgDamageReceivedEffective",     "Effective dealt", "Effective received"),
     recalculateComparisonChart(stats, "Hits vs Hits received",     "avgHits",        "avgDirectHitsReceived", "Hits",  "Hits received"),
+    recalculateComparisonChart(stats, "Effective hits vs Hits received",     "avgHitsEffective",        "avgDirectHitsReceivedEffective", "Effective hits",  "Effective hits received"),
+
   ];
 }
 
