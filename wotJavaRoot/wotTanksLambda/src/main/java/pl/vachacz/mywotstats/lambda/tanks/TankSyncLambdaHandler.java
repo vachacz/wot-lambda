@@ -9,14 +9,14 @@ import pl.vachacz.mywotstats.lambda.tanks.model.vehicle.VehiclesResponse;
 
 import java.util.Map;
 
-public class TankSyncLambdaHandler implements RequestHandler<Request, Response> {
+public class TankSyncLambdaHandler implements RequestHandler<Object, Object> {
 
     private WotDynamo wotDynamo = new WotDynamo();
     private WotClient wotClient = new WotClient();
     private WotWnEfficiencyClient wotWnEfficiencyClient = new WotWnEfficiencyClient();
 
     @Override
-    public Response handleRequest(Request input, Context context) {
+    public Object handleRequest(Object input, Context context) {
 
         Map<Long, TankExpectedRatings> tankMap = wotWnEfficiencyClient.loadWnExpectedStats();
 
@@ -42,12 +42,12 @@ public class TankSyncLambdaHandler implements RequestHandler<Request, Response> 
                     entity.setExpWinRate(ratings.getExpWinRate());
                 }
 
-                System.out.println("Saving new tank : " + tank.getTankId() + " " + tank.getName());
+                System.out.println("REQ[" + context.getAwsRequestId() + "] TANK[" + tank.getTankId() + "] saving new tank " + tank.getName());
                 wotDynamo.save(entity);
             }
         });
 
-        return new Response();
+        return null;
     }
 
     public static void main(String[] args) {

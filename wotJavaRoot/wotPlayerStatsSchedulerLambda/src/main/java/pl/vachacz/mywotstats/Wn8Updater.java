@@ -1,4 +1,4 @@
-package pl.vachacz.mywotstats.lambda.tanks.util;
+package pl.vachacz.mywotstats;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import pl.vachacz.mywotstats.dynamo.WotDynamo;

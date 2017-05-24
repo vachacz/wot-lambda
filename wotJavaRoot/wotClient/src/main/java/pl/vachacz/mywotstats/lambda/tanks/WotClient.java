@@ -67,7 +67,6 @@ public class WotClient {
         try {
             System.out.println(request.getUrl());
             HttpResponse<T> response = request.asObject(responseType);
-            System.out.println(response.getStatus());
             return response.getBody();
         } catch (UnirestException e) {
             throw new RuntimeException(e);

@@ -14,7 +14,7 @@ class MainNavbar extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              WoT MyStats
+              WoTStats.online
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>

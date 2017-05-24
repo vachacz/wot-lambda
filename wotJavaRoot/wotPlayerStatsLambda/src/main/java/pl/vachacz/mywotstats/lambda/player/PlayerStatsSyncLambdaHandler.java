@@ -1,18 +1,17 @@
-package pl.vachacz.mywotstats.lambda.tanks;
+package pl.vachacz.mywotstats.lambda.player;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import pl.vachacz.mywotstats.dynamo.WotDynamo;
-import pl.vachacz.mywotstats.dynamo.model.PlayerEntity;
 import pl.vachacz.mywotstats.dynamo.model.PlayerStatsEntity;
 import pl.vachacz.mywotstats.dynamo.model.PlayerTankStatsEntity;
 import pl.vachacz.mywotstats.dynamo.model.VehicleEntity;
+import pl.vachacz.mywotstats.lambda.tanks.WotClient;
 import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStats;
 import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStats;
 import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsResponse;
-import pl.vachacz.mywotstats.lambda.tanks.model.vehicle.Vehicle;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -20,44 +19,38 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Optional;
 
-public class StatsSyncLambdaHandler implements RequestHandler<Request, Response> {
+public class PlayerStatsSyncLambdaHandler implements RequestHandler<SNSEvent, Object> {
 
     private WotClient wotClient = new WotClient();
     private WotDynamo wotDynamo = new WotDynamo();
 
-    public Response handleRequest(Request input, Context context) {
+    public Object handleRequest(SNSEvent input, Context context) {
+        input.getRecords().forEach(event -> {
+            String message = event.getSNS().getMessage();
+            Long accountId = Long.parseLong(message);
 
-        PaginatedScanList<PlayerEntity> players = wotDynamo.getAllPlayers();
-
-        players.forEach(player -> {
-            System.out.println("====> Processing player : " + player.getPlayer());
-            long startTime = System.currentTimeMillis();
-
-            if (player.getAccountId() == null) {
-                Long accountId = wotClient.getAccountId(player.getPlayer());
-                player.setAccountId(accountId);
-                wotDynamo.save(player);
-            }
-
-            long timestamp = Calendar.getInstance().getTimeInMillis();
-            savePlayerStats(timestamp, player.getAccountId());
-            savePlayerTankStats(timestamp, player.getAccountId());
-
-            System.out.println("====> Finished in " + ((System.currentTimeMillis() - startTime) / 1000) + " seconds");
+            syncPlayer(accountId, context.getAwsRequestId());
         });
-
-        return new Response();
+        return null;
     }
 
-    private void savePlayerStats(long timestamp, Long accountId) {
+    public void syncPlayer(Long accountId, String requestId) {
+        System.out.println("REQ[" + requestId + "] PLAYER[" + accountId + "] fetching player stats ...");
+        long timestamp = Calendar.getInstance().getTimeInMillis();
+        savePlayerStats(timestamp, accountId, requestId);
+        savePlayerTankStats(timestamp, accountId, requestId);
+    }
+
+    private void savePlayerStats(long timestamp, Long accountId, String requestId) {
         PlayerStatsResponse playerStats = wotClient.getPlayerStats(accountId);
         PlayerStats stats = playerStats.getStats();
 
         Optional<Integer> battles = wotDynamo.getBattleCountFromLastStat(accountId);
         if (battles.isPresent() && battles.get().equals(stats.getBattles())) {
-            System.out.println("No new battles for player " + accountId + " found. Skipping.");
             return;
         }
+        int battleDelta = stats.getBattles() - battles.orElse(0);
+        System.out.println("REQ[" + requestId + "] PLAYER[" + accountId + "] " + battleDelta + " new battle(s) found.");
 
         double battlesDouble = new Double(stats.getBattles());
 
@@ -99,7 +92,7 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
         entity.setSurvivedBattlesRatio(scale2(100 * stats.getSurvivedBattles() / battlesDouble));
 
         entity.setXp(stats.getXp());
-        entity.setAvgBattleXp(stats.getAvgBattleXp());
+        entity.setAvgBattleXp(scale2(stats.getXp() / battlesDouble));
 
         entity.setDamageDealt(stats.getDamageDealt());
         entity.setAvgDamageDealt(scale2(stats.getDamageDealt() / battlesDouble));
@@ -134,7 +127,7 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
         wotDynamo.save(entity);
     }
 
-    private void savePlayerTankStats(long timestamp, Long accountId) {
+    private void savePlayerTankStats(long timestamp, Long accountId, String requestId) {
         Map<Long, VehicleEntity> vehiclesMap = wotDynamo.getAllVehiclesAsMap();
         PlayerTankStatsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
         playerTankStats.getPlayerStats(accountId).forEach(s -> {
@@ -149,14 +142,15 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
 
             Optional<Integer> battles = wotDynamo.getTankBattleCountFromLastStat(accountId, s.getTankId());
             if (battles.isPresent() && battles.get().equals(tankStats.getBattles())) {
-                System.out.println("No new battles for [player:" + accountId + "] and [tank:" + s.getTankId() + "] found. Skipping.");
                 return;
             }
 
             if (tankStats.getBattles().equals(0)) {
-                System.out.println("Tank has no battles. [player: " + accountId + "] and [Tank: " + s.getTankId() + "]. Skipping.");
                 return;
             }
+
+            int battleDelta = tankStats.getBattles() - battles.orElse(0);
+            System.out.println("REQ[" + requestId + "] PLAYER[" + accountId + "] TANK[" + s.getTankId() + "] " + battleDelta + " new battle(s) found.");
 
             Double battlesDouble = new Double(tankStats.getBattles());
 
@@ -257,10 +251,5 @@ public class StatsSyncLambdaHandler implements RequestHandler<Request, Response>
         }
         return BigDecimal.valueOf(toBeTruncated).setScale(3, RoundingMode.HALF_UP).doubleValue();
     }
-
-    public static void main(String[] args) {
-        new StatsSyncLambdaHandler().handleRequest(null, null);
-    }
-
 }
 

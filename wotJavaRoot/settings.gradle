@@ -1,6 +1,8 @@
 include 'wotClient'
 include 'wotDynamo'
-include 'wotStatsLambda'
+include 'wotPlayerStatsLambda'
+include 'wotPlayerStatsSchedulerLambda'
 include 'wotTanksLambda'
 include 'wotWnEfficiency'
+include 'wotStandalone'
 
