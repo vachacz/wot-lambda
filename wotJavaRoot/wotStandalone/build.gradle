@@ -1,6 +1,5 @@
 dependencies {
 
-    compile project(':wotPlayerStatsLambda')
-    compile project(':wotPlayerStatsSchedulerLambda')
+    compile project(':wotLambdaPlayerStats')
 
 }

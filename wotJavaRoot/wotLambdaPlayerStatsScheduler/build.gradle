@@ -4,7 +4,7 @@ dependencies {
     compile project(':wotClient')
 
     compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.1.0'
-    compile group: 'com.amazonaws', name: 'aws-lambda-java-events', version: '1.3.0'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-sns', version: '1.11.84'
 }
 
 task lambdaBuild(type: Zip) {
@@ -18,8 +18,8 @@ task lambdaBuild(type: Zip) {
 task lambdaDeploy(type: Exec) {
     workingDir '.'
     commandLine 'aws', 'lambda', 'update-function-code',
-            '--function-name', 'wotPlayerStatsLambda',
-            '--zip-file', 'fileb://build/distributions/wotPlayerStatsLambda-0.1-SNAPSHOT.zip'
+            '--function-name', 'wotPlayerStatsSchedulerLambda',
+            '--zip-file', 'fileb://build/distributions/wotLambdaPlayerStatsScheduler-0.1-SNAPSHOT.zip'
 }
 
 build.dependsOn lambdaBuild
