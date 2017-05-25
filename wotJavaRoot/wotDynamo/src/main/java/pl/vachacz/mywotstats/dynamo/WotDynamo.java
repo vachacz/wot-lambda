@@ -7,9 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import pl.vachacz.mywotstats.dynamo.model.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WotDynamo {
@@ -25,7 +23,7 @@ public class WotDynamo {
         return mapper.scan(PlayerEntity.class, scan);
     }
 
-    PaginatedScanList<VehicleEntity> getAllVehicles() {
+    private PaginatedScanList<VehicleEntity> getAllVehicles() {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         return mapper.scan(VehicleEntity.class, scan);
     }
@@ -34,7 +32,19 @@ public class WotDynamo {
         return getAllVehicles().stream().collect(Collectors.toMap(VehicleEntity::getTankId, item -> item));
     }
 
-    public Map<Long,PlayerTankEntity> getPlayerTanksAsMap() {
+    public Map<Long, PlayerTankEntity> getPlayerTanksAsMap(Long accountId) {
+        return getPlayerTanks(accountId).stream().collect(Collectors.toMap(PlayerTankEntity::getTankId, item -> item));
+    }
+
+    private PaginatedQueryList<PlayerTankEntity> getPlayerTanks(Long accountId) {
+        Map<String, AttributeValue> eav = new HashMap<>();
+        eav.put(":val", new AttributeValue().withN(accountId + ""));
+
+        DynamoDBQueryExpression<PlayerTankEntity> query = new DynamoDBQueryExpression<PlayerTankEntity>()
+                .withKeyConditionExpression("account_id = :val")
+                .withConsistentRead(false)
+                .withExpressionAttributeValues(eav);
+        return mapper.query(PlayerTankEntity.class, query);
     }
 
     public PaginatedScanList<PlayerTankStatsEntity> getAllPlayerTankStats() {
@@ -79,21 +89,6 @@ public class WotDynamo {
                 .withScanIndexForward(false);
         PaginatedQueryList<PlayerStatsEntity> res = mapper.query(PlayerStatsEntity.class, query);
         return res.stream().map(PlayerStatsEntity::getBattles).findFirst();
-    }
-
-    public Optional<Integer> getTankBattleCountFromLastStat(Long accountId, Long tankId) {
-        Map<String, AttributeValue> eav = new HashMap<>();
-        eav.put(":val", new AttributeValue().withS(accountId + "|" + tankId));
-
-        DynamoDBQueryExpression<PlayerTankStatsEntity> query = new DynamoDBQueryExpression<PlayerTankStatsEntity>()
-                .withLimit(1)
-                .withKeyConditionExpression("composite_key = :val")
-                .withExpressionAttributeValues(eav)
-                .withProjectionExpression("battles")
-                .withConsistentRead(false)
-                .withScanIndexForward(false);
-        PaginatedQueryList<PlayerTankStatsEntity> res = mapper.query(PlayerTankStatsEntity.class, query);
-        return res.stream().map(PlayerTankStatsEntity::getBattles).findFirst();
     }
 
 }

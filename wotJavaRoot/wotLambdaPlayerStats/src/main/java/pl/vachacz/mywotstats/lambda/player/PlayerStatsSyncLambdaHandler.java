@@ -130,31 +130,35 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<SNSEvent, Ob
 
     private void savePlayerTankStats(long timestamp, Long accountId, String requestId) {
         Map<Long, VehicleEntity> vehiclesMap = wotDynamo.getAllVehiclesAsMap();
-        Map<Long, PlayerTankEntity> playerTankMap = wotDynamo.getPlayerTanksAsMap();
+        Map<Long, PlayerTankEntity> playerTankMap = wotDynamo.getPlayerTanksAsMap(accountId);
         PlayerTankStatsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
         playerTankStats.getPlayerStats(accountId).forEach(s -> {
 
-            PlayerTankStatsEntity tankEntity = new PlayerTankStatsEntity();
-            tankEntity.setTimestamp(timestamp);
-            tankEntity.setAccountId(accountId);
-            tankEntity.setTankId(s.getTankId());
-            tankEntity.setKey(accountId + "|" + s.getTankId());
-
             PlayerTankStats tankStats = s.getTankRatings();
-
-            Optional<Integer> battles = wotDynamo.getTankBattleCountFromLastStat(accountId, s.getTankId());
-            if (battles.isPresent() && battles.get().equals(tankStats.getBattles())) {
-                return;
-            }
 
             if (tankStats.getBattles().equals(0)) {
                 return;
+            }
+
+            Optional<Integer> battles = Optional.empty();
+            if (playerTankMap.containsKey(s.getTankId())) {
+                PlayerTankEntity entity = playerTankMap.get(s.getTankId());
+                battles = Optional.of(entity.getBattles());
+                if (entity.getBattles().equals(tankStats.getBattles())) {
+                    return;
+                }
             }
 
             int battleDelta = tankStats.getBattles() - battles.orElse(0);
             System.out.println("REQ[" + requestId + "] PLAYER[" + accountId + "] TANK[" + s.getTankId() + "] " + battleDelta + " new battle(s) found.");
 
             Double battlesDouble = new Double(tankStats.getBattles());
+
+            PlayerTankStatsEntity tankEntity = new PlayerTankStatsEntity();
+            tankEntity.setTimestamp(timestamp);
+            tankEntity.setAccountId(accountId);
+            tankEntity.setTankId(s.getTankId());
+            tankEntity.setKey(accountId + "|" + s.getTankId());
 
             tankEntity.setBattles(tankStats.getBattles());
 
@@ -231,12 +235,74 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<SNSEvent, Ob
         playerTank.setTimestamp(timestamp);
         playerTank.setBattles(entity.getBattles());
 
+        playerTank.setDraws(entity.getDraws());
+        playerTank.setDrawsRatio(entity.getDrawsRatio());
+
+        playerTank.setWins(entity.getWins());
+        playerTank.setWinsRatio(entity.getWinsRatio());
+
+        playerTank.setLosses(entity.getLosses());
+        playerTank.setLossesRatio(entity.getLossesRatio());
+
+        playerTank.setSurvivedBattles(entity.getSurvivedBattles());
+        playerTank.setSurvivedBattlesRatio(entity.getSurvivedBattlesRatio());
+
+        playerTank.setXp(entity.getXp());
+        playerTank.setAvgBattleXp(entity.getAvgBattleXp());
+
+        playerTank.setAvgDamageBlocked(entity.getAvgDamageBlocked());
+
+        playerTank.setDamageDealt(entity.getDamageDealt());
+        playerTank.setAvgDamageDealt(entity.getAvgDamageDealt());
+
+        playerTank.setCapturePoints(entity.getCapturePoints());
+        playerTank.setAvgCapturePoints(entity.getAvgCapturePoints());
+
+        playerTank.setDamageReceived(entity.getDamageReceived());
+        playerTank.setAvgDamageReceived(entity.getAvgDamageReceived());
+
+        playerTank.setDirectHitsReceived(entity.getDirectHitsReceived());
+        playerTank.setAvgDirectHitsReceived(entity.getAvgDirectHitsReceived());
+
+        playerTank.setDroppedCapturePoints(entity.getDroppedCapturePoints());
+        playerTank.setAvgDroppedCapturePoints(entity.getAvgDroppedCapturePoints());
+
+        playerTank.setExplosionHits(entity.getExplosionHits());
+        playerTank.setAvgExplosionHits(entity.getAvgExplosionHits());
+
+        playerTank.setExplosionHitsReceived(entity.getExplosionHitsReceived());
+        playerTank.setAvgExplosionHitsReceived(entity.getAvgExplosionHitsReceived());
+
+        playerTank.setFrags(entity.getFrags());
+        playerTank.setAvgFrags(entity.getAvgFrags());
+
+        playerTank.setHits(entity.getHits());
+        playerTank.setAvgHits(entity.getAvgHits());
+        playerTank.setHitsRatio(entity.getHitsRatio());
+
+        playerTank.setSpotted(entity.getSpotted());
+        playerTank.setAvgSpotted(entity.getAvgSpotted());
+
+        playerTank.setShots(entity.getShots());
+        playerTank.setAvgShots(entity.getAvgShots());
+
+        playerTank.setPiercings(entity.getPiercings());
+        playerTank.setAvgPiercings(entity.getAvgPiercings());
+
+        playerTank.setPiercingsReceived(entity.getPiercingsReceived());
+        playerTank.setAvgPiercingsReceived(entity.getAvgPiercingsReceived());
+
+        playerTank.setWn8(entity.getWn8());
+        
         wotDynamo.save(playerTank);
     }
 
     private Double computeWn8(PlayerTankStatsEntity tankEntity, Map<Long, VehicleEntity> vehiclesMap) {
 
         VehicleEntity vehicle = vehiclesMap.get(tankEntity.getTankId());
+        if (vehicle == null) {
+            return null;
+        }
 
         Double rDAMAGE = tankEntity.getAvgDamageDealt() / vehicle.getExpDamage();
         Double rSPOT   = tankEntity.getAvgSpotted() / vehicle.getExpSpot();
