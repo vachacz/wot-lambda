@@ -14,7 +14,8 @@ public class SyncStandalone {
     }
 
     public static void main(String[] args) {
-        new SyncStandalone();
+        // new SyncStandalone();
+        new PlayerStatsSyncLambdaHandler().syncPlayer(539195479L, "dummy");
     }
 
 }

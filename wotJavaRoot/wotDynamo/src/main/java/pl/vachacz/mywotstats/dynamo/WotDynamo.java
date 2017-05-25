@@ -5,10 +5,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import pl.vachacz.mywotstats.dynamo.model.PlayerEntity;
-import pl.vachacz.mywotstats.dynamo.model.PlayerStatsEntity;
-import pl.vachacz.mywotstats.dynamo.model.PlayerTankStatsEntity;
-import pl.vachacz.mywotstats.dynamo.model.VehicleEntity;
+import pl.vachacz.mywotstats.dynamo.model.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +34,9 @@ public class WotDynamo {
         return getAllVehicles().stream().collect(Collectors.toMap(VehicleEntity::getTankId, item -> item));
     }
 
+    public Map<Long,PlayerTankEntity> getPlayerTanksAsMap() {
+    }
+
     public PaginatedScanList<PlayerTankStatsEntity> getAllPlayerTankStats() {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         return mapper.scan(PlayerTankStatsEntity.class, scan);
@@ -48,6 +48,10 @@ public class WotDynamo {
 
     public void save(PlayerStatsEntity playerStat) {
         mapper.save(playerStat);
+    }
+
+    public void save(PlayerTankEntity playerTank) {
+        mapper.save(playerTank);
     }
 
     public void save(PlayerTankStatsEntity tankStatEntity) {

@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import pl.vachacz.mywotstats.dynamo.WotDynamo;
 import pl.vachacz.mywotstats.dynamo.model.PlayerStatsEntity;
+import pl.vachacz.mywotstats.dynamo.model.PlayerTankEntity;
 import pl.vachacz.mywotstats.dynamo.model.PlayerTankStatsEntity;
 import pl.vachacz.mywotstats.dynamo.model.VehicleEntity;
 import pl.vachacz.mywotstats.lambda.tanks.WotClient;
@@ -129,6 +130,7 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<SNSEvent, Ob
 
     private void savePlayerTankStats(long timestamp, Long accountId, String requestId) {
         Map<Long, VehicleEntity> vehiclesMap = wotDynamo.getAllVehiclesAsMap();
+        Map<Long, PlayerTankEntity> playerTankMap = wotDynamo.getPlayerTanksAsMap();
         PlayerTankStatsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
         playerTankStats.getPlayerStats(accountId).forEach(s -> {
 
@@ -216,7 +218,20 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<SNSEvent, Ob
             tankEntity.setWn8(scale2(computeWn8(tankEntity, vehiclesMap)));
 
             wotDynamo.save(tankEntity);
+
+            updatePlayerTank(tankEntity, timestamp);
         });
+    }
+
+    private void updatePlayerTank(PlayerTankStatsEntity entity, long timestamp) {
+        PlayerTankEntity playerTank = new PlayerTankEntity();
+
+        playerTank.setAccountId(entity.getAccountId());
+        playerTank.setTankId(entity.getTankId());
+        playerTank.setTimestamp(timestamp);
+        playerTank.setBattles(entity.getBattles());
+
+        wotDynamo.save(playerTank);
     }
 
     private Double computeWn8(PlayerTankStatsEntity tankEntity, Map<Long, VehicleEntity> vehiclesMap) {

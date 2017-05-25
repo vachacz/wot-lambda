@@ -12,7 +12,10 @@ import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.vehicle.VehiclesResponse;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 public class WotClient {
 
@@ -23,13 +26,23 @@ public class WotClient {
     private static final String WOT_API_PLAYER_STATS = WOT_BASE_URL + "/account/info/";
     private static final String WOT_API_PLAYER_TANK_STATS = WOT_BASE_URL + "/tanks/stats/";
 
+    private Properties properties;
+
     public WotClient() {
         setObjectMapper();
+
+        try {
+            properties = new Properties();
+            properties.load(WotClient.class.getResourceAsStream("/wot.properties"));
+        } catch (IOException e) {
+            System.out.println("Properties not loaded");
+            e.printStackTrace();
+        }
     }
 
     public Long getAccountId(String player) {
         HttpRequest request = Unirest.get(WOT_API_PLAYER)
-                .queryString("application_id", "demo")
+                .queryString("application_id", getApplicationId())
                 .queryString("search", player)
                 .queryString("type", "exact");
         AccountResponse accResponse = make(request, AccountResponse.class);
@@ -38,7 +51,7 @@ public class WotClient {
 
     public VehiclesResponse getVehicles() {
         HttpRequest request = Unirest.get(WOT_API_TANKS)
-                .queryString("application_id", "demo")
+                .queryString("application_id", getApplicationId())
                 .queryString("language", "en")
                 .queryString("fields", "tank_id,name_i18n,level,nation,type");
 
@@ -47,7 +60,7 @@ public class WotClient {
 
     public PlayerTankStatsResponse getPlayerTankStats(Long accountId) {
         HttpRequest request = Unirest.get(WOT_API_PLAYER_TANK_STATS)
-                .queryString("application_id", "demo")
+                .queryString("application_id", properties.getProperty("wotApplicationId"))
                 .queryString("account_id", accountId)
                 .queryString("fields", "tank_id,all");
 
@@ -56,11 +69,17 @@ public class WotClient {
 
     public PlayerStatsResponse getPlayerStats(Long accountId) {
         HttpRequest request = Unirest.get(WOT_API_PLAYER_STATS)
-                .queryString("application_id", "demo")
+                .queryString("application_id", getApplicationId())
                 .queryString("fields", "statistics.all")
                 .queryString("account_id", accountId);
 
         return make(request, PlayerStatsResponse.class);
+    }
+
+    private String getApplicationId() {
+        String appId = properties.getProperty("wotApplicationId");
+        System.out.println(appId);
+        return appId;
     }
 
     public <T> T make(HttpRequest request, Class<T> responseType) {

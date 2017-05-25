@@ -24,12 +24,14 @@ public class StatsSyncSchedulerLambdaHandler implements RequestHandler<Object, O
     }
 
     public Object handleRequest(Object input, Context context) {
-
+        String requestId = context.getAwsRequestId();
+        System.out.println("REQ[" + requestId + "] starting ... ");
         PaginatedScanList<PlayerEntity> players = wotDynamo.getAllPlayers();
 
-        String requestId = context.getAwsRequestId();
 
         players.forEach(player -> {
+            System.out.println("REQ[" + requestId + "] PLAYER[" + player.getPlayer() + "] processing ...");
+
             if (player.getAccountId() == null) {
                 System.out.println("REQ[" + requestId + "] PLAYER[" + player.getPlayer() + "] fetching accountId");
 

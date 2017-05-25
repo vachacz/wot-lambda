@@ -120,3 +120,5 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/vim,java,gradle,intellij+iml
 
 node_modules
+/wotJavaRoot/wotClient/src/main/resources/wot.properties
+
