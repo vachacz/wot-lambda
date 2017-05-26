@@ -28,7 +28,7 @@ export function selectMaxResults(results) {
 
 export function refreshPlayerStats() {
   return (dispatch, getState) => {
-    axios.get(baseurl + "/playerstats/" + getState().players.accountId + "?maxresults=" + getState().playerStats.maxResults)
+    axios.get(baseurl + "/player/" + getState().players.accountId + "/stats?maxresults=" + getState().playerStats.maxResults)
       .then((response) => {
         dispatch({type: "FETCH_PLAYER_STATS_FULFILLED", payload: response.data})
       }

@@ -142,9 +142,9 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<SNSEvent, Ob
 
             Optional<Integer> battles = Optional.empty();
             if (playerTankMap.containsKey(s.getTankId())) {
-                PlayerTankEntity entity = playerTankMap.get(s.getTankId());
-                battles = Optional.of(entity.getBattles());
-                if (entity.getBattles().equals(tankStats.getBattles())) {
+                PlayerTankEntity savedTank = playerTankMap.get(s.getTankId());
+                battles = Optional.of(savedTank.getBattles());
+                if (savedTank.getBattles().equals(tankStats.getBattles())) {
                     return;
                 }
             }

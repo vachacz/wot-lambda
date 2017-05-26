@@ -14,7 +14,7 @@ export function fetchPlayers() {
 export function selectPlayer(player) {
   var accountId = player.account_id
   return (dispatch, getState) => {
-    axios.get(baseurl + "/playerstats/" + accountId + "?maxresults=" + getState().playerStats.maxResults)
+    axios.get(baseurl + "/player/" + accountId + "/stats?maxresults=" + getState().playerStats.maxResults)
       .then((response) => {
         dispatch({type: "PLAYER_SELECTED", payload: player})
         dispatch({type: "FETCH_PLAYER_STATS_FULFILLED", payload: response.data})

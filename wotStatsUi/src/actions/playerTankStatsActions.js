@@ -61,7 +61,7 @@ export function selectTank(selectedTank) {
       dispatch({type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: { playerTankStats: [] }})
     }
   }
-  return (dispatch, getState) => axios.get(baseurl + "/playerstats/" + getState().players.accountId + "/tank/" + selectedTank.tank_id + "?maxresults=" + getState().playerTankStats.maxResults)
+  return (dispatch, getState) => axios.get(baseurl + "/player/" + getState().players.accountId + "/tank/" + selectedTank.tank_id + "/stats?maxresults=" + getState().playerTankStats.maxResults)
     .then((response) => {
       dispatch({type: "TANK_SELECTED", payload: selectedTank })
       dispatch({type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: response.data})
