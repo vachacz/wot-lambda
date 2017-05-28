@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 
 import TanksTable from '../tankstable/TanksTable.js';
 
+import { playerTanksStatsModelDefinition } from '../../const/Const.js';
 const noPlayerWarning = <h3>Select player first!</h3>
 
 class PlayerTanksTab extends Component {
@@ -13,7 +14,7 @@ class PlayerTanksTab extends Component {
     return (
       <div>
         player tanks table
-        <TanksTable tanks={this.props.playerTanks.playerTanks}/>
+        <TanksTable tanks={this.props.playerTanks.playerTanks} definition={playerTanksStatsModelDefinition} />
       </div>
     );
   }

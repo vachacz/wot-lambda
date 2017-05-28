@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
 import { Table } from 'react-bootstrap';
+
+import DateCell from '../stattable/DateCell.js';
 
 export default class TanksTable extends Component {
 
@@ -8,22 +9,33 @@ export default class TanksTable extends Component {
     return (
       <tr>
         <td>time</td>
+        <td>tank_id</td>
         { this.generateHeaderCells() }
       </tr>
     );
   }
 
   generateHeaderCells() {
-    return <td>header 1</td>
+    return this.props.definition.map((def) => {
+      return <td>{def.header}</td>
+    });
   }
 
-  generateCells() {
-    return <td>cell 1</td>
+  generateCells(stat) {
+    return this.props.definition.map((def) => {
+      return <td>{ stat[def.property] }</td>
+    });
   }
 
   generateStatRows() {
-    return this.props.tanks.map((def) => {
-      return <tr> <td>time</td> { this.generateCells() } </tr>
+    return this.props.tanks.map((stat) => {
+      return (
+        <tr>
+          <DateCell timestamp={stat.timestamp} />
+          <td>{stat.tank_id}</td>
+          { this.generateCells(stat) }
+        </tr>
+      )
     });
   }
 
