@@ -22,12 +22,9 @@ export default class TanksTable extends Component {
   }
 
   generateStatRows() {
-    return (
-      <tr>
-        <td>time</td>
-        { this.generateCells() }
-      </tr>
-    );
+    return this.props.tanks.map((def) => {
+      return <tr> <td>time</td> { this.generateCells() } </tr>
+    });
   }
 
   render() {

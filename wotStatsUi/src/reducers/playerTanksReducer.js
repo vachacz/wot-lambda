@@ -18,7 +18,7 @@ export default function playerTanks(state={
   switch (action.type) {
 
     case "FETCH_PLAYER_TANKS_FULFILLED": {
-      return state;
+      return {...state, playerTanks: action.payload.tanks}
     }
 
     default:

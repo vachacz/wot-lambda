@@ -18,7 +18,10 @@ export function selectPlayer(player) {
       .then((response) => {
         dispatch({type: "PLAYER_SELECTED", payload: player})
         dispatch({type: "FETCH_PLAYER_STATS_FULFILLED", payload: response.data})
-      }
-    )
+      });
+    axios.get(baseurl + "/player/" + accountId + "/tanks")
+      .then((response) => {
+        dispatch({type: "FETCH_PLAYER_TANKS_FULFILLED", payload: response.data})
+      });
   }
 }
