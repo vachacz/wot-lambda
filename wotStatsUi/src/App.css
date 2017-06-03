@@ -89,7 +89,19 @@ html[xmlns] .clearfix {
     margin-bottom: 20px;
 }
 
-.App-stats-table td {
+.App-stats-table > thead td.small-column {
+    min-width: 40px;
+    max-width: 40px;
+    width: 40px;
+}
+
+.App-stats-table > thead td.wide-column {
+    min-width: 160px;
+    max-width: 160px;
+    width: 160px;
+}
+
+.App-stats-table > thead td {
     min-width: 80px;
     max-width: 80px;
     width: 80px;

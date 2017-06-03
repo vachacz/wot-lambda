@@ -8,8 +8,11 @@ export default class TanksTable extends Component {
   generateHeaderRow() {
     return (
       <tr>
-        <td>time</td>
-        <td>tank_id</td>
+        <td>last snapshot</td>
+        <td className="wide-column">name</td>
+        <td className="small-column">tier</td>
+        <td className="small-column">type</td>
+        <td className="small-column">nation</td>
         { this.generateHeaderCells() }
       </tr>
     );
@@ -32,7 +35,10 @@ export default class TanksTable extends Component {
       return (
         <tr>
           <DateCell timestamp={stat.timestamp} />
-          <td>{stat.tank_id}</td>
+          <td style={{ "text-align" : "left" }}>{stat.name}</td>
+          <td><b>{stat.level}</b></td>
+          <td><img src={"img/" + stat.type + ".png"} alt="Tank type" /></td>
+          <td><img src={"img/" + stat.nation + ".png"} alt="Nation" /></td>
           { this.generateCells(stat) }
         </tr>
       )
