@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
 
 import DateCell from '../stattable/DateCell.js';
+import Wn8Cell from './Wn8Cell.js';
 
 export default class TanksTable extends Component {
 
@@ -26,6 +27,9 @@ export default class TanksTable extends Component {
 
   generateCells(stat) {
     return this.props.definition.map((def) => {
+      if ("wn8ColorRange" in def) {
+        return <Wn8Cell value={ stat[def.property] } />
+      }
       return <td>{ stat[def.property] }</td>
     });
   }
