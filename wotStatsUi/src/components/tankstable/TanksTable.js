@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Glyphicon, Button } from 'react-bootstrap';
 
 import DateCell from '../stattable/DateCell.js';
 import Wn8Cell from './Wn8Cell.js';
@@ -28,6 +28,34 @@ export default class TanksTable extends Component {
     });
   }
 
+  generateSortRow() {
+    return (
+      <tr>
+        <td></td>
+        <td className="wide-column"></td>
+        <td className="small-column"></td>
+        <td className="small-column"></td>
+        <td className="small-column"></td>
+        { this.generateSortCells() }
+      </tr>
+    );
+  }
+
+  generateSortCells() {
+    return this.props.definition.map((def) => {
+      if (!this.props.columnVisibility[def.group]) {
+        return null;
+      }
+      return (
+        <td>
+          <Button onClick={this.sort} bsStyle="default" bsSize="xsmall">
+            <Glyphicon glyph="sort" />
+          </Button>
+        </td>
+      )
+    });
+  }
+
   generateCells(stat) {
     return this.props.definition.map((def) => {
       if (!this.props.columnVisibility[def.group]) {
@@ -45,7 +73,11 @@ export default class TanksTable extends Component {
       return (
         <tr>
           <DateCell timestamp={stat.timestamp} />
-          <td style={{ "text-align" : "left" }}>{stat.name}</td>
+          <td style={{ "text-align" : "left" }}>
+            <Button onClick={this.shortTankStats} bsStyle="default" bsSize="xsmall">
+              <Glyphicon glyph="signal" style={{ "display": "inline-block" }}/>
+            </Button>  {stat.name}
+          </td>
           <td><b>{stat.level}</b></td>
           <td><img src={"img/" + stat.type + ".png"} alt="Tank type" /></td>
           <td><img src={"img/" + stat.nation + ".png"} alt="Nation" /></td>
@@ -59,7 +91,7 @@ export default class TanksTable extends Component {
     return (
       <div className="App-clear">
         <Table bsClass="App-stats-table table-striped table-bordered table-condensed table-hover">
-          <thead>{ this.generateHeaderRow() }</thead>
+          <thead>{ this.generateHeaderRow() }{ this.generateSortRow() }</thead>
           <tbody>{ this.generateStatRows() }</tbody>
         </Table>
       </div>
