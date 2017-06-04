@@ -25,7 +25,9 @@ class PlayerTanksTab extends Component {
            selectTankType={this.props.selectTankType}
            selectTankNation={this.props.selectTankNation} />
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility} />
-        <TanksTable tanks={this.props.playerTanks.playerTanks} definition={playerTanksStatsModelDefinition} />
+        <TanksTable tanks={this.props.playerTanks.playerTanks}
+            definition={playerTanksStatsModelDefinition}
+            columnVisibility={columnVisibility}/>
       </div>
     );
   }

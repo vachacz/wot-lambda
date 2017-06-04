@@ -21,12 +21,18 @@ export default class TanksTable extends Component {
 
   generateHeaderCells() {
     return this.props.definition.map((def) => {
+      if (!this.props.columnVisibility[def.group]) {
+        return null;
+      }
       return <td>{def.header}</td>
     });
   }
 
   generateCells(stat) {
     return this.props.definition.map((def) => {
+      if (!this.props.columnVisibility[def.group]) {
+        return null;
+      }
       if ("wn8ColorRange" in def) {
         return <Wn8Cell value={ stat[def.property] } />
       }

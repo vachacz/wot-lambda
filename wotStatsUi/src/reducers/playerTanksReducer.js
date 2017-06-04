@@ -42,35 +42,37 @@ export default function playerTanks(state={
       }, {});
       return {...state, allTanksMap: tankMap }
     }
+
     case "FETCH_PLAYER_TANKS_FULFILLED": {
       let playerTanks = action.payload.tanks.map((tankStats) => {
         let tank = state.allTanksMap[tankStats.tankId];
-        return { ...tankStats,
-          name: tank.name,
-          type: tank.type,
-          level: tank.level,
-          nation: tank.nation
-        };
-      })
-      return {...state, playerTanks: playerTanks, allPlayerTanks: playerTanks }
+        return { ...tankStats, name: tank.name, type: tank.type, level: tank.level, nation: tank.nation };
+      });
+      let filtered = filterTanks(playerTanks, state.criteriaSelection);
+      return {...state, playerTanks: filtered, allPlayerTanks: playerTanks }
     }
+
     case "PLAYER_TANK_TIER_SELECTED": {
       let newState = { ...state.criteriaSelection, tier: action.payload }
       let filtered = filterTanks(state.allPlayerTanks, newState);
       return {...state, criteriaSelection: newState, playerTanks: filtered }
     }
+
     case "PLAYER_TANK_TYPE_SELECTED": {
       let newState = { ...state.criteriaSelection, type: action.payload }
       let filtered = filterTanks(state.allPlayerTanks, newState);
       return {...state, criteriaSelection: newState, playerTanks: filtered }
     }
+
     case "PLAYER_TANK_NATION_SELECTED": {
       let newState = { ...state.criteriaSelection, nation: action.payload }
       let filtered = filterTanks(state.allPlayerTanks, newState);
       return {...state, criteriaSelection: newState, playerTanks: filtered }
     }
+
     case "TOGGLE_PLAYER_TANK_STATS_CELL_VISIBILITY": {
-      return {...state}
+      let columnVisibility = state.columnVisibility;
+      return {...state, columnVisibility: { ...columnVisibility, [action.payload] : !columnVisibility[action.payload]}}
     }
 
     default:
