@@ -13,7 +13,8 @@ export default function playerTanks(state={
     criteriaSelection: {
       tier: "",
       type: "",
-      nation: ""
+      nation: "",
+      battleCount: 0
     }
   }, action) {
 
@@ -31,6 +32,7 @@ export default function playerTanks(state={
       let split = criteriaSelection.nation.split(",");
       result = result.filter((tank) => split.includes(tank.nation))
     }
+    result = result.filter((tank) => tank.battles > criteriaSelection.battleCount)
     return result;
   }
 
@@ -67,6 +69,12 @@ export default function playerTanks(state={
 
     case "PLAYER_TANK_NATION_SELECTED": {
       let newState = { ...state.criteriaSelection, nation: action.payload }
+      let filtered = filterTanks(state.allPlayerTanks, newState);
+      return {...state, criteriaSelection: newState, playerTanks: filtered }
+    }
+
+    case "PLAYER_TANK_BATTLE_COUNT_SELECTED": {
+      let newState = { ...state.criteriaSelection, battleCount: action.payload }
       let filtered = filterTanks(state.allPlayerTanks, newState);
       return {...state, criteriaSelection: newState, playerTanks: filtered }
     }

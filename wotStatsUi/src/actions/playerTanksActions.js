@@ -30,3 +30,9 @@ export function sortTanks(property) {
     dispatch({type: "SORT_PLAYER_TANKS", payload: property})
   }
 }
+
+export function selectBattleCount(battleCount) {
+  return dispatch => {
+    dispatch({type: "PLAYER_TANK_BATTLE_COUNT_SELECTED", payload: battleCount})
+  }
+}
