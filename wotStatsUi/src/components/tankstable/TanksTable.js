@@ -71,11 +71,15 @@ export default class TanksTable extends Component {
 
   generateStatRows() {
     return this.props.tanks.map((stat) => {
+      let _this = this;
       return (
         <tr>
           <DateCell timestamp={stat.timestamp} />
           <td style={{ "text-align" : "left" }}>
-            <Button onClick={() => this.props.selectTankHandler(stat.tankId)} bsStyle="default" bsSize="xsmall">
+            <Button onClick={() => {
+                this.props.selectActiveTab(3);
+                this.props.selectTankHandler(stat.tankId);
+              }} bsStyle="default" bsSize="xsmall">
               <Glyphicon glyph="signal" style={{ "display": "inline-block" }}/>
             </Button>  {stat.name}
           </td>

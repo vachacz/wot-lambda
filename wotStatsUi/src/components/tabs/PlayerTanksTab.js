@@ -5,6 +5,7 @@ import { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility
     sortTanks, selectBattleCount } from '../../actions/playerTanksActions.js';
 
 import { selectTank } from '../../actions/playerTankStatsActions.js';
+import { selectActiveTab } from '../../actions/mainAppActions.js';
 
 import TankCriteriaSelector from '../selectors/TankCriteriaSelector.js';
 import TanksTable from '../tankstable/TanksTable.js';
@@ -35,7 +36,8 @@ class PlayerTanksTab extends Component {
             definition={playerTanksStatsModelDefinition}
             columnVisibility={columnVisibility}
             sortTanksHandler={this.props.sortTanks}
-            selectTankHandler={this.props.selectTank}/>
+            selectTankHandler={this.props.selectTank}
+            selectActiveTab={this.props.selectActiveTab} />
       </div>
     );
   }
@@ -43,5 +45,5 @@ class PlayerTanksTab extends Component {
 
 export default connect(
   (store) => ({ playerTanks: store.playerTanks, player: store.players.player }),
-  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, sortTanks, selectBattleCount, selectTank }
+  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, sortTanks, selectBattleCount, selectTank, selectActiveTab }
 )(PlayerTanksTab);
