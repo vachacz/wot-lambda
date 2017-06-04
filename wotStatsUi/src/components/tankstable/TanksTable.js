@@ -46,9 +46,10 @@ export default class TanksTable extends Component {
       if (!this.props.columnVisibility[def.group]) {
         return null;
       }
+      let _this = this;
       return (
         <td>
-          <Button onClick={this.sort} bsStyle="default" bsSize="xsmall">
+          <Button onClick={() => _this.props.sortTanksHandler(def.property)} bsStyle="default" bsSize="xsmall">
             <Glyphicon glyph="sort" />
           </Button>
         </td>

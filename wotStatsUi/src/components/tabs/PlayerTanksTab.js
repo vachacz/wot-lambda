@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 
-import { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility } from '../../actions/playerTanksActions.js';
+import { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, sortTanks } from '../../actions/playerTanksActions.js';
 
 import TankCriteriaSelector from '../selectors/TankCriteriaSelector.js';
 import TanksTable from '../tankstable/TanksTable.js';
@@ -27,7 +27,8 @@ class PlayerTanksTab extends Component {
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility} />
         <TanksTable tanks={this.props.playerTanks.playerTanks}
             definition={playerTanksStatsModelDefinition}
-            columnVisibility={columnVisibility}/>
+            columnVisibility={columnVisibility}
+            sortTanksHandler={this.props.sortTanks}/>
       </div>
     );
   }
@@ -35,5 +36,5 @@ class PlayerTanksTab extends Component {
 
 export default connect(
   (store) => ({ playerTanks: store.playerTanks, player: store.players.player }),
-  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility }
+  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, sortTanks }
 )(PlayerTanksTab);

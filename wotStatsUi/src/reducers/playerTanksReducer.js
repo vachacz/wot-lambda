@@ -2,6 +2,7 @@ export default function playerTanks(state={
     allTanksMap: {},
     allPlayerTanks: [],
     playerTanks: [],
+    sortDescending: true,
     columnVisibility: {
       max: false,
       totals: false,
@@ -73,6 +74,25 @@ export default function playerTanks(state={
     case "TOGGLE_PLAYER_TANK_STATS_CELL_VISIBILITY": {
       let columnVisibility = state.columnVisibility;
       return {...state, columnVisibility: { ...columnVisibility, [action.payload] : !columnVisibility[action.payload]}}
+    }
+
+    case "SORT_PLAYER_TANKS": {
+      let property = action.payload;
+
+      let newSortDescending = true;
+      if (state.sortProperty == property) {
+        newSortDescending = !state.sortDescending;
+      }
+
+      state.playerTanks.sort((a, b) => {
+        let a1 = parseInt(a[property])
+        let b1 = parseInt(b[property])
+        if (newSortDescending) {
+          return (a1 < b1) ? 1 : ((b1 < a1) ? -1 : 0);
+        }
+        return (a1 > b1) ? 1 : ((b1 > a1) ? -1 : 0);
+      });
+      return {...state, playerTanks: state.playerTanks, sortProperty: property, sortDescending: newSortDescending }
     }
 
     default:

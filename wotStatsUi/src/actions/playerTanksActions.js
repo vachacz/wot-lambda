@@ -24,3 +24,9 @@ export function toggleGroupVisibility(group) {
     dispatch({type: "TOGGLE_PLAYER_TANK_STATS_CELL_VISIBILITY", payload: group})
   }
 }
+
+export function sortTanks(property) {
+  return dispatch => {
+    dispatch({type: "SORT_PLAYER_TANKS", payload: property})
+  }
+}
