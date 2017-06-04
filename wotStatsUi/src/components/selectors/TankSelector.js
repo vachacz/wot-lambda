@@ -34,7 +34,7 @@ export default class TankSelector extends Component {
         </div>
         <div className="App-tankselect-last">
           <div className="App-menugroup-header">Tank selection <Glyphicon glyph="question-sign" /></div>
-          <Select name="select-tank" value={tank} options={this.props.tanks} onChange={(val) => this.props.selectTank(val)} labelKey="name" valueKey="tank_id" />
+          <Select name="select-tank" value={tank} options={this.props.tanks} onChange={(val) => this.props.selectTank(val ? val.tank_id : null)} labelKey="name" valueKey="tank_id" />
         </div>
       </div>
     );

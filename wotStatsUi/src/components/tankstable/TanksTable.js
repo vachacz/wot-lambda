@@ -75,7 +75,7 @@ export default class TanksTable extends Component {
         <tr>
           <DateCell timestamp={stat.timestamp} />
           <td style={{ "text-align" : "left" }}>
-            <Button onClick={this.shortTankStats} bsStyle="default" bsSize="xsmall">
+            <Button onClick={() => this.props.selectTankHandler(stat.tankId)} bsStyle="default" bsSize="xsmall">
               <Glyphicon glyph="signal" style={{ "display": "inline-block" }}/>
             </Button>  {stat.name}
           </td>

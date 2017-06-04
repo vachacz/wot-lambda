@@ -78,7 +78,13 @@ export default function playerTankStats(state={
     }
 
     case "TANK_SELECTED": {
-      let newState = { ...state.tankSelection, tank: action.payload }
+      let tankId = action.payload;
+      let newState;
+      if (tankId) {
+        newState = { ...state.tankSelection, tank: state.tankMap[tankId] }
+      } else {
+        newState = { ...state.tankSelection, tank: "" }
+      }
       return {...state, tankSelection: newState }
     }
 

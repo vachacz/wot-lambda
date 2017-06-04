@@ -4,6 +4,8 @@ import { connect } from "react-redux"
 import { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility,
     sortTanks, selectBattleCount } from '../../actions/playerTanksActions.js';
 
+import { selectTank } from '../../actions/playerTankStatsActions.js';
+
 import TankCriteriaSelector from '../selectors/TankCriteriaSelector.js';
 import TanksTable from '../tankstable/TanksTable.js';
 import ColumnVisibilitySelector from '../selectors/ColumnVisibilitySelector.js';
@@ -32,7 +34,8 @@ class PlayerTanksTab extends Component {
         <TanksTable tanks={this.props.playerTanks.playerTanks}
             definition={playerTanksStatsModelDefinition}
             columnVisibility={columnVisibility}
-            sortTanksHandler={this.props.sortTanks}/>
+            sortTanksHandler={this.props.sortTanks}
+            selectTankHandler={this.props.selectTank}/>
       </div>
     );
   }
@@ -40,5 +43,5 @@ class PlayerTanksTab extends Component {
 
 export default connect(
   (store) => ({ playerTanks: store.playerTanks, player: store.players.player }),
-  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, sortTanks, selectBattleCount }
+  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, sortTanks, selectBattleCount, selectTank }
 )(PlayerTanksTab);

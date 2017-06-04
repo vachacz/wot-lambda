@@ -54,16 +54,16 @@ export function selectTankNation(selectedNations) {
   }
 }
 
-export function selectTank(selectedTank) {
-  if (selectedTank == null) {
+export function selectTank(tankId) {
+  if (tankId == null) {
     return (dispatch) => {
       dispatch({type: "TANK_SELECTED", payload: "" })
       dispatch({type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: { playerTankStats: [] }})
     }
   }
-  return (dispatch, getState) => axios.get(baseurl + "/player/" + getState().players.accountId + "/tank/" + selectedTank.tank_id + "/stats?maxresults=" + getState().playerTankStats.maxResults)
+  return (dispatch, getState) => axios.get(baseurl + "/player/" + getState().players.accountId + "/tank/" + tankId + "/stats?maxresults=" + getState().playerTankStats.maxResults)
     .then((response) => {
-      dispatch({type: "TANK_SELECTED", payload: selectedTank })
+      dispatch({type: "TANK_SELECTED", payload: tankId })
       dispatch({type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: response.data})
     }
   )
