@@ -2,6 +2,7 @@ export default function playerTanks(state={
     allTanksMap: {},
     allPlayerTanks: [],
     playerTanks: [],
+    sortProperty: "",
     sortDescending: true,
     columnVisibility: {
       max: false,
@@ -36,6 +37,17 @@ export default function playerTanks(state={
     return result;
   }
 
+  function sortTanksByProperty(tanks, property, descending) {
+    tanks.sort((a, b) => {
+      let a1 = parseInt(a[property])
+      let b1 = parseInt(b[property])
+      if (descending) {
+        return (a1 < b1) ? 1 : ((b1 < a1) ? -1 : 0);
+      }
+      return (a1 > b1) ? 1 : ((b1 > a1) ? -1 : 0);
+    });
+  }
+
   switch (action.type) {
 
     case "FETCH_TANKS_FULFILLED": {
@@ -61,24 +73,28 @@ export default function playerTanks(state={
     case "PLAYER_TANK_TIER_SELECTED": {
       let newState = { ...state.criteriaSelection, tier: action.payload }
       let filtered = filterTanks(state.allPlayerTanks, newState);
+      sortTanksByProperty(filtered, state.sortProperty, state.sortDescending);
       return {...state, criteriaSelection: newState, playerTanks: filtered }
     }
 
     case "PLAYER_TANK_TYPE_SELECTED": {
       let newState = { ...state.criteriaSelection, type: action.payload }
       let filtered = filterTanks(state.allPlayerTanks, newState);
+      sortTanksByProperty(filtered, state.sortProperty, state.sortDescending);
       return {...state, criteriaSelection: newState, playerTanks: filtered }
     }
 
     case "PLAYER_TANK_NATION_SELECTED": {
       let newState = { ...state.criteriaSelection, nation: action.payload }
       let filtered = filterTanks(state.allPlayerTanks, newState);
+      sortTanksByProperty(filtered, state.sortProperty, state.sortDescending);
       return {...state, criteriaSelection: newState, playerTanks: filtered }
     }
 
     case "PLAYER_TANK_BATTLE_COUNT_SELECTED": {
       let newState = { ...state.criteriaSelection, battleCount: action.payload }
       let filtered = filterTanks(state.allPlayerTanks, newState);
+      sortTanksByProperty(filtered, state.sortProperty, state.sortDescending);
       return {...state, criteriaSelection: newState, playerTanks: filtered }
     }
 
@@ -89,20 +105,11 @@ export default function playerTanks(state={
 
     case "SORT_PLAYER_TANKS": {
       let property = action.payload;
-
       let newSortDescending = true;
       if (state.sortProperty == property) {
         newSortDescending = !state.sortDescending;
       }
-
-      state.playerTanks.sort((a, b) => {
-        let a1 = parseInt(a[property])
-        let b1 = parseInt(b[property])
-        if (newSortDescending) {
-          return (a1 < b1) ? 1 : ((b1 < a1) ? -1 : 0);
-        }
-        return (a1 > b1) ? 1 : ((b1 > a1) ? -1 : 0);
-      });
+      sortTanksByProperty(state.playerTanks, property, newSortDescending);
       return {...state, playerTanks: state.playerTanks, sortProperty: property, sortDescending: newSortDescending }
     }
 
