@@ -49,7 +49,10 @@ export default function playerTanks(state={
     case "FETCH_PLAYER_TANKS_FULFILLED": {
       let playerTanks = action.payload.tanks.map((tankStats) => {
         let tank = state.allTanksMap[tankStats.tankId];
-        return { ...tankStats, name: tank.name, type: tank.type, level: tank.level, nation: tank.nation };
+        if (tank) {
+          return { ...tankStats, name: tank.name, type: tank.type, level: tank.level, nation: tank.nation };
+        }
+        return { ... tankStats }
       });
       let filtered = filterTanks(playerTanks, state.criteriaSelection);
       return {...state, playerTanks: filtered, allPlayerTanks: playerTanks }
