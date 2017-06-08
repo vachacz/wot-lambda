@@ -4,7 +4,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import pl.vachacz.mywotstats.dynamo.WotDynamo;
 import pl.vachacz.mywotstats.dynamo.model.PlayerTankStatsEntity;
 import pl.vachacz.mywotstats.dynamo.model.VehicleEntity;
-import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsResponse;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

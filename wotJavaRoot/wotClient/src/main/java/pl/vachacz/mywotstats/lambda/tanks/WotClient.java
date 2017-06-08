@@ -12,8 +12,6 @@ import pl.vachacz.mywotstats.lambda.tanks.model.playerstats.PlayerStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsResponse;
 import pl.vachacz.mywotstats.lambda.tanks.model.vehicle.VehiclesResponse;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 

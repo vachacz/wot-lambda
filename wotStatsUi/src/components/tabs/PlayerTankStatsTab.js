@@ -31,7 +31,7 @@ class PlayerTankStatsTab extends Component {
         <StatPresetSelector maxResults={maxResults} selectMaxResults={this.props.selectMaxResults} />
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode} />
         <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility} />
-        <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility} />
+        <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} disableMax="true" {...columnVisibility} />
         <StatTable definition={playerTanksStatsModelDefinition} deltaMode={deltaMode}
             playerStats={playerTankStats} cellVisibility={cellVisibility} columnVisibility={columnVisibility} />
 

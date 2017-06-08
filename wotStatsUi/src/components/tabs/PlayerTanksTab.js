@@ -31,7 +31,7 @@ class PlayerTanksTab extends Component {
            selectTankNation={this.props.selectTankNation} />
         <BattleCountSelector selectBattleCount={this.props.selectBattleCount}
             battleCount={criteriaSelection.battleCount} />
-        <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility} />
+        <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} disableMax="true" {...columnVisibility} />
         <TanksTable tanks={this.props.playerTanks.playerTanks}
             definition={playerTanksStatsModelDefinition}
             columnVisibility={columnVisibility}
