@@ -32,7 +32,7 @@ export function selectDeltaMode(mode) {
 export function selectMaxResults(results) {
   return (dispatch, getState) => {
     dispatch({type: "TANK_STATS_MAX_RESULTS_SELECTED", payload: results})
-    selectTank(getState().playerTankStats.tankSelection.tank)(dispatch, getState)
+    selectTank(getState().playerTankStats.tankSelection.tank.tank_id)(dispatch, getState)
   }
 }
 

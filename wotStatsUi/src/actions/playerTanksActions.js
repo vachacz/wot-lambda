@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { baseurl } from '../const/Const.js';
 
 export function selectTankTier(selectedTiers) {
   return dispatch => {

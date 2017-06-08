@@ -64,7 +64,7 @@ export default function playerTanks(state={
         if (tank) {
           return { ...tankStats, name: tank.name, type: tank.type, level: tank.level, nation: tank.nation };
         }
-        return { ... tankStats }
+        return { ...tankStats }
       });
       let filtered = filterTanks(playerTanks, state.criteriaSelection);
       return {...state, playerTanks: filtered, allPlayerTanks: playerTanks }
@@ -106,7 +106,7 @@ export default function playerTanks(state={
     case "SORT_PLAYER_TANKS": {
       let property = action.payload;
       let newSortDescending = true;
-      if (state.sortProperty == property) {
+      if (state.sortProperty === property) {
         newSortDescending = !state.sortDescending;
       }
       sortTanksByProperty(state.playerTanks, property, newSortDescending);
