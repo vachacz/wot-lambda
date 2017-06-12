@@ -17,12 +17,14 @@ class MainLayout extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params.accountId !== this.props.match.params.accountId) {
-      this.props.selectPlayer(this.props.match.params.accountId)
+      this.props.selectPlayer(nextProps.match.params.accountId)
     }
   }
 
   render() {
-    let { accountId, match } = this.props;
+    let { match } = this.props;
+    let { accountId } = match.params;
+
     return (
       <div className="container">
 

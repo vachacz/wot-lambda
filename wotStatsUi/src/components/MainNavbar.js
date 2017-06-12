@@ -4,8 +4,6 @@ import { connect } from "react-redux"
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
-import { selectPlayer } from '../actions/playerActions.js';
-
 class MainNavbar extends Component {
 
   render() {
@@ -38,6 +36,5 @@ class MainNavbar extends Component {
 }
 
 export default connect(
-  (store) => ({ players: store.players.players, player: store.players.player }),
-  { selectPlayer }
+  (store) => ({ players: store.players.players, player: store.players.player })
 )(MainNavbar);
