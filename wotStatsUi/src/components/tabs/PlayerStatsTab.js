@@ -16,18 +16,17 @@ class PlayerStatsTab extends Component {
   render() {
     var { playerStats, columnVisibility, cellVisibility, deltaMode, charts, maxResults } = this.props.playerStats;
 
-    if (playerStats.length === 0) {
-      return <h3>Select player first!</h3>
-    }
-
     return (
       <div>
         <StatPresetSelector maxResults={maxResults} selectMaxResults={this.props.selectMaxResults} />
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode} />
         <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility} />
         <ColumnVisibilitySelector toggleGroupVisibility={this.props.toggleGroupVisibility} {...columnVisibility} />
-        <StatTable definition={playerStatsModelDefinition} deltaMode={deltaMode} playerStats={playerStats}
-             cellVisibility={cellVisibility} columnVisibility={columnVisibility} />
+        <StatTable definition={playerStatsModelDefinition}
+             deltaMode={deltaMode}
+             playerStats={playerStats}
+             cellVisibility={cellVisibility}
+             columnVisibility={columnVisibility} />
 
         <StatChartPanel charts={charts}/>
       </div>

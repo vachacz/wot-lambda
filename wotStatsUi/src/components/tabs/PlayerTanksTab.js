@@ -12,14 +12,10 @@ import ColumnVisibilitySelector from '../selectors/ColumnVisibilitySelector.js';
 import BattleCountSelector from '../selectors/BattleCountSelector.js';
 
 import { playerTanksStatsModelDefinition } from '../../const/Const.js';
-const noPlayerWarning = <h3>Select player first!</h3>
 
 class PlayerTanksTab extends Component {
 
   render() {
-    if (!this.props.player) {
-      return noPlayerWarning;
-    }
     var { criteriaSelection, columnVisibility } = this.props.playerTanks;
 
     return (

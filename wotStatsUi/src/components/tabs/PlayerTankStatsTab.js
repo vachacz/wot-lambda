@@ -14,12 +14,18 @@ import StatChartPanel from '../charts/StatChartPanel.js';
 import TankSelector from '../selectors/TankSelector.js';
 
 const noStatsWarning = <div className="App-clear"><h3>No stats for this selection!</h3></div>
-const noPlayerWarning = <h3>Select player first!</h3>
 
 class PlayerTankStatsTab extends Component {
 
   componentWillMount() {
     this.props.fetchTanks()
+    this.props.selectTank(this.props.match.params.tankId)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.match.params.tankId !== this.props.match.params.tankId) {
+      this.props.selectTank(nextProps.match.params.tankId)
+    }
   }
 
   renderStatTable() {
@@ -42,9 +48,6 @@ class PlayerTankStatsTab extends Component {
 
   render() {
     var { tanksFiltered, tankSelection, playerTankStats } = this.props.playerTankStats;
-    if (!this.props.player) {
-      return noPlayerWarning;
-    }
 
     return (
       <div>
@@ -61,5 +64,5 @@ class PlayerTankStatsTab extends Component {
 
 export default connect(
   (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player }),
-  { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults }
+  { selectTankTier, selectTankType, selectTankNation, selectTank, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults, fetchTanks }
 )(PlayerTankStatsTab);
