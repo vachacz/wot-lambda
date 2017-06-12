@@ -1,34 +1,52 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
+import { Route, Switch } from 'react-router-dom'
 
-import { selectActiveTab } from '../actions/mainAppActions.js';
+import { selectPlayer } from '../actions/playerActions.js';
 
-import { Tabs, Tab } from 'react-bootstrap';
-import PlayerStatsTab from './tabs/PlayerStatsTab.js';
-import PlayerTanksTab from './tabs/PlayerTanksTab.js';
-import PlayerTankStatsTab from './tabs/PlayerTankStatsTab.js';
+import NavTab from '../components/util/NavTab.js';
+import PlayerStatsTab from '../components/tabs/PlayerStatsTab.js';
+import PlayerTanksTab from '../components/tabs/PlayerTanksTab.js';
+import PlayerTankStatsTab from '../components/tabs/PlayerTankStatsTab.js';
 
 class MainLayout extends Component {
+
+  componentWillMount() {
+    this.props.selectPlayer(this.props.match.params.accountId)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.match.params.accountId !== this.props.match.params.accountId) {
+      this.props.selectPlayer(this.props.match.params.accountId)
+    }
+  }
+
   render() {
+    let { accountId, match } = this.props;
     return (
       <div className="container">
-        <Tabs id="wotstats-tabs" activeKey={this.props.activeTab} onSelect={(tab) => this.props.selectActiveTab(tab)}>
-          <Tab eventKey={1} title="Player" className="clearfix">
-            <PlayerStatsTab />
-          </Tab>
-          <Tab eventKey={2} title="Tanks" className="clearfix">
-            <PlayerTanksTab />
-          </Tab>
-          <Tab eventKey={3} title="Tank stats" className="clearfix">
-            <PlayerTankStatsTab />
-          </Tab>
-        </Tabs>
+
+        <ul className="nav nav-tabs">
+          <NavTab to={ `/player/${accountId}/stats` }>Player</NavTab>
+          <NavTab to={ `/player/${accountId}/tanks` }>Tanks</NavTab>
+          <NavTab to={ `/player/${accountId}/tank` }>Tank stats</NavTab>
+        </ul>
+
+        <div className="tab-content">
+          <Switch>
+            <Route path={ `${match.url}/stats` } component={PlayerStatsTab}/>
+            <Route path={ `${match.url}/tanks` } component={PlayerTanksTab}/>
+            <Route path={ `${match.url}/tank` } component={PlayerTankStatsTab}/>
+            <Route path={ `${match.url}/tank/:tank` } component={PlayerTankStatsTab}/>
+          </Switch>
+        </div>
+
       </div>
     );
   }
 }
 
 export default connect(
-  (store) => ({ activeTab: store.mainApp.activeTab }),
-  { selectActiveTab }
+  (store) => ({ accountId: store.players.accountId }),
+  { selectPlayer }
 )(MainLayout);

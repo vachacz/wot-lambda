@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Glyphicon, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom'
 
 import DateCell from '../stattable/DateCell.js';
 import Wn8Cell from './Wn8Cell.js';
@@ -76,12 +77,9 @@ export default class TanksTable extends Component {
         <tr>
           <DateCell timestamp={stat.timestamp} />
           <td style={{ "text-align" : "left" }}>
-            <Button onClick={() => {
-                this.props.selectActiveTab(3);
-                this.props.selectTankHandler(stat.tankId);
-              }} bsStyle="default" bsSize="xsmall">
-              <Glyphicon glyph="signal" style={{ "display": "inline-block" }}/>
-            </Button>  {stat.name}
+            <Link to={`/player/${this.props.accountId}/tank/${stat.tankId}`}>
+              <Glyphicon glyph="signal" style={{ "display": "inline-block" }}/> {stat.name}
+            </Link>
           </td>
           <td><b>{stat.level}</b></td>
           <td><img src={"img/" + stat.type + ".png"} alt="Tank type" /></td>

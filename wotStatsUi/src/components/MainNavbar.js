@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 
+import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 import { selectPlayer } from '../actions/playerActions.js';
@@ -22,7 +23,9 @@ class MainNavbar extends Component {
             <Nav pullRight>
               <NavDropdown title={player} id="basic-nav-dropdown">
                 { players.map((player, index) =>
-                  <MenuItem key={player.account_id} onSelect={() => this.props.selectPlayer(player)}>{player.player}</MenuItem>
+                  <MenuItem>
+                    <Link to={ `/player/${player.account_id}/stats` }>{player.player}</Link>
+                  </MenuItem>
                 )}
               </NavDropdown>
               <NavItem href="#">EU</NavItem>

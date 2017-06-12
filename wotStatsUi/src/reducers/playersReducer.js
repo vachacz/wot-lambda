@@ -11,7 +11,8 @@ export default function players(state={
       return {...state, players: action.payload.players}
 
     case "PLAYER_SELECTED":
-      return {...state, player: action.payload.player, accountId: action.payload.account_id}
+      let player = state.players.find((player) => player.account_id === action.payload)
+      return {...state, player: player.player, accountId: player.account_id}
 
     default:
       return state;
