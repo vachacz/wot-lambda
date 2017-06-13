@@ -27,6 +27,7 @@ class PlayerTankStatsTab extends Component {
     }
   }
 
+
   renderStatTable() {
     var { playerTankStats, cellVisibility, charts, deltaMode, columnVisibility, tankSelection, maxResults } = this.props.playerTankStats;
 
@@ -63,5 +64,5 @@ class PlayerTankStatsTab extends Component {
 
 export default connect(
   (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player }),
-  { selectTankTier, selectTankType, selectTankNation, selectTank, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults }
+  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults, selectTank }
 )(PlayerTankStatsTab);

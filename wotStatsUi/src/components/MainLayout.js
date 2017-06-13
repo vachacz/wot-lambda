@@ -36,10 +36,9 @@ class MainLayout extends Component {
 
         <div className="tab-content">
           <Switch>
-            <Route path={ `${match.url}/stats` } component={PlayerStatsTab}/>
-            <Route path={ `${match.url}/tanks` } component={PlayerTanksTab}/>
-            <Route path={ `${match.url}/tank` } component={PlayerTankStatsTab}/>
-            <Route path={ `${match.url}/tank/:tank` } component={PlayerTankStatsTab}/>
+            <Route path="/player/:accountId/stats" component={PlayerStatsTab}/>
+            <Route path="/player/:accountId/tanks" component={PlayerTanksTab}/>
+            <Route path="/player/:accountId/tank/:tankId?" component={PlayerTankStatsTab}/>
           </Switch>
         </div>
 

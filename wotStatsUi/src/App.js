@@ -23,7 +23,7 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <MainNavbar />
-          <Route path="/" exact={true} component={SelectPlayer} />
+          <Route path="/" exact component={SelectPlayer} />
           <Route path="/player/:accountId" component={MainLayout} />
         </div>
       </BrowserRouter>
