@@ -25,7 +25,7 @@ export default class TanksTable extends Component {
       if (!this.props.columnVisibility[def.group]) {
         return null;
       }
-      return <td>{def.header}</td>
+      return <td key={ "header-" + def.property }>{def.header}</td>
     });
   }
 
@@ -49,7 +49,7 @@ export default class TanksTable extends Component {
       }
       let _this = this;
       return (
-        <td>
+        <td key={ "sort-" + def.property }>
           <Button onClick={() => _this.props.sortTanksHandler(def.property)} bsStyle="default" bsSize="xsmall">
             <Glyphicon glyph="sort" />
           </Button>
@@ -64,9 +64,9 @@ export default class TanksTable extends Component {
         return null;
       }
       if ("wn8ColorRange" in def) {
-        return <Wn8Cell value={ stat[def.property] } />
+        return <Wn8Cell key={ "stat-wn8-" + stat.timestamp } value={ stat[def.property] } />
       }
-      return <td>{ stat[def.property] }</td>
+      return <td key={ "state-" + def.property + "-" + stat.timestamp }>{ stat[def.property] }</td>
     });
   }
 
@@ -74,9 +74,9 @@ export default class TanksTable extends Component {
     return this.props.tanks.map((stat) => {
       let _this = this;
       return (
-        <tr>
+        <tr key={ "statrow-" + stat.tankId }>
           <DateCell timestamp={stat.timestamp} />
-          <td style={{ "text-align" : "left" }}>
+          <td style={{ "textAlign" : "left" }}>
             <Link to={`/player/${this.props.accountId}/tank/${stat.tankId}`}>
               <Glyphicon glyph="signal" style={{ "display": "inline-block" }}/> {stat.name}
             </Link>

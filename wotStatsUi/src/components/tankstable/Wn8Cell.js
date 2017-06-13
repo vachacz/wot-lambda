@@ -15,7 +15,11 @@ export default class Wn8Cell extends Component {
   }
 
   render() {
-    return ( <td><span className={this.getWn8Class(this.props.value)}>{this.props.value}</span></td> )
+    return (
+      <td>
+        <span className={this.getWn8Class(this.props.value)}>{this.props.value}</span>
+      </td>
+    )
   }
 
 }

@@ -21,7 +21,7 @@ class MainNavbar extends Component {
             <Nav pullRight>
               <NavDropdown title={player} id="basic-nav-dropdown">
                 { players.map((player, index) =>
-                  <MenuItem>
+                  <MenuItem key={ "menuitem-" + player.account_id }>
                     <Link to={ `/player/${player.account_id}/stats` }>{player.player}</Link>
                   </MenuItem>
                 )}
