@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 import { Route, Switch } from 'react-router-dom'
 
 import { selectPlayer } from '../actions/playerActions.js';
+import { fetchTanks } from '../actions/playerTankStatsActions.js';
 
 import NavTab from '../components/util/NavTab.js';
 import PlayerStatsTab from '../components/tabs/PlayerStatsTab.js';
@@ -12,6 +13,7 @@ import PlayerTankStatsTab from '../components/tabs/PlayerTankStatsTab.js';
 class MainLayout extends Component {
 
   componentWillMount() {
+    this.props.fetchTanks()
     this.props.selectPlayer(this.props.match.params.accountId)
   }
 
@@ -50,5 +52,5 @@ class MainLayout extends Component {
 
 export default connect(
   (store) => ({ accountId: store.players.accountId }),
-  { selectPlayer }
+  { selectPlayer, fetchTanks }
 )(MainLayout);

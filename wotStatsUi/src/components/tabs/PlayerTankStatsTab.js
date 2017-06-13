@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 
 import { playerTanksStatsModelDefinition } from '../../const/Const.js';
-import { selectTankTier, selectTankType, selectTankNation, selectTank, fetchTanks,
+import { selectTankTier, selectTankType, selectTankNation, selectTank,
     toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults } from '../../actions/playerTankStatsActions.js';
 
 import StatPresetSelector from '../selectors/StatPresetSelector.js';
@@ -18,7 +18,6 @@ const noStatsWarning = <div className="App-clear"><h3>No stats for this selectio
 class PlayerTankStatsTab extends Component {
 
   componentWillMount() {
-    this.props.fetchTanks()
     this.props.selectTank(this.props.match.params.tankId)
   }
 
@@ -64,5 +63,5 @@ class PlayerTankStatsTab extends Component {
 
 export default connect(
   (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player }),
-  { selectTankTier, selectTankType, selectTankNation, selectTank, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults, fetchTanks }
+  { selectTankTier, selectTankType, selectTankNation, selectTank, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults }
 )(PlayerTankStatsTab);
