@@ -20,7 +20,6 @@ class PlayerTanksTab extends Component {
 
     return (
       <div>
-        player tanks table
         <TankCriteriaSelector criteriaSelection={criteriaSelection}
            selectTankTier={this.props.selectTankTier}
            selectTankType={this.props.selectTankType}
