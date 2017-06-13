@@ -9,13 +9,13 @@ export default class ChartPanel extends Component {
     return this.props.charts.map((chart) => {
       switch (chart.type) {
          case "effective":
-            return <EffectiveStatChart {...chart} />
+            return <EffectiveStatChart {...chart} key={ "chart-eff-" + chart.title } />
          case "comparison":
-            return <ComparisonChart {...chart} />;
+            return <ComparisonChart {...chart} key={ "chart-comp-" + chart.title } />;
          case "stat":
-            return <SingleStatChart {...chart} />;
+            return <SingleStatChart {...chart} key={ "chart-stat-" + chart.title } />;
          case "category":
-            return <div className="App-clear" style={{ width: "100%" }}><h3>{chart.categoryTitle}</h3></div>;
+            return <div className="App-clear" style={{ width: "100%" }} key={ "category-" + chart.categoryTitle }><h3>{chart.categoryTitle}</h3></div>;
          default:
             return <span>Unknown chart</span>;
        }

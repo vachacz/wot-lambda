@@ -19,7 +19,7 @@ export default class StatTable extends Component {
 
   generateHeaderCells() {
     return this.props.definition.map((def) => {
-      return <StatHeader group={def.group} desc={def.header} columnVisibility={this.props.columnVisibility} />
+      return <StatHeader group={def.group} desc={def.header} columnVisibility={this.props.columnVisibility} key={ "header-" + def.property }/>
     });
   }
 
@@ -34,7 +34,9 @@ export default class StatTable extends Component {
         additionalProps["wn8ColorRange"] = def.wn8ColorRange
       }
 
-      return <StatCell stats={stat} group={def.group} property={def.property} cellVisibility={this.props.cellVisibility} columnVisibility={this.props.columnVisibility} {...additionalProps} />
+      return <StatCell stats={stat} group={def.group} property={def.property} key={ "cell-" + def.property + "-" + stat.timestamp }
+        cellVisibility={this.props.cellVisibility}
+        columnVisibility={this.props.columnVisibility} {...additionalProps} />
     });
   }
 
