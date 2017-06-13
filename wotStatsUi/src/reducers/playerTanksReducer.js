@@ -39,8 +39,8 @@ export default function playerTanks(state={
 
   function sortTanksByProperty(tanks, property, descending) {
     tanks.sort((a, b) => {
-      let a1 = parseInt(a[property])
-      let b1 = parseInt(b[property])
+      let a1 = parseInt(a[property], 10)
+      let b1 = parseInt(b[property], 10)
       if (descending) {
         return (a1 < b1) ? 1 : ((b1 < a1) ? -1 : 0);
       }

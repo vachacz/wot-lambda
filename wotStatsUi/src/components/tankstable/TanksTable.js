@@ -82,8 +82,8 @@ export default class TanksTable extends Component {
             </Link>
           </td>
           <td><b>{stat.level}</b></td>
-          <td><img src={"img/" + stat.type + ".png"} alt="Tank type" /></td>
-          <td><img src={"img/" + stat.nation + ".png"} alt="Nation" /></td>
+          <td><img src={"/img/" + stat.type + ".png"} alt="Tank type" /></td>
+          <td><img src={"/img/" + stat.nation + ".png"} alt="Nation" /></td>
           { this.generateCells(stat) }
         </tr>
       )

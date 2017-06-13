@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 import { BrowserRouter, Route } from 'react-router-dom'
 
 import { fetchPlayers } from './actions/playerActions.js';
+import { fetchTanks } from './actions/playerTankStatsActions.js';
 
 import MainNavbar from './components/MainNavbar.js';
 import MainLayout from './components/MainLayout.js';
@@ -14,6 +15,7 @@ class App extends Component {
 
   componentWillMount() {
     this.props.fetchPlayers()
+    this.props.fetchTanks()
   }
 
   render() {
@@ -31,5 +33,5 @@ class App extends Component {
 
 export default connect(
   (store) => ({ accountId: store.players.accountId }),
-  { fetchPlayers }
+  { fetchPlayers, fetchTanks }
 )(App);
