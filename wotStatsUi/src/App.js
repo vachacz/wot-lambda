@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import { fetchPlayers } from './actions/playerActions.js';
-import { fetchTanks } from './actions/playerTankStatsActions.js';
+import { loadAppInitialState } from './actions/appActions.js';
 
 import MainNavbar from './components/MainNavbar.js';
 import MainLayout from './components/MainLayout.js';
@@ -14,8 +13,7 @@ import './App.css';
 class App extends Component {
 
   componentWillMount() {
-    this.props.fetchPlayers()
-    this.props.fetchTanks()
+    this.props.loadAppInitialState()
   }
 
   render() {
@@ -33,5 +31,5 @@ class App extends Component {
 
 export default connect(
   (store) => ({ accountId: store.players.accountId }),
-  { fetchPlayers, fetchTanks }
+  { loadAppInitialState }
 )(App);

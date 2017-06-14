@@ -1,16 +1,6 @@
 import axios from 'axios';
 import { baseurl } from '../const/Const.js';
 
-export function fetchTanks() {
-  return dispatch => {
-    axios.get(baseurl + "/tanks")
-      .then((response) => {
-        dispatch({type: "FETCH_TANKS_FULFILLED", payload: response.data})
-      }
-    )
-  }
-}
-
 export function toggleGroupVisibility(group) {
   return { type: "TOGGLE_TANK_STATS_COLUMN_GROUP_VISIBILITY", payload: group }
 }
