@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import {withRouter} from "react-router-dom";
 
 import { Glyphicon } from 'react-bootstrap';
 import Select from 'react-select';
 
 import { tiers, tanktypes, nations } from '../../const/Const.js';
 
-export default class TankSelector extends Component {
+class TankSelector extends Component {
 
   renderTankType(option) {
     return <span><img src={"img/" + option.value + ".png"} alt="Tank type" /> {option.label}</span>;
@@ -13,6 +14,14 @@ export default class TankSelector extends Component {
 
   renderNation(option) {
     return <span><img src={"img/" + option.value + ".png"} alt="Nation" /> {option.label}</span>;
+  }
+
+  gotoTank(val) {
+    if (val) {
+      this.props.history.push("/player/" + this.props.accountId + "/tank/" + val.tank_id);
+    } else {
+      this.props.history.push("/player/" + this.props.accountId + "/tank");
+    }
   }
 
   render() {
@@ -34,9 +43,11 @@ export default class TankSelector extends Component {
         </div>
         <div className="App-tankselect-last">
           <div className="App-menugroup-header">Tank selection <Glyphicon glyph="question-sign" /></div>
-          <Select name="select-tank" value={tank} options={this.props.tanks} onChange={(val) => this.props.selectTank(val ? val.tank_id : null)} labelKey="name" valueKey="tank_id" />
+          <Select name="select-tank" value={tank} options={this.props.tanks} onChange={(val) => this.gotoTank(val)} labelKey="name" valueKey="tank_id" />
         </div>
       </div>
     );
   }
 }
+
+export default withRouter(TankSelector);

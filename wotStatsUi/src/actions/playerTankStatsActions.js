@@ -16,7 +16,7 @@ export function selectDeltaMode(mode) {
 export function selectMaxResults(results) {
   return (dispatch, getState) => {
     dispatch({ type: "TANK_STATS_MAX_RESULTS_SELECTED", payload: results })
-    selectTank(getState().playerTankStats.tankSelection.tank.tank_id)(dispatch, getState)
+    selectTank(getState().players.accountId, getState().playerTankStats.tankSelection.tank.tank_id)(dispatch, getState)
   }
 }
 
@@ -32,18 +32,19 @@ export function selectTankNation(selectedNations) {
   return { type: "TANK_NATION_SELECTED", payload: selectedNations }
 }
 
-export function selectTank(tankId) {
+export function selectTank(accountId, tankId) {
   if (tankId == null) {
     return (dispatch) => {
       dispatch({ type: "TANK_SELECTED", payload: "" })
       dispatch({ type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: { playerTankStats: [] }})
     }
   }
-  return (dispatch, getState) => axios.get(baseurl + "/player/" + getState().players.accountId + "/tank/" + tankId + "/stats?maxresults=" + getState().playerTankStats.maxResults)
-    .then((response) => {
-      dispatch({ type: "TANK_SELECTED", payload: tankId })
-      dispatch({ type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: response.data })
-    }
-  )
+  return (dispatch, getState) => {
+    axios.get(baseurl + "/player/" + accountId + "/tank/" + tankId + "/stats?maxresults=" + getState().playerTankStats.maxResults)
+      .then((response) => {
+        dispatch({ type: "TANK_SELECTED", payload: tankId })
+        dispatch({ type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: response.data })
+      })
+  }
 }
 

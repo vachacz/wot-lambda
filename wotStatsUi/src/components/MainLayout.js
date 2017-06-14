@@ -18,19 +18,18 @@ class MainLayout extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let nextParams = nextProps.match.params;
-    let params = this.props.match.params;
-    let accountIdHasChanged = nextParams.accountId !== params.accountId;
-    let initialStateLoaded = !this.props.initialStateLoaded && nextProps.initialStateLoaded && nextParams.accountId;
+    let accountIdHasChanged = nextProps.match.params.accountId !== this.props.match.params.accountId;
+    let initialStateLoaded = !this.props.initialStateLoaded && nextProps.initialStateLoaded;
 
     if (accountIdHasChanged || initialStateLoaded) {
-      this.props.selectPlayer(nextParams.accountId)
+      this.props.selectPlayer(nextProps.match.params.accountId)
     }
   }
 
   render() {
     let { match } = this.props;
     let { accountId } = match.params;
+    let tankIdParam = this.props.tankId ? "/" + this.props.tankId : "";
 
     return (
       <div className="container">
@@ -38,7 +37,7 @@ class MainLayout extends Component {
         <ul className="nav nav-tabs">
           <NavTab to={ `/player/${accountId}/stats` }>Player</NavTab>
           <NavTab to={ `/player/${accountId}/tanks` }>Tanks</NavTab>
-          <NavTab to={ `/player/${accountId}/tank` }>Tank stats</NavTab>
+          <NavTab to={ `/player/${accountId}/tank${tankIdParam}` }>Tank stats</NavTab>
         </ul>
 
         <div className="tab-content">
@@ -55,6 +54,6 @@ class MainLayout extends Component {
 }
 
 export default connect(
-  (store) => ({ initialStateLoaded: store.app.initialStateLoaded }),
+  (store) => ({ initialStateLoaded: store.app.initialStateLoaded, tankId: store.playerTankStats.tankSelection.tank.tank_id }),
   { selectPlayer }
 )(MainLayout);

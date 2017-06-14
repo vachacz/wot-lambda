@@ -18,15 +18,21 @@ const noStatsWarning = <div className="App-clear"><h3>No stats for this selectio
 class PlayerTankStatsTab extends Component {
 
   componentWillMount() {
-    this.props.selectTank(this.props.match.params.tankId)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.tankId !== this.props.match.params.tankId) {
-      this.props.selectTank(nextProps.match.params.tankId)
+    if (this.props.initialStateLoaded) {
+      let { tankId, accountId } = this.props.match.params;
+      this.props.selectTank(accountId, tankId)
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    let tankIdHasChanged = nextProps.match.params.tankId !== this.props.match.params.tankId;
+    let initialStateLoaded = !this.props.initialStateLoaded && nextProps.initialStateLoaded;
+
+    if (tankIdHasChanged || initialStateLoaded) {
+      let { tankId, accountId } = nextProps.match.params;
+      this.props.selectTank(accountId, tankId)
+    }
+  }
 
   renderStatTable() {
     var { playerTankStats, cellVisibility, charts, deltaMode, columnVisibility, tankSelection, maxResults } = this.props.playerTankStats;
@@ -55,7 +61,8 @@ class PlayerTankStatsTab extends Component {
           selectTank={this.props.selectTank}
           selectTankTier={this.props.selectTankTier}
           selectTankType={this.props.selectTankType}
-          selectTankNation={this.props.selectTankNation} />
+          selectTankNation={this.props.selectTankNation}
+          accountId={this.props.accountId}/>
         { playerTankStats.length === 0 ? noStatsWarning : this.renderStatTable() }
       </div>
     );
@@ -63,6 +70,6 @@ class PlayerTankStatsTab extends Component {
 }
 
 export default connect(
-  (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player }),
+  (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player, accountId: store.players.accountId, initialStateLoaded: store.app.initialStateLoaded }),
   { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults, selectTank }
 )(PlayerTankStatsTab);
