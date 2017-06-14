@@ -12,12 +12,19 @@ import PlayerTankStatsTab from '../components/tabs/PlayerTankStatsTab.js';
 class MainLayout extends Component {
 
   componentWillMount() {
-    this.props.selectPlayer(this.props.match.params.accountId)
+    if (this.props.initialStateLoaded) {
+      this.props.selectPlayer(this.props.match.params.accountId)
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.accountId !== this.props.match.params.accountId) {
-      this.props.selectPlayer(nextProps.match.params.accountId)
+    let nextParams = nextProps.match.params;
+    let params = this.props.match.params;
+    let accountIdHasChanged = nextParams.accountId !== params.accountId;
+    let initialStateLoaded = !this.props.initialStateLoaded && nextProps.initialStateLoaded && nextParams.accountId;
+
+    if (accountIdHasChanged || initialStateLoaded) {
+      this.props.selectPlayer(nextParams.accountId)
     }
   }
 
@@ -48,6 +55,6 @@ class MainLayout extends Component {
 }
 
 export default connect(
-  (store) => ({ accountId: store.players.accountId, tanks: store.playerTanks.playerTanks }),
+  (store) => ({ initialStateLoaded: store.app.initialStateLoaded }),
   { selectPlayer }
 )(MainLayout);
