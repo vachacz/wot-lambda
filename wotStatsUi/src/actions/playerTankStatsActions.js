@@ -16,7 +16,13 @@ export function selectDeltaMode(mode) {
 export function selectMaxResults(results) {
   return (dispatch, getState) => {
     dispatch({ type: "TANK_STATS_MAX_RESULTS_SELECTED", payload: results })
-    selectTank(getState().players.accountId, getState().playerTankStats.tankSelection.tank.tank_id)(dispatch, getState)
+    
+    let accountId = getState().players.accountId
+    let tankId = getState().playerTankStats.tankSelection.tank.tank_id
+    axios.get(baseurl + "/player/" + accountId + "/tank/" + tankId + "/stats?maxresults=" + getState().playerTankStats.maxResults)
+      .then((response) => {
+        dispatch({ type: "FETCH_PLAYER_TANK_STATS_FULFILLED", payload: response.data })
+      })
   }
 }
 
@@ -40,6 +46,7 @@ export function selectTank(accountId, tankId) {
     }
   }
   return (dispatch, getState) => {
+    dispatch({ type: "FETCH_TANKS_REQUEST" })
     axios.get(baseurl + "/player/" + accountId + "/tank/" + tankId + "/stats?maxresults=" + getState().playerTankStats.maxResults)
       .then((response) => {
         dispatch({ type: "TANK_SELECTED", payload: tankId })
@@ -47,4 +54,3 @@ export function selectTank(accountId, tankId) {
       })
   }
 }
-

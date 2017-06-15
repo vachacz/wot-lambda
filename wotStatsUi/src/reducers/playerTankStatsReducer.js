@@ -85,7 +85,7 @@ export default function playerTankStats(state={
       } else {
         newState = { ...state.tankSelection, tank: "" }
       }
-      return {...state, tankSelection: newState }
+      return {...state, tankSelection: newState}
     }
 
     case "FETCH_PLAYER_TANK_STATS_FULFILLED": {

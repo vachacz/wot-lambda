@@ -28,7 +28,7 @@ class TankSelector extends Component {
     var { tier, type, nation, tank } = this.props.tankSelection;
 
     return (
-      <div>
+      <div className="clearfix">
         <div className="App-tankselect">
           <div className="App-menugroup-header">Tier filter <Glyphicon glyph="question-sign" /></div>
           <Select name="select-tier" value={tier} options={tiers} multi simpleValue onChange={(val) => this.props.selectTankTier(val)} />

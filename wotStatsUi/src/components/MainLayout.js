@@ -41,19 +41,26 @@ class MainLayout extends Component {
         </ul>
 
         <div className="tab-content">
-          <Switch>
-            <Route path="/player/:accountId/stats" component={PlayerStatsTab}/>
-            <Route path="/player/:accountId/tanks" component={PlayerTanksTab}/>
-            <Route path="/player/:accountId/tank/:tankId?" component={PlayerTankStatsTab}/>
-          </Switch>
+          { this.props.isFetchingPlayer || !this.props.initialStateLoaded ? <div className="loader"/> : this.renderTabContent() }
         </div>
 
       </div>
     );
   }
+
+  renderTabContent() {
+     return (
+       <Switch>
+         <Route path="/player/:accountId/stats" component={PlayerStatsTab}/>
+         <Route path="/player/:accountId/tanks" component={PlayerTanksTab}/>
+         <Route path="/player/:accountId/tank/:tankId?" component={PlayerTankStatsTab}/>
+       </Switch>
+     );
+  }
 }
 
 export default connect(
-  (store) => ({ initialStateLoaded: store.app.initialStateLoaded, tankId: store.playerTankStats.tankSelection.tank.tank_id }),
+  (store) => ({ initialStateLoaded: store.app.initialStateLoaded, tankId: store.playerTankStats.tankSelection.tank.tank_id,
+    isFetchingPlayer: store.app.isFetchingPlayer }),
   { selectPlayer }
 )(MainLayout);

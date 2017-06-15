@@ -13,8 +13,6 @@ import StatTable from '../stattable/StatTable.js';
 import StatChartPanel from '../charts/StatChartPanel.js';
 import TankSelector from '../selectors/TankSelector.js';
 
-const noStatsWarning = <div className="App-clear"><h3>No stats for this selection!</h3></div>
-
 class PlayerTankStatsTab extends Component {
 
   componentWillMount() {
@@ -34,8 +32,31 @@ class PlayerTankStatsTab extends Component {
     }
   }
 
+  render() {
+    var { tanksFiltered, tankSelection } = this.props.playerTankStats;
+
+    return (
+      <div>
+        <TankSelector tanks={tanksFiltered} tankSelection={tankSelection}
+          selectTank={this.props.selectTank}
+          selectTankTier={this.props.selectTankTier}
+          selectTankType={this.props.selectTankType}
+          selectTankNation={this.props.selectTankNation}
+          accountId={this.props.accountId}/>
+
+        { this.renderStatTable() }
+      </div>
+    );
+  }
+
   renderStatTable() {
     var { playerTankStats, cellVisibility, charts, deltaMode, columnVisibility, tankSelection, maxResults } = this.props.playerTankStats;
+    if (this.props.isFetchingTank || !this.props.initialStateLoaded) {
+      return <div className="loader"/>;
+    }
+    if (playerTankStats.length === 0) {
+      return <div className="App-clear"><h3>No stats for this selection!</h3></div>;
+    }
 
     return (
       <div>
@@ -51,25 +72,10 @@ class PlayerTankStatsTab extends Component {
       </div>
     );
   }
-
-  render() {
-    var { tanksFiltered, tankSelection, playerTankStats } = this.props.playerTankStats;
-
-    return (
-      <div>
-        <TankSelector tanks={tanksFiltered} tankSelection={tankSelection}
-          selectTank={this.props.selectTank}
-          selectTankTier={this.props.selectTankTier}
-          selectTankType={this.props.selectTankType}
-          selectTankNation={this.props.selectTankNation}
-          accountId={this.props.accountId}/>
-        { playerTankStats.length === 0 ? noStatsWarning : this.renderStatTable() }
-      </div>
-    );
-  }
 }
 
 export default connect(
-  (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player, accountId: store.players.accountId, initialStateLoaded: store.app.initialStateLoaded }),
+  (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player, accountId: store.players.accountId, initialStateLoaded: store.app.initialStateLoaded,
+   isFetchingTank: store.app.isFetchingTank }),
   { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults, selectTank }
 )(PlayerTankStatsTab);

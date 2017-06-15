@@ -12,7 +12,7 @@ export default function players(state={
 
     case "PLAYER_SELECTED": {
       let player = state.players.find((player) => player.account_id === action.payload)
-      return {...state, player: player.player, accountId: player.account_id}
+      return { ...state, player: player.player, accountId: player.account_id }
     }
 
     default:
