@@ -8,11 +8,11 @@ import { tiers, tanktypes, nations } from '../../const/Const.js';
 export default class TankCriteriaSelector extends Component {
 
   renderTankType(option) {
-    return <span><img src={"img/" + option.value + ".png"} alt="Tank type" /> {option.label}</span>;
+    return <span><img src={"/img/" + option.value + ".png"} alt="Tank type" /> {option.label}</span>;
   }
 
   renderNation(option) {
-    return <span><img src={"img/" + option.value + ".png"} alt="Nation" /> {option.label}</span>;
+    return <span><img src={"/img/" + option.value + ".png"} alt="Nation" /> {option.label}</span>;
   }
 
   render() {
