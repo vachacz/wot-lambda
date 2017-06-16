@@ -19,7 +19,7 @@ export default function app(state={
       return {...state, isFetchingPlayer: true}
     }
 
-    case "PLAYER_SELECTED": {
+    case "PLAYER_SELECTION_COMPLETE": {
       return { ...state, isFetchingPlayer: false }
     }
 

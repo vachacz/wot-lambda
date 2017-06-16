@@ -10,8 +10,8 @@ export default function players(state={
     case "FETCH_PLAYERS_FULFILLED":
       return {...state, players: action.payload.players}
 
-    case "PLAYER_SELECTED": {
-      let player = state.players.find((player) => player.account_id === action.payload)
+    case "PLAYER_SELECTION_COMPLETE": {
+      let player = state.players.find((player) => player.account_id === action.payload.accountId)
       return { ...state, player: player.player, accountId: player.account_id }
     }
 

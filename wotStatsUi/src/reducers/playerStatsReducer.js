@@ -21,12 +21,22 @@ export default function playerStats(state={
     maxResults: 10
   }, action) {
 
+  function refreshStats(stats) {
+    let newStats = recalculateStats(playerStatsModelDefinition, stats, state.deltaMode)
+    let charts = recalculateCharts(playerStatsChartsDefinition, newStats)
+    return {...state, playerStats: newStats, charts: charts}
+  }
+
   switch (action.type) {
 
-    case "FETCH_PLAYER_STATS_FULFILLED": {
-      let newStats = recalculateStats(playerStatsModelDefinition, action.payload.playerStats, state.deltaMode)
-      let charts = recalculateCharts(playerStatsChartsDefinition, newStats)
-      return {...state, playerStats: newStats, charts: charts}
+    case "PLAYER_SELECTION_COMPLETE": {
+      return refreshStats(action.payload.stats.playerStats)
+    }
+
+    case "PLAYER_MAX_RESULTS_REFRESH_COMPLETE": {
+      let newState = refreshStats(action.payload.stats.playerStats)
+      newState["maxResults"] = action.payload.maxResults
+      return newState
     }
 
     case "TOGGLE_STATS_COLUMN_GROUP_VISIBILITY": {
@@ -43,10 +53,6 @@ export default function playerStats(state={
       let newStats = recalculateStats(playerStatsModelDefinition, state.playerStats, action.payload)
       let charts = recalculateCharts(playerStatsChartsDefinition, newStats)
       return {...state, deltaMode: action.payload, playerStats: newStats, charts: charts}
-    }
-
-    case "MAX_RESULTS_SELECTED": {
-      return {...state, maxResults: action.payload }
     }
 
     default:

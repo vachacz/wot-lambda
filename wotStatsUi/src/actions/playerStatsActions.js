@@ -15,16 +15,12 @@ export function selectDeltaMode(mode) {
 
 export function selectMaxResults(results) {
   return (dispatch, getState) => {
-    dispatch({type: "MAX_RESULTS_SELECTED", payload: results})
-    refreshPlayerStats()(dispatch, getState)
-  }
-}
-
-export function refreshPlayerStats() {
-  return (dispatch, getState) => {
-    axios.get(baseurl + "/player/" + getState().players.accountId + "/stats?maxresults=" + getState().playerStats.maxResults)
+    axios.get(baseurl + "/player/" + getState().players.accountId + "/stats?maxresults=" + results)
       .then((response) => {
-        dispatch({type: "FETCH_PLAYER_STATS_FULFILLED", payload: response.data})
+        dispatch({type: "PLAYER_MAX_RESULTS_REFRESH_COMPLETE", payload: {
+          maxResults: results,
+          stats: response.data
+        }})
       }
     )
   }

@@ -9,9 +9,11 @@ export function selectPlayer(accountId) {
       axios.get(baseurl + "/player/" + accountId + "/tanks")
     ]).then(
       axios.spread((stats, tanks) => {
-        dispatch({ type: "PLAYER_SELECTED", payload: accountId })
-        dispatch({ type: "FETCH_PLAYER_STATS_FULFILLED", payload: stats.data })
-        dispatch({ type: "FETCH_PLAYER_TANKS_FULFILLED", payload: tanks.data })
+        dispatch({ type: "PLAYER_SELECTION_COMPLETE", payload: {
+          accountId: accountId,
+          stats: stats.data,
+          tanks: tanks.data
+        }});
       })
     );
   }
