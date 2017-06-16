@@ -7,7 +7,7 @@ export default function players(state={
 
   switch (action.type) {
 
-    case "FETCH_PLAYERS_FULFILLED":
+    case "INITIAL_STATE_LOADED":
       return {...state, players: action.payload.players}
 
     case "PLAYER_SELECTION_COMPLETE": {

@@ -8,9 +8,10 @@ export function loadAppInitialState() {
       axios.get(baseurl + "/tanks")
     ]).then(
       axios.spread((players, tanks) => {
-        dispatch({ type: "FETCH_PLAYERS_FULFILLED", payload: players.data })
-        dispatch({ type: "FETCH_TANKS_FULFILLED", payload: tanks.data })
-        dispatch({ type: "INITIAL_STATE_LOADED", payload: true })
+        dispatch({ type: "INITIAL_STATE_LOADED", payload: {
+          players: players.data.players,
+          tanks: tanks.data.tanks
+        }})
       })
     );
   }

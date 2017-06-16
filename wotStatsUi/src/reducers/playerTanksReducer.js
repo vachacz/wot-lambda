@@ -61,7 +61,7 @@ export default function playerTanks(state={
 
   switch (action.type) {
 
-    case "FETCH_TANKS_FULFILLED": {
+    case "INITIAL_STATE_LOADED": {
       let tankMap = action.payload.tanks.reduce(function(map, obj) {
         map[obj.tank_id] = obj;
         return map;

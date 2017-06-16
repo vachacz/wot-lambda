@@ -13,12 +13,12 @@ export function selectDeltaMode(mode) {
   return { type: "DELTA_MODE_SELECTED", payload: mode }
 }
 
-export function selectMaxResults(results) {
+export function selectMaxResults(newMaxResults) {
   return (dispatch, getState) => {
-    axios.get(baseurl + "/player/" + getState().players.accountId + "/stats?maxresults=" + results)
+    axios.get(baseurl + "/player/" + getState().players.accountId + "/stats?maxresults=" + newMaxResults)
       .then((response) => {
         dispatch({type: "PLAYER_MAX_RESULTS_REFRESH_COMPLETE", payload: {
-          maxResults: results,
+          maxResults: newMaxResults,
           stats: response.data
         }})
       }
