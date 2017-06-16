@@ -16,7 +16,7 @@ class MainNavbar extends Component {
               my.WoTStats.online
             </Navbar.Brand>
             <Navbar.Text>
-              <Navbar.Link href="mailto:support@my.wotstats.online">Support</Navbar.Link>
+              <Navbar.Link href="mailto:support@my.wotstats.online">Contact</Navbar.Link>
             </Navbar.Text>
             <Navbar.Toggle />
           </Navbar.Header>

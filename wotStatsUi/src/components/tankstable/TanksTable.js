@@ -25,6 +25,7 @@ export default class TanksTable extends Component {
       if (this.props.columnVisibility[def.group]) {
         return <td key={ "header-" + def.property }>{def.header}</td>
       }
+      return null
     });
   }
 
@@ -46,6 +47,7 @@ export default class TanksTable extends Component {
       if (this.props.columnVisibility[def.group]) {
         return <td key={ "sort-" + def.property }>{ this.generateSortButton(def.property) }</td>
       }
+      return null
     });
   }
 
@@ -66,6 +68,7 @@ export default class TanksTable extends Component {
         }
         return <td key={ "state-" + def.property + "-" + stat.timestamp }>{ stat[def.property] }</td>
       }
+      return null
     });
   }
 
