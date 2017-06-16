@@ -2,7 +2,7 @@ export default function playerTanks(state={
     allTanksMap: {},
     allPlayerTanks: [],
     playerTanks: [],
-    sortProperty: "",
+    sortProperty: "battles",
     sortDescending: true,
     columnVisibility: {
       max: false,
@@ -78,6 +78,7 @@ export default function playerTanks(state={
         return { ...tankStats }
       });
       let filtered = filterTanks(playerTanks, state.criteriaSelection);
+      sortTanksByProperty(filtered, state.sortProperty, state.sortDescending);
       return {...state, playerTanks: filtered, allPlayerTanks: playerTanks }
     }
 

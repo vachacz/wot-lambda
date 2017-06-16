@@ -76,11 +76,13 @@ html[xmlns] .clearfix {
     width: 160px;
 }
 
-.App-stats-table > thead td {
+.App-stats-table > thead > tr > td {
     min-width: 80px;
     max-width: 80px;
     width: 80px;
-    vertical-align: top;
+    vertical-align: bottom;
+    border-bottom-width: 0px !important;
+    border-top-width: 0px !important;
 }
 
 .App-stats-table td > span {

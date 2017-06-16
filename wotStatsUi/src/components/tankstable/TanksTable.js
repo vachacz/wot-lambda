@@ -14,7 +14,7 @@ export default class TanksTable extends Component {
         <td className="wide-column">name</td>
         <td className="small-column">tier</td>
         <td className="small-column">type</td>
-        <td className="small-column">nation</td>
+        <td className="small-column">flag</td>
         { this.generateHeaderCells() }
       </tr>
     );
@@ -92,7 +92,7 @@ export default class TanksTable extends Component {
   render() {
     return (
       <div className="App-clear">
-        <Table bsClass="App-stats-table table-striped table-bordered table-condensed table-hover">
+        <Table bsClass="table-striped table-bordered table-condensed table-hover App-stats-table">
           <thead>{ this.generateHeaderRow() }{ this.generateSortRow() }</thead>
           <tbody>{ this.generateStatRows() }</tbody>
         </Table>
