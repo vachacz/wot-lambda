@@ -77,9 +77,14 @@ export default function playerTankStats(state={
       return {...state, tankSelection: newState, tanksFiltered: filtered }
     }
 
+    case "TANK_SELECTION_REMOVED": {
+      let newSelection = { ...state.tankSelection, tank: "" }
+      return {...state, playerTankStats: [], charts: [], tankSelection: newSelection }
+    }
+
     case "TANK_SELECTION_COMPLETE": {
       let tankId = action.payload.tankId;
-      let newSelection = { ...state.tankSelection, tank: tankId ? state.tankMap[tankId] : "" }
+      let newSelection = { ...state.tankSelection, tank: state.tankMap[tankId] }
       let newStats = recalculateStats(playerTanksStatsModelDefinition, action.payload.stats.playerTankStats, state.deltaMode)
 
       let expectedTankWnStats = state.tankMap[tankId]

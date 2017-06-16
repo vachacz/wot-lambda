@@ -41,15 +41,11 @@ export function selectTankNation(selectedNations) {
   return { type: "TANK_NATION_SELECTED", payload: selectedNations }
 }
 
+export function deselectTank() {
+  return { type: "TANK_SELECTION_REMOVED" }
+}
+
 export function selectTank(accountId, tankId) {
-  if (tankId == null) {
-    return (dispatch) => {
-      dispatch({ type: "TANK_SELECTION_COMPLETE", payload: {
-        tankId: "",
-        stats: { playerTankStats: [] }
-      }});
-    }
-  }
   return (dispatch, getState) => {
     dispatch({ type: "TANK_SELECTION_REQUEST" })
     axios.get(baseurl + "/player/" + accountId + "/tank/" + tankId + "/stats?maxresults=" + getState().playerTankStats.maxResults)

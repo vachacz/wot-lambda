@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 
 import { playerTanksStatsModelDefinition } from '../../const/Const.js';
-import { selectTankTier, selectTankType, selectTankNation, selectTank,
+import { selectTankTier, selectTankType, selectTankNation, selectTank, deselectTank,
     toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults } from '../../actions/playerTankStatsActions.js';
 
 import StatPresetSelector from '../selectors/StatPresetSelector.js';
@@ -15,10 +15,18 @@ import TankSelector from '../selectors/TankSelector.js';
 
 class PlayerTankStatsTab extends Component {
 
+  applyTankSelection(tankId, accountId) {
+    if (tankId) {
+      this.props.selectTank(accountId, tankId)
+    } else {
+      this.props.deselectTank()
+    }
+  }
+
   componentWillMount() {
     if (this.props.initialStateLoaded) {
       let { tankId, accountId } = this.props.match.params;
-      this.props.selectTank(accountId, tankId)
+      this.applyTankSelection(tankId, accountId)
     }
   }
 
@@ -28,7 +36,7 @@ class PlayerTankStatsTab extends Component {
 
     if (tankIdHasChanged || initialStateLoaded) {
       let { tankId, accountId } = nextProps.match.params;
-      this.props.selectTank(accountId, tankId)
+      this.applyTankSelection(tankId, accountId)
     }
   }
 
@@ -39,6 +47,7 @@ class PlayerTankStatsTab extends Component {
       <div>
         <TankSelector tanks={tanksFiltered} tankSelection={tankSelection}
           selectTank={this.props.selectTank}
+          deselectTank={this.props.deselectTank}
           selectTankTier={this.props.selectTankTier}
           selectTankType={this.props.selectTankType}
           selectTankNation={this.props.selectTankNation}
@@ -78,5 +87,5 @@ class PlayerTankStatsTab extends Component {
 export default connect(
   (store) => ({ playerTankStats: store.playerTankStats, player: store.players.player, accountId: store.players.accountId, initialStateLoaded: store.app.initialStateLoaded,
    isFetchingTank: store.app.isFetchingTank }),
-  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults, selectTank }
+  { selectTankTier, selectTankType, selectTankNation, toggleGroupVisibility, toggleCellVisibility, selectDeltaMode, selectMaxResults, selectTank, deselectTank }
 )(PlayerTankStatsTab);
