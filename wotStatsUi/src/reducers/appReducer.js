@@ -7,11 +7,11 @@ export default function app(state={
 
   switch (action.type) {
 
-    case "FETCH_TANKS_REQUEST": {
+    case "TANK_SELECTION_REQUEST": {
       return {...state, isFetchingTank: true }
     }
 
-    case "TANK_SELECTED": {
+    case "TANK_SELECTION_COMPLETE": {
       return {...state, isFetchingTank: false }
     }
 

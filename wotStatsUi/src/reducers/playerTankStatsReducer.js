@@ -77,25 +77,16 @@ export default function playerTankStats(state={
       return {...state, tankSelection: newState, tanksFiltered: filtered }
     }
 
-    case "TANK_SELECTED": {
-      let tankId = action.payload;
-      let newState;
-      if (tankId) {
-        newState = { ...state.tankSelection, tank: state.tankMap[tankId] }
-      } else {
-        newState = { ...state.tankSelection, tank: "" }
-      }
-      return {...state, tankSelection: newState}
-    }
+    case "TANK_SELECTION_COMPLETE": {
+      let tankId = action.payload.tankId;
+      let newSelection = { ...state.tankSelection, tank: tankId ? state.tankMap[tankId] : "" }
+      let newStats = recalculateStats(playerTanksStatsModelDefinition, action.payload.stats.playerTankStats, state.deltaMode)
 
-    case "FETCH_PLAYER_TANK_STATS_FULFILLED": {
-      let newStats = recalculateStats(playerTanksStatsModelDefinition, action.payload.playerTankStats, state.deltaMode)
-
-      let expectedTankWnStats = state.tankMap[state.tankSelection.tank.tank_id]
+      let expectedTankWnStats = state.tankMap[tankId]
       calculateAndMergeWn8(newStats, expectedTankWnStats)
 
       let charts = recalculateCharts(playerTankStatsChartsDefinition, newStats)
-      return {...state, playerTankStats: newStats, charts: charts }
+      return {...state, playerTankStats: newStats, charts: charts, tankSelection: newSelection }
     }
 
     case "TOGGLE_TANK_STATS_COLUMN_GROUP_VISIBILITY": {
