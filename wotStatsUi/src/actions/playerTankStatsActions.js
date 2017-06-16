@@ -16,7 +16,7 @@ export function selectDeltaMode(mode) {
 export function selectMaxResults(results) {
   return (dispatch, getState) => {
     dispatch({ type: "TANK_STATS_MAX_RESULTS_SELECTED", payload: results })
-    
+
     let accountId = getState().players.accountId
     let tankId = getState().playerTankStats.tankSelection.tank.tank_id
     axios.get(baseurl + "/player/" + accountId + "/tank/" + tankId + "/stats?maxresults=" + getState().playerTankStats.maxResults)

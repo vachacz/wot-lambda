@@ -69,6 +69,7 @@ class PlayerTankStatsTab extends Component {
             playerStats={playerTankStats} cellVisibility={cellVisibility} columnVisibility={columnVisibility} />
 
         <StatChartPanel charts={charts} />
+        <div style={{ clear: "both" }} />
       </div>
     );
   }

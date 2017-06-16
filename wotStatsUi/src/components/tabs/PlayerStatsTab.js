@@ -29,6 +29,7 @@ class PlayerStatsTab extends Component {
              columnVisibility={columnVisibility} />
 
         <StatChartPanel charts={charts}/>
+        <div style={{ clear: "both" }} />
       </div>
     );
   }
