@@ -39,13 +39,24 @@ export default function playerTanks(state={
 
   function sortTanksByProperty(tanks, property, descending) {
     tanks.sort((a, b) => {
-      let a1 = parseInt(a[property], 10)
-      let b1 = parseInt(b[property], 10)
+      let a1 = parseIfNumeric(a[property])
+      let b1 = parseIfNumeric(b[property])
       if (descending) {
         return (a1 < b1) ? 1 : ((b1 < a1) ? -1 : 0);
       }
       return (a1 > b1) ? 1 : ((b1 > a1) ? -1 : 0);
     });
+  }
+
+  function parseIfNumeric(value) {
+    if (isNumeric(value)) {
+      return parseInt(value, 10);
+    }
+    return value;
+  }
+
+  function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
   }
 
   switch (action.type) {

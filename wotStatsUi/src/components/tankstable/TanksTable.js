@@ -22,21 +22,20 @@ export default class TanksTable extends Component {
 
   generateHeaderCells() {
     return this.props.definition.map((def) => {
-      if (!this.props.columnVisibility[def.group]) {
-        return null;
+      if (this.props.columnVisibility[def.group]) {
+        return <td key={ "header-" + def.property }>{def.header}</td>
       }
-      return <td key={ "header-" + def.property }>{def.header}</td>
     });
   }
 
   generateSortRow() {
     return (
       <tr>
-        <td></td>
-        <td className="wide-column"></td>
-        <td className="small-column"></td>
-        <td className="small-column"></td>
-        <td className="small-column"></td>
+        <td>{ this.generateSortButton("timestamp") }</td>
+        <td className="wide-column">{ this.generateSortButton("name") }</td>
+        <td className="small-column">{ this.generateSortButton("level") }</td>
+        <td className="small-column">{ this.generateSortButton("type") }</td>
+        <td className="small-column">{ this.generateSortButton("nation") }</td>
         { this.generateSortCells() }
       </tr>
     );
@@ -44,29 +43,29 @@ export default class TanksTable extends Component {
 
   generateSortCells() {
     return this.props.definition.map((def) => {
-      if (!this.props.columnVisibility[def.group]) {
-        return null;
+      if (this.props.columnVisibility[def.group]) {
+        return <td key={ "sort-" + def.property }>{ this.generateSortButton(def.property) }</td>
       }
-      let _this = this;
-      return (
-        <td key={ "sort-" + def.property }>
-          <Button onClick={() => _this.props.sortTanksHandler(def.property)} bsStyle="default" bsSize="xsmall">
-            <Glyphicon glyph="sort" />
-          </Button>
-        </td>
-      )
     });
+  }
+
+  generateSortButton(property) {
+    let _this = this;
+    return (
+      <Button onClick={() => _this.props.sortTanksHandler(property)} bsStyle="default" bsSize="xsmall">
+        <Glyphicon glyph="sort" />
+      </Button>
+    )
   }
 
   generateCells(stat) {
     return this.props.definition.map((def) => {
-      if (!this.props.columnVisibility[def.group]) {
-        return null;
+      if (this.props.columnVisibility[def.group]) {
+        if ("wn8ColorRange" in def) {
+          return <Wn8Cell key={ "stat-wn8-" + stat.timestamp } value={ stat[def.property] } />
+        }
+        return <td key={ "state-" + def.property + "-" + stat.timestamp }>{ stat[def.property] }</td>
       }
-      if ("wn8ColorRange" in def) {
-        return <Wn8Cell key={ "stat-wn8-" + stat.timestamp } value={ stat[def.property] } />
-      }
-      return <td key={ "state-" + def.property + "-" + stat.timestamp }>{ stat[def.property] }</td>
     });
   }
 
