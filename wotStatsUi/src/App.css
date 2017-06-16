@@ -28,10 +28,6 @@
   padding: 2px;
 }
 
-.App-menugroup-right > div {
-  z-index: 0;
-}
-
 .App-menugroup-header {
   font-size: 90%;
 }
@@ -132,6 +128,10 @@ html[xmlns] .clearfix {
 
 .App-chart-panel > div{
     float: left;
+}
+
+.Select {
+    z-index: 1000;
 }
 
 .App-tankselect {
