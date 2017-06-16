@@ -83,12 +83,12 @@ export default function playerTankStats(state={
     }
 
     case "TANK_SELECTION_COMPLETE": {
-      let tankId = action.payload.tankId;
-      let newSelection = { ...state.tankSelection, tank: state.tankMap[tankId] }
+      let selectedTank = state.tankMap[action.payload.tankId]
+
+      let newSelection = { ...state.tankSelection, tank: selectedTank }
       let newStats = recalculateStats(playerTanksStatsModelDefinition, action.payload.stats.playerTankStats, state.deltaMode)
 
-      let expectedTankWnStats = state.tankMap[tankId]
-      calculateAndMergeWn8(newStats, expectedTankWnStats)
+      calculateAndMergeWn8(newStats, selectedTank)
 
       let charts = recalculateCharts(playerTankStatsChartsDefinition, newStats)
       return {...state, playerTankStats: newStats, charts: charts, tankSelection: newSelection }
