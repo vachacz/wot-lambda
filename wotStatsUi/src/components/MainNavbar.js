@@ -13,7 +13,7 @@ class MainNavbar extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              my.WoTStats.online
+              my.WoTStats.online (beta)
             </Navbar.Brand>
             <Navbar.Text>
               <Navbar.Link href="mailto:support@my.wotstats.online">Contact</Navbar.Link>

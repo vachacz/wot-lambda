@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { baseurl } from '../const/Const.js';
 
+export function showEffectiveIntroModal() {
+  return { type: "EFFECTIVE_INTRO_MODAL_SHOW" }
+}
+
+export function hideEffectiveIntroModal() {
+  return { type: "EFFECTIVE_INTRO_MODAL_HIDE" }
+}
+
 export function loadAppInitialState() {
   return dispatch => {
     axios.all([

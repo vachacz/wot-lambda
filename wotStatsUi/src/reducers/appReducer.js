@@ -3,6 +3,7 @@ export default function app(state={
     initialStateLoaded: false,
     isFetchingPlayer: false,
     isFetchingTank: false,
+    effectiveIntroModalVisible: false
   }, action) {
 
   switch (action.type) {
@@ -25,6 +26,14 @@ export default function app(state={
 
     case "INITIAL_STATE_LOADED": {
       return { ...state, initialStateLoaded: true }
+    }
+
+    case "EFFECTIVE_INTRO_MODAL_SHOW": {
+      return { ...state, effectiveIntroModalVisible: true }
+    }
+
+    case "EFFECTIVE_INTRO_MODAL_HIDE": {
+      return { ...state, effectiveIntroModalVisible: false }
     }
 
     default:
