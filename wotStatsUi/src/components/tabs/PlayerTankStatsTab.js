@@ -15,14 +15,6 @@ import TankSelector from '../selectors/TankSelector.js';
 
 class PlayerTankStatsTab extends Component {
 
-  applyTankSelection(tankId, accountId) {
-    if (tankId) {
-      this.props.selectTank(accountId, tankId)
-    } else {
-      this.props.deselectTank()
-    }
-  }
-
   componentWillMount() {
     if (this.props.initialStateLoaded) {
       let { tankId, accountId } = this.props.match.params;
@@ -37,6 +29,14 @@ class PlayerTankStatsTab extends Component {
     if (tankIdHasChanged || initialStateLoaded) {
       let { tankId, accountId } = nextProps.match.params;
       this.applyTankSelection(tankId, accountId)
+    }
+  }
+
+  applyTankSelection(tankId, accountId) {
+    if (tankId) {
+      this.props.selectTank(accountId, tankId)
+    } else {
+      this.props.deselectTank()
     }
   }
 
@@ -69,7 +69,7 @@ class PlayerTankStatsTab extends Component {
 
     return (
       <div>
-        <h3 className="App-clear" style={{ "overflow-y": "hidden" }}>{tankSelection.tank.name}</h3>
+        <h3 className="App-clear" style={{ overflowY: "hidden" }}>{tankSelection.tank.name}</h3>
         <StatPresetSelector maxResults={maxResults} selectMaxResults={this.props.selectMaxResults} />
         <DeltaModeSelector deltaMode={deltaMode} selectDeltaMode={this.props.selectDeltaMode} />
         <CellVisibilitySelector toggleCellVisibility={this.props.toggleCellVisibility} {...cellVisibility} />
