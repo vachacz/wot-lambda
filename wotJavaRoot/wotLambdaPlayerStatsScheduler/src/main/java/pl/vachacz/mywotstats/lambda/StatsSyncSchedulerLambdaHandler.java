@@ -3,24 +3,22 @@ package pl.vachacz.mywotstats.lambda;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.lambda.runtime.*;
-import com.amazonaws.services.sns.AmazonSNS;
-import com.amazonaws.services.sns.AmazonSNSClientBuilder;
-import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
 import pl.vachacz.mywotstats.dynamo.WotDynamo;
 import pl.vachacz.mywotstats.dynamo.model.PlayerEntity;
 import pl.vachacz.mywotstats.lambda.tanks.WotClient;
 
 public class StatsSyncSchedulerLambdaHandler implements RequestHandler<Object, Object> {
 
-    private AmazonSNS snsClient;
+    private AmazonSQS sqsClient;
 
     private WotClient wotClient = new WotClient();
     private WotDynamo wotDynamo = new WotDynamo();
 
     public StatsSyncSchedulerLambdaHandler() {
-        snsClient = AmazonSNSClientBuilder.standard()
-                .withRegion(Regions.EU_CENTRAL_1)
-                .build();
+        sqsClient = AmazonSQSClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
     }
 
     public Object handleRequest(Object input, Context context) {
@@ -42,9 +40,10 @@ public class StatsSyncSchedulerLambdaHandler implements RequestHandler<Object, O
 
             System.out.println("REQ[" + requestId + "] PLAYER[" + player.getAccountId() + "] sending SNS event");
 
-            PublishRequest publishRequest =
-                    new PublishRequest("arn:aws:sns:eu-central-1:592294659655:wot_player_stat_sync_request_topic", player.getAccountId().toString());
-            snsClient.publish(publishRequest);
+            SendMessageRequest sendRequest =
+                    new SendMessageRequest("https://sqs.eu-central-1.amazonaws.com/592294659655/wot-stats-sync-queue", player.getAccountId().toString());
+
+            sqsClient.sendMessage(sendRequest);
         });
 
         return null;

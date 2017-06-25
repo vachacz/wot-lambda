@@ -13,7 +13,9 @@ import pl.vachacz.mywotstats.lambda.tanks.model.playertankstats.PlayerTankStatsR
 import pl.vachacz.mywotstats.lambda.tanks.model.vehicle.VehiclesResponse;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class WotClient {
 
@@ -56,20 +58,22 @@ public class WotClient {
         return make(request, VehiclesResponse.class);
     }
 
-    public PlayerTankStatsResponse getPlayerTankStats(Long accountId) {
+    public PlayerTankStatsResponse getPlayerTankStats(List<Long> accountIds) {
+        String ids = accountIds.stream().map(Object::toString).collect(Collectors.joining(","));
         HttpRequest request = Unirest.get(WOT_API_PLAYER_TANK_STATS)
                 .queryString("application_id", properties.getProperty("wotApplicationId"))
-                .queryString("account_id", accountId)
+                .queryString("account_id", ids)
                 .queryString("fields", "tank_id,all");
 
         return make(request, PlayerTankStatsResponse.class);
     }
 
-    public PlayerStatsResponse getPlayerStats(Long accountId) {
+    public PlayerStatsResponse getPlayerStats(List<Long> accountIds) {
+        String ids = accountIds.stream().map(Object::toString).collect(Collectors.joining(","));
         HttpRequest request = Unirest.get(WOT_API_PLAYER_STATS)
                 .queryString("application_id", getApplicationId())
                 .queryString("fields", "statistics.all")
-                .queryString("account_id", accountId);
+                .queryString("account_id", ids);
 
         return make(request, PlayerStatsResponse.class);
     }

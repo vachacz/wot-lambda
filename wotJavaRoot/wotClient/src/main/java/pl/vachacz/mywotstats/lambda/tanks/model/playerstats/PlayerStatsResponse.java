@@ -16,7 +16,7 @@ public class PlayerStatsResponse extends BaseResponse {
         this.data = data;
     }
 
-    public PlayerStats getStats() {
-        return data.values().iterator().next().getStatistics().getPlayerStats();
+    public PlayerStats getStats(Long accountId) {
+        return data.get(accountId.toString()).getStatistics().getPlayerStats();
     }
 }
