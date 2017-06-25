@@ -180,9 +180,8 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<Object, Obje
 
     private void savePlayerTankStats(long timestamp, List<Long> accountIds, String requestId) {
         Map<Long, VehicleEntity> vehiclesMap = wotDynamo.getAllVehiclesAsMap();
-
-
         PlayerTankStatsResponse playerTankStats = wotClient.getPlayerTankStats(accountIds);
+        
         accountIds.forEach(accountId -> {
             Map<Long, PlayerTankEntity> playerTankMap = wotDynamo.getPlayerTanksAsMap(accountId);
 
