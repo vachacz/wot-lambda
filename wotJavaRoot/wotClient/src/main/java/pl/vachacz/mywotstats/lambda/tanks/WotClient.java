@@ -58,11 +58,10 @@ public class WotClient {
         return make(request, VehiclesResponse.class);
     }
 
-    public PlayerTankStatsResponse getPlayerTankStats(List<Long> accountIds) {
-        String ids = accountIds.stream().map(Object::toString).collect(Collectors.joining(","));
+    public PlayerTankStatsResponse getPlayerTankStats(Long accountId) {
         HttpRequest request = Unirest.get(WOT_API_PLAYER_TANK_STATS)
                 .queryString("application_id", properties.getProperty("wotApplicationId"))
-                .queryString("account_id", ids)
+                .queryString("account_id", accountId)
                 .queryString("fields", "tank_id,all");
 
         return make(request, PlayerTankStatsResponse.class);

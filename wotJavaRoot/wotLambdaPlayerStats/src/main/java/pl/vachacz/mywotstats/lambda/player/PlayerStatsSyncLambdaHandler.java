@@ -5,9 +5,7 @@ import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.invoke.LambdaInvokerFactory;
 import com.amazonaws.services.lambda.model.InvocationType;
 import com.amazonaws.services.lambda.model.InvokeRequest;
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaRuntime;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.*;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.Message;
@@ -51,7 +49,7 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<Object, Obje
     public Object handleRequest(Object input, Context context) {
         ReceiveMessageRequest request = new ReceiveMessageRequest()
                 .withQueueUrl(QUEUE_NAME)
-                .withMaxNumberOfMessages(5);
+                .withMaxNumberOfMessages(10);
 
         ReceiveMessageResult result = sqsClient.receiveMessage(request);
         System.out.println("Got " + result.getMessages().size() + " messages.");
@@ -61,18 +59,18 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<Object, Obje
             sqsClient.deleteMessage(QUEUE_NAME, message.getReceiptHandle());
         });
 
-        List<Long> accountIds =
+        if (result.getMessages().size() > 0) {
+            List<Long> accountIds =
                 result.getMessages().stream()
                     .map(Message::getBody)
                     .map(Long::parseLong)
                     .collect(Collectors.toList());
 
-        syncPlayer(accountIds, context.getAwsRequestId());
+            syncPlayer(accountIds, context.getAwsRequestId());
 
-        // call lambda once again because possibly there are still awaiting massages on the queue
-        if (result.getMessages().size() > 0) {
             System.out.println("Calling recursive lambda");
 
+            // call lambda once again because possibly there are still awaiting massages on the queue
             InvokeRequest recustiveLambdaCall = new InvokeRequest()
                     .withInvocationType(InvocationType.Event)
                     .withFunctionName("wotPlayerStatsSyncLambda");
@@ -180,9 +178,9 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<Object, Obje
 
     private void savePlayerTankStats(long timestamp, List<Long> accountIds, String requestId) {
         Map<Long, VehicleEntity> vehiclesMap = wotDynamo.getAllVehiclesAsMap();
-        PlayerTankStatsResponse playerTankStats = wotClient.getPlayerTankStats(accountIds);
-        
+
         accountIds.forEach(accountId -> {
+            PlayerTankStatsResponse playerTankStats = wotClient.getPlayerTankStats(accountId);
             Map<Long, PlayerTankEntity> playerTankMap = wotDynamo.getPlayerTanksAsMap(accountId);
 
             playerTankStats.getPlayerStats(accountId).forEach(s -> {
@@ -386,5 +384,66 @@ public class PlayerStatsSyncLambdaHandler implements RequestHandler<Object, Obje
         }
         return BigDecimal.valueOf(toBeTruncated).setScale(3, RoundingMode.HALF_UP).doubleValue();
     }
+
+    public static void main(String[] args) {
+        Context ctx = new Context() {
+            @Override
+            public String getAwsRequestId() {
+                return "123";
+            }
+
+            @Override
+            public String getLogGroupName() {
+                return null;
+            }
+
+            @Override
+            public String getLogStreamName() {
+                return null;
+            }
+
+            @Override
+            public String getFunctionName() {
+                return null;
+            }
+
+            @Override
+            public String getFunctionVersion() {
+                return null;
+            }
+
+            @Override
+            public String getInvokedFunctionArn() {
+                return null;
+            }
+
+            @Override
+            public CognitoIdentity getIdentity() {
+                return null;
+            }
+
+            @Override
+            public ClientContext getClientContext() {
+                return null;
+            }
+
+            @Override
+            public int getRemainingTimeInMillis() {
+                return 0;
+            }
+
+            @Override
+            public int getMemoryLimitInMB() {
+                return 0;
+            }
+
+            @Override
+            public LambdaLogger getLogger() {
+                return null;
+            }
+        };
+        new PlayerStatsSyncLambdaHandler().handleRequest(null, ctx);
+    }
+
 }
 
